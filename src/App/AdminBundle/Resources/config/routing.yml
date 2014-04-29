@@ -1,0 +1,32 @@
+admin_homepage:
+    pattern:  /
+    defaults: { _controller: AdminBundle:Default:index }
+    
+uzytkownik_show:
+    pattern: /uzytkownik-show/{page}
+    defaults:  { _controller: AdminBundle:Uzytkownik:show, page: 1 }
+uzytkownik_edit:
+    pattern: /uzytkownik-edit/{id}
+    defaults:  { _controller: AdminBundle:Uzytkownik:edit }
+uzytkownik_delete:
+    pattern: /uzytkownik-delete/{id}
+    defaults:  { _controller: AdminBundle:Uzytkownik:delete }
+uzytkownik_new:
+    pattern: /uzytkownik-new
+    defaults:  { _controller: AdminBundle:Uzytkownik:new }
+uzytkownik_config:
+    pattern: /uzytkownik-config/{id}
+    defaults:  { _controller: AdminBundle:Uzytkownik:config }
+
+role_show:
+    pattern: /role-show/{page}
+    defaults:  { _controller: AdminBundle:Role:show, page: 1 }
+role_edit:
+    pattern: /role-edit/{id}
+    defaults:  { _controller: AdminBundle:Role:edit }
+role_delete:
+    pattern: /role-delete/{id}
+    defaults:  { _controller: AdminBundle:Role:delete }
+role_new:
+    pattern: /role-new
+    defaults:  { _controller: AdminBundle:Role:new }

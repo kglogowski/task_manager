@@ -1,0 +1,78 @@
+.tt-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    width: 573px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    background-clip: padding-box;
+}
+.tt-suggestion > p {
+    display: block;
+    padding: 3px 10px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.428571429;
+    color: #333333;
+    white-space: nowrap;
+}
+.tt-suggestion > p:hover,
+.tt-suggestion > p:focus,
+.tt-suggestion.tt-cursor p {
+    color: #ffffff;
+    text-decoration: none;
+    outline: 0;
+    background-color: #428bca;
+    cursor: pointer;
+}
+
+
+.typeahead-ct {
+    background-color: #0097CF;
+    background-image: linear-gradient(to bottom, #04A2DD, #03739C);
+    background-repeat: repeat-x;
+    border: 1px solid #024E6A;
+    border-radius: 10px;
+    box-shadow: 0 0 2px #111111;
+    margin: 50px auto 0;
+    padding: 15px;
+    position: relative;
+    text-align: left;
+    width: 600px;
+}
+
+.typeahead-ct input {
+        border: 1px solid #024E6A;
+    border-radius: 8px;
+    font-size: 24px;
+    height: 50px;
+    line-height: 30px;
+    outline: medium none;
+    padding: 8px 12px;
+    width: 574px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+    left: 0;
+    position: absolute;
+    top: 0;
+    color: #000;
+}
+
+.twitter-typeahead {
+    color: #333333;
+    font-family: Prociono;
+    font-size: 18px;
+    line-height: 1.2;
+}

@@ -1,0 +1,8 @@
+{% extends "::admin.html.twig" %}
+{% block content %}
+<div class='ct' >
+    {{ include('AppHelperBundle:bootstrap:naglowek.html.twig', {h1: 'Role', small: 'Nowy'}) }}
+    {{ include('AppHelperBundle:form:standard_form.html.twig', {form: form}) }}
+    {{ include('AppHelperBundle:bootstrap:return_link.html.twig', { link: 'role_show' }) }}
+</div>
+{% endblock content %}

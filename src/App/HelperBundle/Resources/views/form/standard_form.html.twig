@@ -1,0 +1,12 @@
+<div class="standard_form">
+    <form action="" method="POST">
+{% for key, element in form if key != '_token' %}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-1">{{ form_label(element) }}</div>
+            <div class="col-md-2">{{ form_widget(element) }}</div>
+        </div>
+{% endfor %}
+        {{ form_widget(form._token) }}
+    </form>
+</div>

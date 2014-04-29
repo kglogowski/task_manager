@@ -1,0 +1,52 @@
+<div class="panel-body">
+    <div class="alert alert-success">{{ msg }} <span id="ok" style="float: right; cursor: pointer" class="glyphicon glyphicon-ok"></span></div>
+    <div class="row">
+        <div class="col-md-2"><label for="imie">Imie: </label></div>
+        <div class="col-md-2"><input type="imie" value="{{ app.user.imie }}" name="imie" /></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><label for="nazwisko">Nazwisko: </label></div>
+        <div class="col-md-2"><input type="text" value="{{ app.user.nazwisko }}" name="nazwisko" /></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><label for="login">Login: </label></div>
+        <div class="col-md-2"><input type="text" value="{{ app.user.login }}" name="login" /></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2"><label for="email">Adres email: </label></div>
+        <div class="col-md-2"><input type="text" value="{{ app.user.email }}" name="email" /></div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <button id="profile-edit-basic-btn" type="button" class="btn btn-success btn-xs">
+                <span class="glyphicon glyphicon-ok"></span> Zapisz zmiany
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $().ready(function() {
+        $('#ok').click(function(){
+           $(this).parent().fadeOut('slow'); 
+        });
+        $('#profile-edit-basic-btn').click(function() {
+            idLoad = '#collapseOne';
+            arr = new Array();
+            arr[0] = 'imie=' + $(idLoad).find("input[name='imie']").val();
+            arr[1] = 'nazwisko=' + $(idLoad).find("input[name='nazwisko']").val();
+            arr[2] = 'login=' + $(idLoad).find("input[name='login']").val();
+            arr[3] = 'email=' + $(idLoad).find("input[name='email']").val();
+            dataString = arr.join('&');
+            ajaxChangeContent({
+                append: false,
+                data: dataString,
+                url: '{{ url('profile_edit_change_basic') }}',
+                id: '#profile-edit-basic-btn',
+                idLoad: idLoad,
+                msg: 'Dane zostały zaktualizowane',
+                msgTo: '.panel-body'
+            });
+        });
+    });
+</script>

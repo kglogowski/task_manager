@@ -1,0 +1,28 @@
+<div id="pagination-center">
+    <ul class="pagination">
+        {% if page > 1  %}
+        <li><a href="{{ url(app.request.get('_route')) }}">&laquo;</a></li>
+        <li><a href="{{ url(app.request.get('_route'), {page: page-1}) }}">&lsaquo;</a></li>
+        {% endif %}
+        {% for i in (page > 5 ? page-5 : 0)..((page+3) < (count > 10 ? ((count/10)|number_format) : 1) ? (page+3) : (count > 10 ? ((count/10)|number_format) : 0))   %}
+            {% if i+1 == page %}
+                <li class="active" ><a href="#">{{ i+1 }}<span class="sr-only">(current)</span></a></li>
+            {% else %}
+                <li><a href="{{ url(app.request.get('_route'), {page: i+1}) }}">{{ i+1 }}<span class="sr-only">(current)</span></a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page < ((count/10)|number_format + (count%10 == 0 ? 0 : 1))  %}
+        <li><a href="{{ url(app.request.get('_route'), {page: page+1}) }}">&rsaquo;</a></li>
+        <li><a href="{{ url(app.request.get('_route'), {page: (count > 10 ? ((count/10)|number_format + (count%10 == 0 ? 0 : 1)) : 1)}) }}">&raquo;</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $().ready(function() {
+        $('#pagination-center').css({
+            'width': $('.pagination').width()+20,
+            'margin': '0 auto'
+        });
+    });
+</script>

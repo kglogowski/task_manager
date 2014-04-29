@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        
+        {% stylesheets 'css/main.css' 'css/admin/admin.css' %}
+        <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+        {% endstylesheets %}
+        
+        {% include 'AppHelperBundle:jquery:load.html.twig' %}
+        {{ include('AppHelperBundle:bootstrap:load.html.twig') }}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block templatestyle %}{% endblock %}
+    </head>
+    <body>
+        {% block body %}
+            {# Content #}
+            {% block nav %}
+                {% include 'admin/nav.html.twig' %}
+            {% endblock %}
+            <div class="content">
+                {% block content %} 
+                {% endblock %}
+            </div>
+        {% endblock %}
+        {% block js %}
+            {% javascripts 'js/main.js' %}
+                <script src="{{ asset_url }}" type="text/javascript"></script>
+            {% endjavascripts %}
+        {% endblock %}
+    </body>
+</html>

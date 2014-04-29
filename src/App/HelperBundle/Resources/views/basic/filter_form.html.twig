@@ -1,0 +1,53 @@
+<div id="filter_form">
+    <a href="javascript:void(0)">Pokaż filtry</a>
+    <div class="filter_form">
+        <form class="form" action="" method="post">
+            <div class="form-row">
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon"{{ form_label(filterForm.imie) }}</span>
+                        {{ form_widget(filterForm.imie) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon"{{ form_label(filterForm.nazwisko) }}</span>
+                        {{ form_widget(filterForm.nazwisko) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon"{{ form_label(filterForm.login) }}</span>
+                        {{ form_widget(filterForm.login) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon"{{ form_label(filterForm.email) }}</span>
+                        {{ form_widget(filterForm.email) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div>{{ form_row(filterForm.submit) }}</div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#filter_form').children('a').click(function() {
+        $ff = $(this).next('div');
+        $link = $(this);
+        if ($ff.hasClass('active')) {
+            $link.html('Pokaż filtry');
+            $ff.removeClass('active');
+            $ff.slideUp('fast');
+        } else {
+            $link.html('Ukryj filtry');
+            $ff.addClass('active');
+            $ff.slideDown('fast');
+        }
+
+    });
+</script>

@@ -1,0 +1,10 @@
+<nav class="navbar navbar-inverse" role="navigation">
+  <div class="container">
+      <ul class="nav navbar-nav">
+          <li {% if app.request.get('_route') == 'admin_homepage' %} class="active" {% endif %} ><a href="{{ url('admin_homepage') }}">Home</a></li>
+          <li {% if app.request.get('_route') == 'uzytkownik_show' %} class="active" {% endif %} ><a href="{{ url('uzytkownik_show') }}">Uzytkownicy</a></li>
+          <li {% if app.request.get('_route') == 'role_show' %} class="active" {% endif %} ><a href="{{ url('role_show') }}">Role</a></li>
+          <li><a href="{{ url('homepage') }}">Wróć</a></li>
+      </ul>
+  </div>
+</nav>

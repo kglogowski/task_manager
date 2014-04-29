@@ -1,0 +1,30 @@
+{#
+IN VIEW
+{{ 
+    include('AppHelperBundle:ui:datapicker.html.twig', 
+        { arrObj: ['.date_from','.date_to'] }
+    )
+}}
+#}
+{#
+IN PHP
+        $builder = $this->createFormBuilder()
+                ->add('dFrom', 'date', array(
+                    'widget' => 'single_text',
+                    'format' => 'dd-MM-yyyy',
+                    'attr' => array('class' => 'date_from')
+                ))
+                ->add('dTo', 'date', array(
+                    'widget' => 'single_text',
+                    'format' => 'dd-MM-yyyy',
+                    'attr' => array('class' => 'date_to')
+                ))
+                ->getForm();
+#}
+{% for object in arrObj %}
+<script type="text/javascript">
+    $().ready(function(){
+        $('{{object}}').datepicker({dateFormat: 'dd-mm-yy'});
+    })
+</script>
+{% endfor %}

@@ -1,0 +1,22 @@
+_login_path:
+    pattern:  /login
+    defaults: { _controller: AppGuardBundle:Default:login }
+
+_register_path:
+    pattern:  /register
+    defaults: { _controller: AppGuardBundle:Default:register }
+    
+_logout:
+    path:     /logout
+    
+_register_confirm:
+    pattern:  /register-confirm/{token}
+    defaults: { _controller: AppGuardBundle:Default:registerConfirm }
+    
+_login_remember_password:
+    pattern:  /login-remember-password
+    defaults: { _controller: AppGuardBundle:Default:rememberPassword }
+    
+_forgot_password:
+    pattern:  /forgot-password/{token}
+    defaults: { _controller: AppGuardBundle:Default:forgotPassword }

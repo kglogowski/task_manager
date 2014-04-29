@@ -1,0 +1,46 @@
+{#
+EXAMPLE
+{% block templatestyle %}
+    {{ include('AppHelperBundle:typeahead:load.html.twig') }}
+{% endblock %}
+
+{% block content %}
+    {{ include('AppHelperBundle:typeahead:create.html.twig') }}
+{% endblock %}
+#}
+<br />
+
+<div class="typeahead-ct">
+    <input class="typeahead form-control" type="text" placeholder="Countries" autocomplete="off" spellcheck="false" dir="auto" > <!-- This is a typehead class in that js-->
+{#    <input class="typeahead form-control typeahead" type="text" disabled="" autocomplete="off" spellcheck="false" style="visibility: hidden; ">#}
+    <pre aria-hidden="true" style="position: absolute; visibility: hidden; white-space: nowrap; font-size: 24px; font-style: normal; font-variant: normal; font-weight: 400; word-spacing: 0px; letter-spacing: 0px; text-indent: 0px; text-rendering: auto; text-transform: none;">
+    </pre>
+    <span class="tt-dropdown-menu" style="position: absolute; top: 100%; left: 0px; z-index: 100; display: none;">
+        <div class="tt-dataset-countries"></div>
+    </span>
+</div>
+<script>
+    $().ready(function() {
+        var numbers;
+        $array = '{{ keys|json_encode()|raw }}';
+        
+        var countries = new Bloodhound({
+            datumTokenizer: function(d) {
+                return Bloodhound.tokenizers.whitespace(d.name);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: 10,
+            local: [
+                {name: 'Alabama'}, {name: 'Alcatraz'}
+            ]
+        });
+
+        countries.initialize();
+
+        $('.typeahead').typeahead(null, {
+            displayKey: 'name',
+            source: countries.ttAdapter()
+        });
+
+    });
+</script>

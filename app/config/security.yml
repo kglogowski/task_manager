@@ -1,0 +1,42 @@
+security:
+    encoders:
+        Data\DatabaseBundle\Entity\Uzytkownik:
+            algorithm: bcrypt
+            cost: 12
+
+    role_hierarchy:
+        ROLE_USER:  [ROLE_USER]
+        ROLE_ADMIN: [ROLE_USER, ROLE_ADMIN]
+
+    providers:
+        main:
+            entity:
+                class:          DataDatabaseBundle:Uzytkownik
+                property:       (login|email)
+                manager_name:   ~
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        secured_area:
+            pattern:    ^/*
+            form_login:
+                check_path: _login_check
+                login_path: _login_path
+            logout:
+                path:   _logout
+                target: homepage
+            remember_me:
+                key: MiPassphrase
+                lifetime: 3600
+                path: /.*
+                domain: ~
+            anonymous: true
+            #http_basic:
+            #    realm: "Secured Demo Area"
+
+    access_control:
+        - { path: ^/profile*, roles: ROLE_USER }
+        - { path: ^/admin*, roles: ROLE_ADMIN }

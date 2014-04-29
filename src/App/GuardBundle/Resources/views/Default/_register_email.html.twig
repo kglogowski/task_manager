@@ -1,0 +1,9 @@
+{% extends "::email.html.twig" %}
+{% block content %} 
+Witaj,<br /><br />
+
+Twój login: {{ user.login }}<br />
+Hasło: {{ haslo }}<br /><br />
+
+Aby potwierdzić rejestracje kliknij w link: {{ url('_register_confirm',{token: user.token}) }}
+{% endblock content %} 

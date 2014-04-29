@@ -1,0 +1,21 @@
+{% extends "::security.html.twig" %}
+
+{% block content %}
+<div class="register_text">
+    <div><h2>Zarejestruj się i za darmo korzystaj z naszego serwisu ogłoszeniowgo NAZWA.pl</h2></div>
+    <div class="return_link"><h2>lub wróć do <a href="{{ path('homepage') }}">strony głównej</a></h2></div> 
+</div>
+<div class="register_form">
+    <form class="form" action="" method="post">
+        <div style="width: 350px;">{% include 'AppHelperBundle:basic:flash.html.twig' %}</div>
+        <div class="form-row"><div>{{ form_widget(form.imie) }}</div>{{ form_errors(form.imie) }}</div>
+        <div class="form-row"><div>{{ form_widget(form.nazwisko) }}</div>{{ form_errors(form.nazwisko) }}</div>
+        <div class="form-row"><div>{{ form_widget(form.email) }}</div>{{ form_errors(form.email) }}</div>
+        <div class="form-row"><div>{{ form_widget(form.haslo.first) }}</div>{{ form_errors(form.haslo.first) }}</div>
+        <div class="form-row"><div>{{ form_widget(form.haslo.second) }}</div>{{ form_errors(form.haslo.second) }}</div>
+        <div class="form-row"><div>{{ form_widget(form.register) }}</div>
+        {{ form_widget(form._token) }}
+    </form>
+</div>
+<div class="clear"></div>
+{% endblock content %}

@@ -1,0 +1,16 @@
+<div class="nav_ct">
+    <div class="nav">
+        <a href="{{ url('homepage') }}"><div class="element lt">Logo</div></a>
+        {% if app.user %}
+        <a href="{{ url('_logout') }}"><div class="element rt">Wyloguj się</div></a>
+        <a id="username" href="{{ url('profile_edit') }}"><div class="element rt">{{ app.user.imie }}</div></a>
+        {% if app.user.isGranted('ROLE_ADMIN') %}
+        <a style="position: absolute; right: 10px" href="{{ url('admin_homepage') }}"><div class="element rt"><span class="glyphicon glyphicon-lock">Admin</span></div></a>
+        {% endif %}
+        {% else %}
+        <a href="{{ url('_login_path') }}"><div class="element rt">Zaloguj się</div></a>
+        <a href="{{ url('_register_path') }}"><div class="element rt">Zarejestruj się</div></a>
+        {% endif %}
+        <div style="clear: both;"></div>
+    </div>
+</div>

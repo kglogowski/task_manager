@@ -1,0 +1,11 @@
+homepage:
+    pattern:  /
+    defaults: { _controller: AppFrontendBundle:Default:index }
+
+profile_edit:
+    pattern:  /profile/edit
+    defaults: { _controller: AppFrontendBundle:Profile:edit }
+    
+profile_edit_change_basic:
+    pattern:  /profile/edit-change-basic
+    defaults: { _controller: AppFrontendBundle:Profile:changeBasic }

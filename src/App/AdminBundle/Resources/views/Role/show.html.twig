@@ -1,0 +1,27 @@
+
+{% extends "::admin.html.twig" %}
+{% block content %}
+<div class="ct">
+    {{ include('AppHelperBundle:bootstrap:naglowek.html.twig', {h1: 'Role', small: 'Lista'}) }}
+    <table class="table table-hover">
+        <tr>
+		<th>Id</th>
+		<th>Nazwa</th>
+		<th>Akcja</th>
+
+        </tr>
+        {% for object in collection %}
+        <tr>
+		<td>{{ object.id }}</td>
+		<td>{{ object.nazwa }}</td>
+		<td><div><a href="{{ url('role_edit', {'id': object.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a><a href="{{ url('role_delete', {'id': object.id}) }}"><span class="glyphicon glyphicon-remove span-remove"></span></a></div></td>
+
+        </tr>
+        {% endfor %}
+    </table>
+    <form method="get" action="{{ url('role_new') }}">
+        <div class="btn"><button class="btn btn-success">New</button></div>
+    </form>
+    {{ include('AppHelperBundle:bootstrap:pagination.html.twig', {page: page, count: count }) }}
+</div>
+{% endblock content %}

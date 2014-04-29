@@ -1,0 +1,26 @@
+<div>
+    {% if app.session.flashbag.has('error') %} 
+    <div class="alert alert-danger"> 
+       <span class="glyphicon glyphicon-ban-circle"></span>
+       {% for flashbag in app.session.flashbag.get('error') %}
+            {{ flashbag }} 
+       {% endfor %}
+    </div> 
+    {% endif %} 
+    {% if app.session.flashbag.has('success') %} 
+    <div class="alert alert-success"> 
+       <span class="glyphicon glyphicon-ok-circle"></span>
+       {% for flashbag in app.session.flashbag.get('success') %}
+            {{ flashbag }} 
+       {% endfor %}
+    </div> 
+    {% endif %} 
+    {% if app.session.flashbag.has('info') %} 
+    <div class="alert alert-info"> 
+       <span class="glyphicon glyphicon-info-sign"></span>
+       {% for flashbag in app.session.flashbag.get('info') %}
+            {{ flashbag }} 
+       {% endfor %}
+    </div> 
+    {% endif %} 
+</div>

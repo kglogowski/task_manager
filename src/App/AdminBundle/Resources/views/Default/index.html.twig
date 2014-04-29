@@ -1,0 +1,36 @@
+{% extends "::admin.html.twig" %}
+
+{% block content %}
+<div class="">
+    <div class="container">
+        <div class="row hr">
+            <div class="col-md-2 well-sm"><label class="label label-primary">Imię:</label></div>
+            <div class="col-md-2 well-sm">{{ app.user.imie }}</div>
+        </div>
+        <div class="row hr">
+            <div class="col-md-2 well-sm"><label class="label label-primary">Nazwisko:</label></div>
+            <div class="col-md-2 well-sm">{{ app.user.nazwisko }}</div>
+        </div>
+        <div class="row hr">
+            <div class="col-md-2 well-sm"><label class="label label-primary">Login:</label></div>
+            <div class="col-md-2 well-sm">{{ app.user.login }}</div>
+        </div>
+        <div class="row hr">
+            <div class="col-md-2 well-sm"><label class="label label-primary">Email:</label></div>
+            <div class="col-md-2 well-sm">{{ app.user.email }}</div>
+        </div>
+        <div class="row hr">
+            <div class="col-md-2 well-sm"><label class="label label-primary">Ilość logowań:</label></div>
+            <div class="col-md-2 well-sm">{{ app.user.countLogin }}</div>
+        </div>
+        <div class="row hr">
+            <div class="col-md-2 well-sm"><label class="label label-primary">Aktualne logowanie:</label></div>
+            <div class="col-md-2 well-sm">{{ app.user.lastLoginFormatted }}</div>
+        </div>
+        <div class="row hr">
+            <div class="col-md-2 well-sm"><label class="label label-primary">Ostatnie logowanie:</label></div>
+            <div class="col-md-2 well-sm">{{ app.user.penultimateLoginFormatted }}</div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

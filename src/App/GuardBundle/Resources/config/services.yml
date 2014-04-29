@@ -1,0 +1,7 @@
+parameters:
+#    uzytkownik: Data\DatabaseBundle\Entity\Uzytkownik
+
+services:
+#    app_guard.example:
+#        class: %app_guard.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

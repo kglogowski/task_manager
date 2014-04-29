@@ -1,0 +1,31 @@
+{% extends "::admin.html.twig" %}
+
+{% block content %}
+<div class="ct">
+    {{ include('AppHelperBundle:bootstrap:naglowek.html.twig', {h1: 'Użytkownik', small: 'Konfiguracja ( '~uzytkownik.login~' )'}) }}
+    <ol class="breadcrumb">
+        <li><a href="{{ url('uzytkownik_show') }}">Uzytkownicy</a></li>
+        <li class="active">Konfiguracja</li>
+    </ol>
+    {% include 'AppHelperBundle:basic:flash.html.twig' %}
+    <form action="" method="POST">
+        <table class="table table-hover">
+            <tr>
+                <th>Rola</th>
+                <th>Posiada</th>
+            </tr>
+        {% for rola in roles_all %}
+            <tr>
+                <td>{{ rola.nazwa }}</td>
+                <td><input name="{{ rola.nazwa }}" type="checkbox" {% if rola.nazwa in roles %} checked="" {% endif %} /></td>
+            </tr>
+        {% endfor %}
+            <tr>
+                <td></td>
+                <td><button id="save_config" class="btn btn-danger" >Zapisz zmiany</button></td>
+            </tr>
+        </table>
+    </form>
+    {{ include('AppHelperBundle:bootstrap:return_link.html.twig', { link: 'uzytkownik_show' }) }}
+</div>
+{% endblock content %}

@@ -1,0 +1,128 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.clear {
+    clear: both;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+.ajax-load {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0,0,20,0.9);
+    background-image: url('/js/ajax/img/aw_loading2.gif');
+    background-repeat:no-repeat;
+    background-position:center; 
+}
+
+.relative {
+    position: relative;
+}
+
+.standard_form {
+    background-color: #eee;
+    padding: 20px 0px;
+}
+
+.standard_form label {
+    font-size: 15px;
+    line-height: 38px;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+.filter_form {
+    width: 400px;
+    background-color: rgb(245,245,245);
+    display: none;
+    margin: 40px 0px;
+    padding: 15px 15px;
+}
+
+.filter_form .row {
+    margin: 10px 0px;
+}
+
+.hr {
+    border-bottom: 1px solid #ccc;
+}
+
+.hr:hover {
+    background-color: #fff5dc;
+}
+
+.content {
+    margin: 50px auto;
+}
+
+.header {
+    margin: 40px 0 0;
+    width: 100%;
+    height: 400px;
+    position: relative;
+}
+
+.banner {
+    background-color: #333;
+}
+
+.nav_ct {
+    z-index: 999;
+    background-color: #000;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+}
+
+.nav {
+    width: 1000px;
+    margin: 0 auto;
+}
+
+.nav .element {
+    padding: 0px 15px;
+    line-height: 50px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.nav .element:hover {
+    color: #08C;
+    transition-duration: 0.5s;
+}
+
+.nav .rt {
+    float: right;
+}
+
+.nav .lt {
+    float: left;
+}
+
+.nav a {
+    color: #fff;
+    font-size: 14px;
+}
+
+.profileEdit {
+    position: relative;
+    top: 100px;
+    width: 1000px;
+    margin: 0 auto;
+}

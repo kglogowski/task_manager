@@ -1,0 +1,12 @@
+admin:
+    resource: "@AdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
+app_guard:
+    resource: "@AppGuardBundle/Resources/config/routing.yml"
+    prefix:   /secured
+
+app_frontend:
+    resource: "@AppFrontendBundle/Resources/config/routing.yml"
+    prefix:   /
+
