@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ProfileController extends Controller {
     
     public function editAction() {
-        return $this->render('AppFrontendBundle:profile:edit.html.twig');
+        return $this->render('AppFrontendBundle:Profile:edit.html.twig');
     }
     
     public function changeBasicAction(Request $request) {
@@ -26,7 +26,7 @@ class ProfileController extends Controller {
         $this->getUser()->setEmail($email);
         $m->persist($this->getUser());
         $m->flush();
-        return $this->render('AppFrontendBundle:profile:changeBasic.html.twig', array(
+        return $this->render('AppFrontendBundle:Profile:changeBasic.html.twig', array(
             'msg'   =>  $request->get('msg')
         ));
     }

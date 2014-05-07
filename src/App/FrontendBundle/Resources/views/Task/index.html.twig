@@ -1,0 +1,102 @@
+{% extends "::frontend.html.twig" %}
+{% block templatestyle %}
+        {% include 'AppHelperBundle:ui:load.html.twig' %}
+{% endblock %}
+{% block content %}
+
+{% if app.user.isGranted('ROLE_ADMIN') %}
+<div class="modernizator_area">
+    <a href="{{ url('task_new', {projekt_nazwa: projekt.name}) }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Nowe zadanie" class="modernizator_field"><span class="glyphicon glyphicon-plus-sign"></span></div>
+    </a>
+</div>
+{% endif%}
+{% include 'AppHelperBundle:basic:flash.html.twig' %}
+
+<div class="cloud-lt">
+    <div class="cloud_tt">
+        <h4>Zadania</h4>
+    </div>
+    <div class="cloud_ct">
+        {% for task in projekt.getTasks() %}
+        <a class="cloud_list" href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id}) }}">
+            <div class="cloud_elem padding-low">
+                <div class="left lt">
+                    <div data-toggle="tooltip" data-placement="top" title="Status {{ task.getStatusLabel() }}" class="left"><span class="glyphicon glyphicon-tag {{ task.getStatusClass() }}"></span></div> 
+                    <div data-toggle="tooltip" data-placement="top" title="Priorytet {{ task.getPriorytetLabel() }}" class="left"><span class="glyphicon glyphicon-bookmark {{ task.getPriorytetClass() }}"></span></div> 
+                    {{ task.label }}
+                </div>
+                <div class="right">
+                {{ task.termin|date('d-m-Y') }}
+                </div>
+                <div class="clear"></div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% if task %}
+<div class="cloud-rt">
+    <div class="cloud_tt">
+        <h4>
+            Zadanie stworzył: {{ creator.login }} dnia {{ task.createdAt|date('d-m-Y') }}<br />
+            <small>{{ task.label }}</small>
+        </h4>
+    </div>
+    <div class="cloud_ct padding-medium">
+        {{ task.opis|raw  }}
+    </div>
+</div>
+<div class="btn-new">
+    <div>
+        <a id="dodaj_wiadomosc" style="float: right" class="btn btn-default btn-block" href="javascript:void(0)">Napisz wiadomość</a>
+    </div>
+</div>
+<div class="cloud-rt">
+    <div class="cloud_ct">
+        <div id="dodaj_wiadomosc_form">
+            <form action="" method="POST">
+                <div class="well-sm">
+                {{ form_widget(form.tekst) }}
+                </div>
+                <div class="well-sm">
+                {{ form_widget(form.aktualny) }}
+                </div>
+                <div class="well-sm">
+                {{ form_widget(form._token) }}
+                {{ form_widget(form.save) }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% for wiadomosc in task.wiadomosci %}
+<div class="cloud-rt">
+     {{ wiadomosc.tresc }}
+</div>
+{% endfor %}
+{% else %}
+
+{% endif %}
+<div class="clear"></div>
+
+<script type="text/javascript">
+    $('.selectpicker').selectpicker();
+    $().ready(function() {
+        $dw = $('#dodaj_wiadomosc');
+        $dwf = $('#dodaj_wiadomosc_form').parent().parent();
+        $dwf.slideUp(0);
+        $dw.click(function() {
+            if ($dwf.hasClass('show')) {
+                $dwf.slideUp('medium');
+                $dwf.removeClass('show');
+                $dw.html('Napisz wiadomość');
+            } else {
+                $dwf.slideDown('medium');
+                $dwf.addClass('show');
+                $dw.html('Ukryj formularz');
+            }
+        });
+    });
+</script>
+{% endblock %}

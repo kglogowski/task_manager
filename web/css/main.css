@@ -26,16 +26,6 @@
     position: relative;
 }
 
-.standard_form {
-    background-color: #eee;
-    padding: 20px 0px;
-}
-
-.standard_form label {
-    font-size: 15px;
-    line-height: 38px;
-}
-
 .right {
     float: right;
 }
@@ -46,18 +36,6 @@
 
 .input-group-addon {
     cursor: pointer;
-}
-
-.filter_form {
-    width: 400px;
-    background-color: rgb(245,245,245);
-    display: none;
-    margin: 40px 0px;
-    padding: 15px 15px;
-}
-
-.filter_form .row {
-    margin: 10px 0px;
 }
 
 .hr {

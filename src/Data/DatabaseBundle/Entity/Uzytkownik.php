@@ -102,7 +102,6 @@ class Uzytkownik implements AdvancedUserInterface {
      * 
      */
     private $count_login;
-    
 
     /**
      * @var datetime
@@ -124,10 +123,32 @@ class Uzytkownik implements AdvancedUserInterface {
      */
     private $roles;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Task", mappedBy="uzytkownicy")
+     */
+    private $tasks;
+
+    /**
+     * @ORM\OneToMany(targetEntity="UzytkownikProjekt", mappedBy="uzytkownik")
+     */
+    private $uzytkownicy_projekty;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Wiadomosc", mappedBy="uzytkownik")
+     */
+    private $wiadomosci;
+
     public function __construct() {
+        $this->wiadomosci = new ArrayCollection();
+        $this->uzytkownicy_projekty = new ArrayCollection();
         $this->roles = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
         $this->salt = uniqid() . uniqid();
         $this->created_at = new \DateTime('now');
+    }
+
+    public function __sleep() {
+        return array('id');
     }
 
     /**
@@ -313,11 +334,11 @@ class Uzytkownik implements AdvancedUserInterface {
     public function setCountLogin() {
         $this->count_login++;
     }
-    
+
     public function getLastLoginFormatted() {
         return date_format($this->last_login, 'Y-m-d H:i:s');
     }
-    
+
     public function getLastLogin() {
         return $this->last_login;
     }
@@ -361,6 +382,93 @@ class Uzytkownik implements AdvancedUserInterface {
 
     public function getAuthenticationToken() {
         return new UsernamePasswordToken($this, 'brak', 'secured_area', $this->getRoles());
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     * @return Uzytkownik
+     */
+    public function setSalt($salt) {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Uzytkownik
+     */
+    public function setCreatedAt($createdAt) {
+        $this->created_at = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Set penultimate_login
+     *
+     * @param \DateTime $penultimateLogin
+     * @return Uzytkownik
+     */
+    public function setPenultimateLogin($penultimateLogin) {
+        $this->penultimate_login = $penultimateLogin;
+
+        return $this;
+    }
+
+    /**
+     * Get penultimate_login
+     *
+     * @return \DateTime 
+     */
+    public function getPenultimateLogin() {
+        return $this->penultimate_login;
+    }
+
+    /**
+     * Add uzytkownicy_projekty
+     *
+     * @param \Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty
+     * @return Uzytkownik
+     */
+    public function addUzytkownicyProjekty(\Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty) {
+        $this->uzytkownicy_projekty[] = $uzytkownicyProjekty;
+
+        return $this;
+    }
+
+    /**
+     * Remove uzytkownicy_projekty
+     *
+     * @param \Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty
+     */
+    public function removeUzytkownicyProjekty(\Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty) {
+        $this->uzytkownicy_projekty->removeElement($uzytkownicyProjekty);
+    }
+
+    /**
+     * Get uzytkownicy_projekty
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUzytkownicyProjekty() {
+        return $this->uzytkownicy_projekty;
+    }
+
+    public function getTasks() {
+        return $this->tasks->toArray();
+    }
+
+    public function addTask(Task $tasks) {
+        $this->tasks->add($tasks);
+    }
+
+    public function removeTask(Task $tasks) {
+        $this->tasks->removeElement($tasks);
     }
 
 }

@@ -1,0 +1,48 @@
+{% extends "::frontend.html.twig" %}
+{% block templatestyle %}
+        {% include 'AppHelperBundle:ui:load.html.twig' %}
+{% endblock %}
+
+{% block content %}
+{% include 'AppHelperBundle:basic:flash.html.twig' %}
+{{ include('AppHelperBundle:ui:datapicker.html.twig', { arrObj: ['.date_to'] } ) }}
+<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+<script>
+        tinymce.init({selector:'textarea'});
+</script>
+
+<div class="cloud">
+    <div class="cloud_tt">
+        <h3>Nowe zadanie</h3>
+    </div>
+    <div class="cloud_ct">
+        <form action="" method="POST">
+            <div class="well-sm">
+                {{ form_widget(form.label) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form.uzytkownicy) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form.aktualny) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form.priorytet) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form.date_to) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form.opis) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form._token) }}
+                {{ form_widget(form.save) }}
+            </div>
+        </form>
+    </div> 
+</div>
+<script>
+    $('.selectpicker').selectpicker();
+</script>
+{% endblock %}

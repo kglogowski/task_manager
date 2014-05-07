@@ -3,24 +3,24 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        
+
         {% stylesheets 'css/main.css' 'css/frontend/frontend.css' %}
         <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
         {% endstylesheets %}
-        
 {#        {% block stylesheets %}
             <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}" />
             <link rel="stylesheet" type="text/css" href="{{ asset('css/frontend/frontend.css') }}" />
         {% endblock stylesheets %}#}
 
         {% include 'AppHelperBundle:jquery:load.html.twig' %}
+        {% block templatestyle %}{% endblock %}
         {{ include('AppHelperBundle:bootstrap:load.html.twig') }}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        {{ include('AppHelperBundle:bootstrap:load.html.twig') }}
-        {% block templatestyle %}{% endblock %}
+
     </head>
     <body>
         {% block body %}
+        <div class="con">
             {# Navigation #}
             {% block nav %}
                 {% include 'frontend/frontend-nav.html.twig' %}
@@ -40,10 +40,11 @@
             {% block footer %} 
                 {% include 'frontend/frontend-footer.html.twig' %}
             {% endblock %}
+        </div>
         {% endblock %}
         {% block js %}
             {% javascripts 'js/main.js' %}
-                <script src="{{ asset_url }}" type="text/javascript"></script>
+        <script src="{{ asset_url }}" type="text/javascript"></script>
             {% endjavascripts %}
         {% endblock %}
     </body>

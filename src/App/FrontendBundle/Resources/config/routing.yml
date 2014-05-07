@@ -2,10 +2,35 @@ homepage:
     pattern:  /
     defaults: { _controller: AppFrontendBundle:Default:index }
 
+projects:
+    pattern: /projekty
+    defaults: { _controller: AppFrontendBundle:Projects:index }
+
+projects_new:
+    pattern: /projekty-nowy
+    defaults: { _controller: AppFrontendBundle:Projects:new }
+
+tasks:
+    pattern: /projekty/{projekt_nazwa}/{task_id}
+    defaults: { _controller: AppFrontendBundle:Task:index, task_id: 0 }
+    
+task_new:
+    pattern: /projekty/{projekt_nazwa}/zadanie/nowe
+    defaults: { _controller: AppFrontendBundle:Task:new }
+    
+calendar:
+    pattern: /kalendarz
+    defaults: { _controller: AppFrontendBundle:Calendar:index }
+
+settings:
+    pattern: /ustawienia
+    defaults: { _controller: AppFrontendBundle:Settings:index }
+
 profile_edit:
-    pattern:  /profile/edit
+    pattern:  /profil/edytuj
     defaults: { _controller: AppFrontendBundle:Profile:edit }
     
 profile_edit_change_basic:
-    pattern:  /profile/edit-change-basic
+    pattern:  /profil/edytuj-change-basic
     defaults: { _controller: AppFrontendBundle:Profile:changeBasic }
+    

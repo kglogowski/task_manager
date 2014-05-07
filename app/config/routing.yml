@@ -10,3 +10,5 @@ app_frontend:
     resource: "@AppFrontendBundle/Resources/config/routing.yml"
     prefix:   /
 
+_logout:
+    path:     /logout

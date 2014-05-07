@@ -16,10 +16,12 @@ security:
                 manager_name:   ~
 
     firewalls:
-        dev:
+        f1:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
+        f2:
+            pattern: ^/secured/
+            security: false
         secured_area:
             pattern:    ^/*
             form_login:
@@ -38,5 +40,5 @@ security:
             #    realm: "Secured Demo Area"
 
     access_control:
-        - { path: ^/profile*, roles: ROLE_USER }
+        - { path: ^/*, roles: ROLE_USER }
         - { path: ^/admin*, roles: ROLE_ADMIN }

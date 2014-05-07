@@ -2,9 +2,9 @@
 
 namespace App\LibBundle\Guard;
 
-use App\LibBundle\Base\Filter;
+use App\LibBundle\Base\BaseForm;
 
-class RegisterForm extends FilterForm {
+class RegisterForm extends BaseForm {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         parent::buildForm($builder, $options);

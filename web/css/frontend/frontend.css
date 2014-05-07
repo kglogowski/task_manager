@@ -1,58 +1,225 @@
-.content {
-    margin: 50px auto;
+body {
+    background-color: #eee !important;
 }
 
-.header {
-    margin: 40px 0 0;
-    width: 100%;
-    height: 400px;
+.con {
+    min-width: 900px;
+    width: 95%;
+    background-color: #2d2400;
+    margin: 40px auto;
+    padding-bottom: 25px;
+}
+
+.content {
+    width: 98%;
+    background-color: #ffe;
+    margin: 0 auto;
+    padding: 60px 40px;
     position: relative;
 }
 
-.banner {
-    background-color: #333;
-}
 
-.nav_ct {
-    z-index: 999;
-    background-color: #000;
-    position: fixed;
-    width: 100%;
-    top: 0px;
-}
-
-.nav {
-    width: 1000px;
+.navigation {
+    background-color: #2d2400;
+    width: 98%;
     margin: 0 auto;
+    color: #fff;
 }
 
-.nav .element {
-    padding: 0px 15px;
-    line-height: 50px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+.nav-element {
+    font-size: 20px;
+    color: #fff;
+    padding: 10px 15px 4px 15px;
+    margin-top: 10px;
+
 }
 
-.nav .element:hover {
-    color: #08C;
-    transition-duration: 0.5s;
+.nav-element:hover {
+    color: #ffa;
 }
 
-.nav .rt {
+.nav-element-active {
+    color: #000;
+    background-color: #ffe;
+    border-radius: 4px 4px 0px 0px;
+}
+
+.nav-element-active:hover {
+    color: #000;
+    background-color: #ffe;
+    border-radius: 4px 4px 0px 0px;
+}
+
+.cloud {
+    width: 90%;
+    margin: 0px auto 40px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 0px 10px 20px 10px;
+}
+
+.cloud .cloud_tt, .cloud-lt .cloud_tt, .cloud-rt .cloud_tt {
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.cloud .cloud_ct {
+    margin: 40px auto 0px;
+}
+
+
+.cloud_elem_th, .cloud_elem {
+    margin: 0 auto;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+}
+
+a.cloud_list {
+    color: #2d2400;
+}
+
+.cloud_elem_th {
+    color: #fff;
+    background-color: #2d2400;
+}
+
+.cloud_elem {
+    border-bottom: 1px solid #eee;
+}
+
+.cloud_elem:hover {
+    background-color: #ffe;
+}
+
+.modernizator_area {
+    background-color: #fff;
+    border: 1px solid #eee;
+    position: absolute; 
+    left: 7px; 
+    top: 7px; 
+    line-height: 25px;
+    font-size: 18px;
+    border-radius: 4px;
+}
+
+.modernizator_field {
+    color: #555;
+    float: left;
+    padding: 2px 4px 0px 4px;
+}
+
+.modernizator_field:hover {
+    color: #000;
+}
+
+
+.cloud-lt, .cloud-rt {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.cloud-lt {
+    width: 40%;
+    float: left;
+
+}
+
+.cloud-rt {
+    width: 58%;
     float: right;
 }
 
-.nav .lt {
-    float: left;
+.btn-new {
+    width: 58%;
+    float: right;
+    margin: 10px auto 20px;
 }
 
-.nav a {
-    color: #fff;
-    font-size: 14px;
-}
-
-.profileEdit {
-    position: relative;
-    top: 100px;
-    width: 1000px;
+.btn-new div {
+    width: 150px;
     margin: 0 auto;
+}
+
+
+.priorytet_bniski, .priorytet_niski, .priorytet_sredni, .priorytet_wysoki, .priorytet_bwysoki {
+    padding-right: 10px;
+    text-shadow: -1px 0 #777, 0 1px #777,
+        1px 0 #777, 0 -1px #777;
+}
+
+.priorytet_bniski {
+    color: #009933;
+}
+.priorytet_niski {
+    color: #00aa00;
+
+}
+.priorytet_sredni {
+    color: #ffa;
+}
+.priorytet_wysoki {
+    color: #FECA40;
+}
+.priorytet_bwysoki {
+    color: red;
+}
+
+.cloud_elem .lt {
+    width: 70%;
+}
+
+.status_nowy,
+.status_w_realizacji,
+.status_zatrzymany,
+.status_testowany,
+.status_test_negatywny,
+.status_test_pozytywny,
+.status_wgrywany,
+.status_wgrany,
+.status_zamknięty {
+    padding-right: 6px;
+    padding-left: 6px;
+    text-shadow: -1px 0 #777, 0 1px #777,
+        1px 0 #777, 0 -1px #777;
+}
+
+
+.status_nowy{
+    color: #009933;
+}
+.status_w_realizacji{
+    color: #FECA40;
+}
+.status_zatrzymany{
+    color: #313131;
+}
+.status_testowany{
+    color: #0097CF;
+}
+.status_test_negatywny{
+    color: red;
+}
+.status_test_pozytywny{
+    color: #99ff99;
+}
+.status_wgrywany{
+    color: purple;
+}
+.status_wgrany{
+    color: #999;
+}
+.status_zamknięty {
+    color: #ccc;
+}
+
+.padding-low {
+    padding: 3px;
+}
+
+.padding-medium {
+    padding: 20px;
 }

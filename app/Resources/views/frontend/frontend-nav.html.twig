@@ -1,16 +1,33 @@
-<div class="nav_ct">
-    <div class="nav">
-        <a href="{{ url('homepage') }}"><div class="element lt">Logo</div></a>
-        {% if app.user %}
-        <a href="{{ url('_logout') }}"><div class="element rt">Wyloguj się</div></a>
-        <a id="username" href="{{ url('profile_edit') }}"><div class="element rt">{{ app.user.imie }}</div></a>
-        {% if app.user.isGranted('ROLE_ADMIN') %}
-        <a style="position: absolute; right: 10px" href="{{ url('admin_homepage') }}"><div class="element rt"><span class="glyphicon glyphicon-lock">Admin</span></div></a>
-        {% endif %}
-        {% else %}
-        <a href="{{ url('_login_path') }}"><div class="element rt">Zaloguj się</div></a>
-        <a href="{{ url('_register_path') }}"><div class="element rt">Zarejestruj się</div></a>
-        {% endif %}
-        <div style="clear: both;"></div>
-    </div>
+<div class="navigation">
+    <a href="{{ url('homepage') }}">
+        <div data-toggle="tooltip" title="Strona główna" class="nav-element left {% if(app.request.get('_route') == 'homepage') %} nav-element-active {% endif %}">
+            <span class="glyphicon glyphicon-home"></span>
+        </div>
+    </a>
+    <a href="{{ url('projects') }}">
+        <div data-toggle="tooltip" title="Projekty" class="nav-element left {% if(app.request.get('_route') matches('/projects/')) %} nav-element-active {% endif %}">
+            <span class="glyphicon glyphicon-tasks"></span>
+        </div>
+    </a>
+    <a href="{{ url('calendar') }}">
+        <div data-toggle="tooltip" title="Kalendarz" class="nav-element left {% if(app.request.get('_route') matches('/calendar/')) %} nav-element-active {% endif %}">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </div>
+    </a>
+    <a href="{{ url('settings') }}">
+        <div data-toggle="tooltip" title="Ustawienia" class="nav-element right {% if(app.request.get('_route') matches('/settings/')) %} nav-element-active {% endif %}">
+            <span class="glyphicon glyphicon-cog"></span>
+        </div>
+    </a>
+    <a href="{{ url('profile_edit') }}">
+        <div data-toggle="tooltip" title="Profil" class="nav-element right {% if(app.request.get('_route') matches('/profile/')) %} nav-element-active {% endif %}">
+            <span class="glyphicon glyphicon-user"></span>
+        </div>
+    </a>
+    <div class="clear"></div>
 </div>
+<script type="text/javascript">
+    $().ready(function(){
+        $('div').tooltip('hide');
+    })
+</script>
