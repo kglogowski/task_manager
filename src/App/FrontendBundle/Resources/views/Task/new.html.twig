@@ -6,10 +6,6 @@
 {% block content %}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
 {{ include('AppHelperBundle:ui:datapicker.html.twig', { arrObj: ['.date_to'] } ) }}
-<script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
-<script>
-        tinymce.init({selector:'textarea'});
-</script>
 
 <div class="cloud">
     <div class="cloud_tt">
@@ -42,6 +38,7 @@
         </form>
     </div> 
 </div>
+{{ tinymce_init() }}
 <script>
     $('.selectpicker').selectpicker();
 </script>

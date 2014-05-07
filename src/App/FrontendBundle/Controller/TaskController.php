@@ -32,7 +32,7 @@ class TaskController extends TmController {
             $form = $this->createFormBuilder()
                     ->add('tekst', 'textarea', array(
                         'attr' => array(
-                            'class' => 'form-control',
+                            'class' => 'tinymce',
                             'placeholder' => 'Napisz wiadomość',
                             'title' => 'Napisz wiadomość',
                         )
@@ -155,7 +155,7 @@ class TaskController extends TmController {
                 )
                 ->add('opis', 'textarea', array(
                     'attr' => array(
-                        'class' => 'form-control',
+                        'class' => 'tinymce',
                         'placeholder' => 'Napisz co należy wykonać w zadaniu',
                         'title' => 'Napisz wiadomość',
                     )
