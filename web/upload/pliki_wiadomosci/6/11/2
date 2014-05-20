@@ -1,0 +1,267 @@
+<?php
+
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    Mage
+ * @package     Mage_CatalogRule
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+
+/**
+ * Catalog Price rules observer model
+ */
+class Mage_CatalogRule_Model_Import {
+
+    public function stworzPlikCsv($observer) {
+        $domain = "http://lovrin.pl/porownywarki/ceneo_ynuungjvkrjnugea.xml";
+        $xml = simplexml_load_file($domain);
+        $csv = array(
+            0 => 'sku,_store,_attribute_set,_type,_category,_root_category,_product_websites,color,cost,country_of_manufacture,created_at,custom_design,custom_design_from,custom_design_to,custom_layout_update,description,gallery,gift_message_available,has_options,image,image_label,manufacturer,media_gallery,meta_description,meta_keyword,meta_title,minimal_price,msrp,msrp_display_actual_price_type,msrp_enabled,name,news_from_date,news_to_date,options_container,page_layout,price,required_options,short_description,small_image,small_image_label,special_from_date,special_price,special_to_date,status,tax_class_id,thumbnail,thumbnail_label,updated_at,url_key,url_path,visibility,weight,qty,min_qty,use_config_min_qty,is_qty_decimal,backorders,use_config_backorders,min_sale_qty,use_config_min_sale_qty,max_sale_qty,use_config_max_sale_qty,is_in_stock,notify_stock_qty,use_config_notify_stock_qty,manage_stock,use_config_manage_stock,stock_status_changed_auto,use_config_qty_increments,qty_increments,use_config_enable_qty_inc,enable_qty_increments,is_decimal_divided,_links_related_sku,_links_related_position,_links_crosssell_sku,_links_crosssell_position,_links_upsell_sku,_links_upsell_position,_associated_sku,_associated_default_qty,_associated_position,_tier_price_website,_tier_price_customer_group,_tier_price_qty,_tier_price_price,_group_price_website,_group_price_customer_group,_group_price_price,_media_attribute_id,_media_image,_media_lable,_media_position,_media_is_disabled'
+        );
+
+        $i = 1;
+        foreach ($xml as $o) {
+            $arrId = explode(' ', $o->name);
+            $kod_producenta = null;
+            $sku = null;
+            $set = 'simple';
+            foreach ($o->attrs->a as $a) {
+                if ($a['name'] == 'Kod producenta') {
+                    $kod_producenta = $a;
+                }
+                if ($a['name'] == 'Zestaw') {
+                    $set = 'bundle';
+                }
+            }
+            $sku = substr($o->name, strlen($o->name) - 4, strlen($o->name));
+            $kod_producenta = !isset($kod_producenta) ? $arrId[count($arrId) - 1] : $kod_producenta;
+            $code = str_replace('"', '\'', str_replace('\'', '', str_replace("\n", " ", $o->desc)));
+
+
+            $url = $o->imgs->main['url'];
+            $arr = explode(".", $url);
+            $tip = $arr[count($arr) - 1];
+//    file_put_contents($sku.'.'.$tip, file_get_contents($url));
+            $pathUrl = '/media/catalog/product/' . $sku[0] . '/' . $sku[1] . '/' . $sku . '.' . $tip;
+
+            $subArr = array(
+                $sku,
+                '',
+                'Default',
+                'simple',
+                'Biżuteria pozłacana',
+                'Default Category',
+                'base',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '"' . html_entity_decode($code) . '"',
+                '',
+                '',
+                '0',
+                '"' . $pathUrl . '"',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                'Użyj konfiguracji',
+                'Użyj konfiguracji',
+                $o->name,
+                '',
+                '',
+                'Blok za kolumną informacyjną',
+                '',
+                $o['price'],
+                '0',
+                $sku,
+                '"' . $pathUrl . '"',
+                '',
+                '',
+                '',
+                '',
+                $o['avail'],
+                '0',
+                '"' . $pathUrl . '"',
+                '',
+                '',
+                $sku,
+                $sku . '.html',
+                '4',
+                $o['weight'],
+                '25.0000',
+                '0.0000',
+                '1',
+                '0',
+                '0',
+                '1',
+                '1.0000',
+                '1',
+                '0.0000',
+                '1',
+                '1',
+                '',
+                '1',
+                '0',
+                '1',
+                '0',
+                '1',
+                '0.0000',
+                '1',
+                '0',
+                '0',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '88',
+                '',
+                '',
+                '1',
+                '0'
+            );
+            $line1 = join(',', $subArr);
+            $subArr2 = array(
+                '',
+                '',
+                '',
+                '',
+                'Biżuteria pozłacana/' . $o->cat,
+                'Default Category',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                ''
+            );
+            $line2 = join(',', $subArr2);
+            $csv[$i++] = $line1;
+            $csv[$i++] = $line2;
+        }
+//header("Content-type: text/csv");
+//header("Content-Disposition: inline; filename=\"test.csv\";" );
+        file_put_contents($_SERVER['DOCUMENT_ROOT'].'/test.csv', join(PHP_EOL, $csv));
+    }
+
+}

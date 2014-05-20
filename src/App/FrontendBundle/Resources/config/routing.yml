@@ -7,16 +7,33 @@ projects:
     defaults: { _controller: AppFrontendBundle:Projects:index }
 
 projects_new:
-    pattern: /projekty-nowy
+    pattern: /nowy-projekt
     defaults: { _controller: AppFrontendBundle:Projects:new }
 
+
+projects_edit_roles:
+    pattern: /projekt-edycja-rol/{projekt_nazwa}
+    defaults: { _controller: AppFrontendBundle:Projects:editRoles }
+
 tasks:
-    pattern: /projekty/{projekt_nazwa}/{task_id}
+    pattern: /projekt/{projekt_nazwa}/{task_id}
     defaults: { _controller: AppFrontendBundle:Task:index, task_id: 0 }
     
 task_new:
-    pattern: /projekty/{projekt_nazwa}/zadanie/nowe
+    pattern: /projekt-nowe-zadanie/{projekt_nazwa}
     defaults: { _controller: AppFrontendBundle:Task:new }
+
+plikWiadomoscPobierz:
+    pattern:  /projekt-wiadomosc/pobierz-plik-zadania/{plikWiadomosciId}
+    defaults: { _controller: AppFrontendBundle:Task:plikWiadomoscPobierz}
+    
+plikTaskPobierz:
+    pattern:  /projekt-wiadomosc/pobierz-plik-glowny-zadania/{plikTaskId}
+    defaults: { _controller: AppFrontendBundle:Task:plikTaskPobierz}
+    
+wiadomosc_delete:
+    pattern:  /usuwanie-wiadomosci/{wiadomoscId}
+    defaults: { _controller: AppFrontendBundle:Task:usunWiadomosc }
     
 calendar:
     pattern: /kalendarz

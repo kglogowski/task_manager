@@ -70,3 +70,17 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+    
+#stfalcon_tinymce:
+#    tinymce_buttons:
+#        stfalcon: # Id of the first button
+#            title: "Stfalcon"
+#            image: "http://stfalcon.com/favicon.ico"
+#        hello_world: # Id of the second button
+#            title: "Google"
+#            image: "http://google.com/favicon.ico"
+#
+#    theme:
+#        simple:
+#             toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+#             toolbar2: "print preview media | forecolor backcolor emoticons | stfalcon | hello_world"

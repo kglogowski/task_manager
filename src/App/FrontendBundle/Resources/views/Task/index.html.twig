@@ -45,6 +45,23 @@
     </div>
     <div class="cloud_ct padding-medium">
         {{ task.opis|raw  }}
+        <div class="cloud_files">
+        {% for plikTask in task.plikiTask %}
+            <a target="_blank" href="{{ url('plikTaskPobierz',{plikTaskId: plikTask.id}) }}" class="download_plik_wiadomosc" data-id="{{ plikTask.id }}">
+                <div data-toggle="tooltip" data-placement="left" title="{{plikTask.getLabel()}}" class="cloud_files_element">
+                    <div class="cloud_files_typ">
+                        {{plikTask.getLabelTyp()}}
+                    </div>
+                    <div>
+                        <span style="" class="glyphicon glyphicon-file"></span>
+                    </div>
+                    <div class="cloud_files_name">
+                        {{plikTask.getLabel()}}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+        </div>
     </div>
 </div>
 <div class="btn-new">
@@ -52,15 +69,21 @@
         <a id="dodaj_wiadomosc" style="float: right" class="btn btn-default btn-block" href="javascript:void(0)">Napisz wiadomość</a>
     </div>
 </div>
-<div class="cloud-rt">
+<div style="display: none" class="cloud-rt">
     <div class="cloud_ct">
         <div id="dodaj_wiadomosc_form">
-            <form action="" method="POST">
+            <form action="" method="POST" {{ form_enctype(form) }}>
                 <div class="well-sm">
                 {{ form_widget(form.tekst) }}
                 </div>
                 <div class="well-sm">
+                    {{ include('AppHelperBundle:basic:zalacz_pliki.html.twig', {name: 'pliki'}) }}
+                </div>
+                <div class="well-sm">
                 {{ form_widget(form.aktualny) }}
+                </div>
+                <div class="well-sm">
+                {{ form_widget(form.status) }}
                 </div>
                 <div class="well-sm">
                 {{ form_widget(form._token) }}
@@ -72,13 +95,54 @@
 </div>
 {% for wiadomosc in task.wiadomosci %}
 <div class="cloud-rt">
-     {{ wiadomosc.tresc }}
+    <div class="cloud_tt_message">
+        <div class="left"><h5>{{ wiadomosc.uzytkownik.login }} <small>{{ wiadomosc.createdAt|date('d-m-Y') }}</small></h5></div>
+        <div class="right"><h5><small>#{{ wiadomosc.numer }}</small></h5></div>
+        <a onclick="return confirm('Czy napewno chcesz usunąć wiadomość?')" href="{{ url('wiadomosc_delete', {wiadomoscId: wiadomosc.id}) }}"><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-trash"></span></h5></div></a>
+        <a href=""><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-pencil"></span></h5></div></a>
+        <div class="clear"></div>
+    </div>
+    <div class="cloud_ct padding-medium">
+        {{ wiadomosc.tresc|raw }}
+        <div class="cloud_files">
+        {% for plik in wiadomosc.plikiWiadomosci %}
+            <a target="_blank" href="{{ url('plikWiadomoscPobierz',{plikWiadomosciId: plik.id}) }}" class="download_plik_wiadomosc" data-id="{{ plik.id }}">
+                <div data-toggle="tooltip" data-placement="left" title="{{plik.getLabel()}}" class="cloud_files_element">
+                    <div class="cloud_files_typ">
+                        {{plik.getLabelTyp()}}
+                    </div>
+                    <div>
+                        <span style="" class="glyphicon glyphicon-file"></span>
+                    </div>
+                    <div class="cloud_files_name">
+                        {{plik.getLabel()}}
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+        </div>
+    </div>
 </div>
 {% endfor %}
 {% else %}
-
+<div class="cloud-rt">
+    <div class="cloud_tt">
+        <h4>
+            Projekt stworzył: {{ creator.login }} dnia {{ projekt.createdAt|date('d-m-Y') }}<br />
+            <small>{{ projekt.label }}</small>
+        </h4>
+        <h5>
+            Zakończenie projektu wypada na dzień: {{ projekt.termin|date('d-m-Y') }}
+            <small>Pozostało dni: {{ projekt.getTimeToFinish() }}</small>
+        </h5>
+    </div>
+    <div class="cloud_ct padding-medium">
+        <div>Osoby przypisane do projektu:</div>
+    </div>
+</div>
 {% endif %}
 <div class="clear"></div>
+{{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
 
 {{ tinymce_init() }}
 <script type="text/javascript">
@@ -86,14 +150,13 @@
     $().ready(function() {
         $dw = $('#dodaj_wiadomosc');
         $dwf = $('#dodaj_wiadomosc_form').parent().parent();
-        $dwf.slideUp(0);
         $dw.click(function() {
             if ($dwf.hasClass('show')) {
-                $dwf.slideUp('medium');
+                $dwf.fadeIn('medium');
                 $dwf.removeClass('show');
                 $dw.html('Napisz wiadomość');
             } else {
-                $dwf.slideDown('medium');
+                $dwf.fadeOut('medium');
                 $dwf.addClass('show');
                 $dw.html('Ukryj formularz');
             }

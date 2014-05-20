@@ -33,6 +33,7 @@ class TaskController extends TmController {
                     ->add('tekst', 'textarea', array(
                         'attr' => array(
                             'class' => 'tinymce',
+                            'data-theme' => 'bbcode',
                             'placeholder' => 'Napisz wiadomość',
                             'title' => 'Napisz wiadomość',
                         )
@@ -44,6 +45,22 @@ class TaskController extends TmController {
                             'class' => 'form-control selectpicker',
                             'data-style' => 'btn-default',
                             'title' => 'Przypnij zadanie na:',
+                        )
+                    ))
+                    ->add('status', 'choice', array(
+                        'choices' => array('_vns_' => 'Aktualny status: ' . $task->getStatusLabel() . ' ') + Task::GetStatusyForDropDown(),
+                        'required' => 'true',
+                        'attr' => array(
+                            'class' => 'form-control selectpicker',
+                            'data-style' => 'btn-default',
+                            'title' => 'Ustaw status',
+                        )
+                    ))
+                    ->add('pliki', 'file', array(
+                        'required' => false,
+                        'attr' => array(
+                            'multiple' => 'multiple',
+                            'id' => 'files'
                         )
                     ))
                     ->add('save', 'submit', array(
@@ -59,18 +76,39 @@ class TaskController extends TmController {
                 if ($form->isValid()) {
                     $data = $form->getData();
                     $aktualnyId = $data['aktualny'] == '_vns_' ? $task->getAktualnyUzytkownik() : $data['aktualny'];
+                    $statusId = $data['status'] == '_vns_' ? $task->getStatus() : $data['status'];
                     $wiadomosc = new \Data\DatabaseBundle\Entity\Wiadomosc();
                     $wiadomosc
                             ->setCreatedAt()
                             ->setTask($task)
                             ->setTresc($data['tekst'])
                             ->setUzytkownik($this->getUser())
+                            ->setNumer(count($task->getWiadomosci()) + 1);
                     ;
-                    $task->setAktualnyUzytkownik($aktualnyId);
-                    $m->persist($task);
                     $m->persist($wiadomosc);
+                    $errorString = '';
+                    foreach ($data['pliki'] as $plik) {
+                        if ($plik instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+                            if ($plik->isValid()) {
+                                $plikWiadomosci = new \Data\DatabaseBundle\Entity\PlikWiadomosci();
+                                $plikWiadomosci
+                                        ->setLabel($plik->getClientOriginalName())
+                                        ->setWiadomosc($wiadomosc)
+                                        ->setTyp($plik->getMimeType())
+                                ;
+                                $m->persist($plikWiadomosci);
+                                $plikWiadomosci->move($plik);
+                            } else {
+                                $errorString .= ', plik ' . $plik->getClientOriginalName() . ' jest za duży lub niepoprawny';
+                            }
+                        }
+                    }
+                    $task
+                            ->setAktualnyUzytkownik($aktualnyId)
+                            ->setStatus($statusId);
+                    $m->persist($task);
                     $m->flush();
-                    return $this->redirectWithFlash('tasks', 'Wiadmość została dodana', 'success', array(
+                    return $this->redirectWithFlash('tasks', 'Wiadmość została dodana' . $errorString, 'success', array(
                                 'projekt_nazwa' => $projekt->getName(),
                                 'task_id' => $task->getId()
                     ));
@@ -166,6 +204,13 @@ class TaskController extends TmController {
                         'class' => 'btn btn-success'
                     )
                 ))
+                ->add('pliki', 'file', array(
+                    'required' => false,
+                    'attr' => array(
+                        'multiple' => 'multiple',
+                        'id' => 'files'
+                    )
+                ))
                 ->getForm();
 
 
@@ -198,6 +243,23 @@ class TaskController extends TmController {
                         ->setCreator($this->getUser()->getId())
                 ;
                 $m->persist($task);
+                foreach ($data['pliki'] as $plik) {
+                    if ($plik instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+                        if ($plik->isValid()) {
+                            $plikTask = new \Data\DatabaseBundle\Entity\PlikTask();
+                            $plikTask
+                                    ->setLabel($plik->getClientOriginalName())
+                                    ->setTask($task)
+                                    ->setTyp($plik->getMimeType())
+                            ;
+                            $m->persist($plikTask);
+                            $plikTask->move($plik);
+                        } else {
+                            $errorString .= ', plik ' . $plik->getClientOriginalName() . ' jest za duży lub niepoprawny';
+                        }
+                    }
+                }
+
                 $m->flush();
                 return $this->redirectWithFlash('tasks', 'Stworzono nowe zadanie', 'success', array('projekt_nazwa' => $projekt->getName()));
             }
@@ -205,6 +267,43 @@ class TaskController extends TmController {
         return $this->render('AppFrontendBundle:Task:new.html.twig', array(
                     'form' => $form->createView()
         ));
+    }
+
+    public function plikWiadomoscPobierzAction($plikWiadomosciId) {
+        $m = $this->getDoctrine()->getManager();
+        $plikWiadomosci = $m->find("DataDatabaseBundle:PlikWiadomosci", $plikWiadomosciId);
+        $wiadomosc = $plikWiadomosci->getWiadomosc();
+        $task = $wiadomosc->getTask();
+        $projektId = $task->getProjekt()->getId();
+        $path = $_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projektId . '/' . $task->getId() . '/' . $wiadomosc->getId() . '/' . $plikWiadomosciId;
+
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$path");
+        header("Content-Disposition: inline; filename=" . $plikWiadomosci->getLabel());
+        header("Content-Type: " . $plikWiadomosci->getTyp());
+        header("Content-Transfer-Encoding: binary");
+
+        // Read the file from disk
+        readfile($path);
+        die;
+    }
+
+    public function plikTaskPobierzAction($plikTaskId) {
+        $m = $this->getDoctrine()->getManager();
+        $plikTask = $m->find("DataDatabaseBundle:PlikTask", $plikTaskId);
+        $task = $plikTask->getTask();
+        $projektId = $task->getProjekt()->getId();
+        $path = $_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/' . $projektId . '/' . $task->getId() . '/' . $plikTaskId;
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header("Content-Disposition: attachment; filename=$path");
+        header("Content-Disposition: inline; filename=" . $plikTask->getLabel());
+        header("Content-Type: " . $plikTask->getTyp());
+        header("Content-Transfer-Encoding: binary");
+        // Read the file from disk
+        readfile($path);
+        die;
     }
 
 }

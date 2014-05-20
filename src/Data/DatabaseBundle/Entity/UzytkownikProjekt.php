@@ -57,7 +57,11 @@ class UzytkownikProjekt
     }
     
     
-    /**
+    public static function GetRoleArray() {
+        return self::$arrRoleLabel;
+    }
+
+        /**
      * Get id
      *
      * @return integer 

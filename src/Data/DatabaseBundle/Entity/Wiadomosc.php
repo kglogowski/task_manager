@@ -4,6 +4,9 @@ namespace Data\DatabaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Data\DatabaseBundle\Entity\Task;
+use Data\DatabaseBundle\Entity\PlikWiadomosci;
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  * Wiadomosc
  *
@@ -58,7 +61,22 @@ class Wiadomosc
      */
     private $tresc;
 
+    /**
+     *
+     * @ORM\Column(name="numer", type="integer") 
+     */
+    private $numer;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="PlikWiadomosci", mappedBy="wiadomosc")
+     */
+    protected $plikiWiadomosci;
+
+    public function __construct() {
+        $this->plikiWiadomosci = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -182,5 +200,24 @@ class Wiadomosc
     public function getTresc()
     {
         return $this->tresc;
+    }
+    
+    
+    public function addPlikWiadomosci(PlikWiadomosci $plikWiadomosci) {
+        $this->plikiWiadomosci->add($plikWiadomosci);
+        return $this;
+    }
+    
+    public function getPlikiWiadomosci() {
+        return $this->plikiWiadomosci;
+    }
+    
+    public function setNumer($numer) {
+        $this->numer = $numer;
+        return $this;
+    }
+    
+    public function getNumer() {
+        return $this->numer;
     }
 }

@@ -14,6 +14,11 @@
             <span class="glyphicon glyphicon-calendar"></span>
         </div>
     </a>
+    <a href="{{ url('_logout') }}">
+        <div data-toggle="tooltip" title="Wyloguj się" class="nav-element right">
+            <span class="glyphicon glyphicon-off"></span>
+        </div>
+    </a>
     <a href="{{ url('settings') }}">
         <div data-toggle="tooltip" title="Ustawienia" class="nav-element right {% if(app.request.get('_route') matches('/settings/')) %} nav-element-active {% endif %}">
             <span class="glyphicon glyphicon-cog"></span>

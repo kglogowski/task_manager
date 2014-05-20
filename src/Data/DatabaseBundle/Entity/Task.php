@@ -7,6 +7,7 @@ use Data\DatabaseBundle\Entity\Uzytkownik;
 use Data\DatabaseBundle\Entity\Wiadomosc;
 use Doctrine\Common\Collections\ArrayCollection;
 use Data\DatabaseBundle\Entity\Projekt;
+use Data\DatabaseBundle\Entity\PlikTask;
 
 /**
  * Task
@@ -80,7 +81,7 @@ class Task {
      * @ORM\Column(name="aktualny_uzytkownik", type="integer")
      */
     private $aktualnyUzytkownik;
-    
+
     /**
      * @var integer
      *
@@ -88,15 +89,13 @@ class Task {
      */
     private $creator;
 
-    
     /**
      * @var text
      *
      * @ORM\Column(name="opis", type="text")
      */
     private $opis;
-    
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="Uzytkownik", inversedBy="tasks", cascade={"persist"})
      * @ORM\JoinTable(name="uzytkownicy_taski",
@@ -112,6 +111,11 @@ class Task {
      */
     protected $wiadomosci;
 
+    /**
+     * @ORM\OneToMany(targetEntity="PlikTask", mappedBy="task")
+     */
+    protected $plikiTask;
+    
     /**
      * @ORM\ManyToOne(targetEntity="Projekt",inversedBy="tasks")
      * @ORM\JoinColumn(referencedColumnName="id")
@@ -139,7 +143,6 @@ class Task {
         self::STATUS_WGRANY => 'Wgrany',
         self::STATUS_ZAMKNIETY => 'Zamknięty',
     );
-    
     protected static $arrStatusClass = array(
         self::STATUS_NOWY => 'status_nowy',
         self::STATUS_REALIZOWANY => 'status_w_realizacji',
@@ -152,14 +155,18 @@ class Task {
         self::STATUS_ZAMKNIETY => 'status_zamknięty',
     );
 
+    public static function GetStatusyForDropDown() {
+        return self::$arrStatusLabel;
+    }
+
     public function getStatusLabelByKey($key) {
         return self::$arrStatusLabel[$key];
     }
-    
+
     public function getStatusLabel() {
         return self::$arrStatusLabel[$this->getStatus()];
     }
-    
+
     public function getStatusClass() {
         return self::$arrStatusClass[$this->getStatus()];
     }
@@ -177,7 +184,6 @@ class Task {
         self::PRIORYTET_WYSOKI => 'wysoki',
         self::PRIORYTET_BARDZO_WYSOKI => 'bardzo wysoki',
     );
-    
     protected static $arrPriorytetClass = array(
         self::PRIORYTET_BARDZO_NISKI => 'priorytet_bniski',
         self::PRIORYTET_NISKI => 'priorytet_niski',
@@ -185,24 +191,25 @@ class Task {
         self::PRIORYTET_WYSOKI => 'priorytet_wysoki',
         self::PRIORYTET_BARDZO_WYSOKI => 'priorytet_bwysoki',
     );
-    
+
     public static function GetProtytety() {
         return self::$arrPriorytetLabel;
     }
-    
+
     public function getPriorytetClassByKey($key) {
         return self::$arrPriorytetClass[$key];
     }
-    
+
     public function getPriorytetClass() {
         return self::$arrPriorytetClass[$this->getPriorytet()];
     }
-    
+
     public function getPriorytetLabel() {
         return self::$arrPriorytetLabel[$this->getPriorytet()];
     }
 
     public function __construct() {
+        $this->plikiTask = new ArrayCollection();
         $this->uzytkownicy = new ArrayCollection();
         $this->wiadomosci = new ArrayCollection();
     }
@@ -345,7 +352,7 @@ class Task {
     public function getUzytkownicy() {
         return $this->uzytkownicy->toArray();
     }
-    
+
     public function getUzytkownicyToDropdown() {
         $uzytkownicy = array();
         foreach ($this->getUzytkownicy() as $user) {
@@ -404,7 +411,7 @@ class Task {
         $this->projekt = $projekt;
         return $this;
     }
-    
+
     public function getCreator() {
         return $this->creator;
     }
@@ -422,6 +429,14 @@ class Task {
         return $this;
     }
 
-
-
+    
+    public function addPlikTask(PlikTask $plikTask) {
+        $this->plikiTask->add($plikTask);
+        return $this;
+    }
+    
+    public function getPlikiTask() {
+        return $this->plikiTask;
+    }
+    
 }

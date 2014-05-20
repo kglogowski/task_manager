@@ -470,5 +470,25 @@ class Uzytkownik implements AdvancedUserInterface {
     public function removeTask(Task $tasks) {
         $this->tasks->removeElement($tasks);
     }
+    
+    public function getRoleProjektuByProjektId($projektId) {
+        $collUp = $this->getUzytkownicyProjekty();
+        foreach ($collUp as $up) {
+            if($up->getProjekt()->getId() == $projektId) {
+                return $up->getRola();
+            }
+        }
+        return null;
+    }
+    
+    public function setRoleProjektuByProjektId($projektId, $rola) {
+        $collUp = $this->getUzytkownicyProjekty();
+        foreach ($collUp as $up) {
+            if($up->getProjekt()->getId() == $projektId) {
+                $up->setRola($rola);
+                return $this;
+            }
+        }
+    }
 
 }

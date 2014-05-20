@@ -24,3 +24,13 @@
     </div> 
     {% endif %} 
 </div>
+
+
+<script type="text/javascript">
+    $().ready(function(){
+        $('.alert').children('span').css('cursor','pointer');
+        $('.alert').children('span').click(function(){
+            $(this).parent().parent().fadeOut('slow');
+        });
+    });
+</script>

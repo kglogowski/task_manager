@@ -27,14 +27,14 @@ class Projekt
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=255, unique=true)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="label", type="string", length=255)
+     * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
     private $label;
 
@@ -360,5 +360,9 @@ class Projekt
 
     public function setCreator($creator) {
         $this->creator = $creator;
+    }
+    
+    public function getTimeToFinish()  {
+        return $this->getTermin()->diff(new \DateTime('now'))->days;
     }
 }

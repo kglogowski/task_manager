@@ -1,0 +1,31 @@
+<span class="btn btn-file btn-info">
+    <span class="glyphicon glyphicon-upload"></span> Załącz pliki<input id="form_pliki" type="file" multiple="multiple" name="form[{{ name }}][]">
+</span>
+<div id="selectedFiles"></div>
+
+<script>
+    var selDiv = "";
+
+    document.addEventListener("DOMContentLoaded", init, false);
+
+    function init() {
+        document.querySelector('#form_pliki').addEventListener('change', handleFileSelect, false);
+        selDiv = document.querySelector("#selectedFiles");
+    }
+
+    function handleFileSelect(e) {
+        if (!e.target.files)
+            return;
+
+        selDiv.innerHTML = "";
+
+        var files = e.target.files;
+        for (var i = 0; i < files.length; i++) {
+            var f = files[i];
+
+            selDiv.innerHTML += "<div>" + f.name + "</div>";
+
+        }
+
+    }
+</script>

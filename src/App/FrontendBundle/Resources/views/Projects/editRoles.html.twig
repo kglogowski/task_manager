@@ -1,0 +1,55 @@
+{% extends "::frontend.html.twig" %}
+{% block content %}
+{% include 'AppHelperBundle:basic:flash.html.twig' %}
+
+<div class="cloud">
+    <div class="cloud_tt">
+        <h2>Role użytkowników <small>Edycja</small></h2>
+    </div>
+    <form action="" method="POST">
+        <div class="cloud_ct">
+            <div class="cloud_elem_th">
+                <div class="row well-sm">
+                    <div class="col-md-3">
+                        Nazwa użytkownika
+                    </div>
+                {% for rola, key in role %}
+                    <div class="col-md-2">
+                    {{ key }}
+                    </div>
+                {% endfor%}
+                    <div class="col-md-1">
+                        Akcja
+                    </div>
+                </div>
+            </div>
+        {% for uzytkownik in uzytkownicy %}
+            <div class="cloud_elem">
+                <div class="row well-sm">
+                    <div class="col-md-3">
+                {{ uzytkownik.login }}
+                    </div>
+            {% for rola, key in role %}
+                    <div class="col-md-2">
+                        <input {% if uzytkownik.getRoleProjektuByProjektId(projekt.id) == rola %}checked{% endif %} value="{{ rola }}" class="form-control-static" name="{{ uzytkownik.id }}" type="radio"  />
+                    </div>
+            {% endfor%}
+                    <div class="col-md-1">
+                        <a href="">
+                            <div data-toggle="tooltip" data-placement="top" title="Usuń użytkownika z projektu" class="glyphicon glyphicon-trash"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+            <div class="well-sm">
+                <input class="btn btn-success" type="submit" value="Zapisz role" />
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="clear"></div>
+{{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
+{% endblock content %}

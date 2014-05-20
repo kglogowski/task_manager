@@ -28,7 +28,7 @@
         <div class="cloud_elem">
             <div class="row well-sm">
                 <div class="col-md-3">
-                    <a href="{{ url('tasks', { projekt_nazwa: project.name }) }}">{{ project.label }}</a>
+                   {{ project.label }}
                 </div>
                 <div class="col-md-2">
                 {{ UzytkownikProjekt.getRolaLabelByKey(project.rola_uzytkownika) }}
@@ -40,8 +40,19 @@
                 {{ project.termin|date('d-m-Y') }}
                 </div>
                 <div class="col-md-2">
+                    <a href="{{ url('tasks', { projekt_nazwa: project.name }) }}">
+                        <div data-toggle="tooltip" data-placement="top" title="Przejdź do projektu" class="glyphicon glyphicon-log-in"></div>
+                    </a>
                     {% if UzytkownikProjekt.getRolaLabelByKey(project.rola_uzytkownika) == 'Lider' %}
-                        {{ 'Edycja ról' }}
+                    <a href="{{ url('projects_edit_roles', { projekt_nazwa: project.name }) }}">
+                        <div data-toggle="tooltip" data-placement="top" title="Zmień role w projekcie" class="glyphicon glyphicon-cog"></div>
+                    </a>
+                    <a href="">
+                        <div data-toggle="tooltip" data-placement="top" title="Edytuj projekt" class="glyphicon glyphicon-pencil"></div>
+                    </a>
+                    <a href="">
+                        <div data-toggle="tooltip" data-placement="top" title="Usuń projekt" class="glyphicon glyphicon-trash"></div>
+                    </a>
                     {% endif %}
                 </div>
             </div>
@@ -54,4 +65,5 @@
         <h3>Pozostałe projekty</h3>
     </div>
 </div>
+{{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'homepage'}) }}
 {% endblock content %}

@@ -1,5 +1,5 @@
 body {
-    background-color: #eee !important;
+    background-color: #ffe !important;
 }
 
 .con {
@@ -12,10 +12,11 @@ body {
 
 .content {
     width: 98%;
-    background-color: #ffe;
+    background-color: #eee;
     margin: 0 auto;
     padding: 60px 40px;
     position: relative;
+    font-size: 90%;
 }
 
 
@@ -40,14 +41,17 @@ body {
 
 .nav-element-active {
     color: #000;
-    background-color: #ffe;
+    background-color: #eee;
     border-radius: 4px 4px 0px 0px;
 }
 
 .nav-element-active:hover {
     color: #000;
-    background-color: #ffe;
+    background-color: #eee;
     border-radius: 4px 4px 0px 0px;
+}
+
+.cloud, .cloud-rt, .cloud-lt {
 }
 
 .cloud {
@@ -75,7 +79,19 @@ body {
     border-right: 1px solid #eee;
 }
 
+.cloud_elem a {
+    color: #333;
+}
+
+.cloud_elem a:hover {
+    text-decoration: none;
+}
+
 a.cloud_list {
+    color: #2d2400;
+}
+
+a.cloud_list:hover {
     color: #2d2400;
 }
 
@@ -90,6 +106,51 @@ a.cloud_list {
 
 .cloud_elem:hover {
     background-color: #ffe;
+}
+
+.cloud_files {
+    border-top: 1px solid #eee;
+    font-size: 34px;
+    color: #444;
+    position: relative;
+    top: 30px;
+    padding-top: 10px;
+}
+
+.cloud_files a {
+    color: #0097CF;
+}
+
+.cloud_files a:hover, .cloud_files a:focus {
+    color: #941400;
+    text-decoration: none;
+}
+
+.cloud_files_typ {
+    height: 26px;
+    overflow: hidden;
+    font-size: 16px;
+    position: absolute;
+    top: 18px;
+    z-index: 2;
+    color: #fff;
+    left: 4px;
+    text-shadow: 1px 0px 0px #000, 0px 2px 0px #000, 0px 0px 3px #000;
+}
+
+.cloud_files_name {
+    font-size: 10px;
+    position: relative;
+    max-width: 50px;
+    max-height: 14px;
+    overflow: hidden;
+    top: -10px;
+}
+
+.cloud_files_element {
+    position: relative;
+    padding-right: 2px;
+    display: inline-block;
 }
 
 .modernizator_area {
@@ -131,6 +192,14 @@ a.cloud_list {
 .cloud-rt {
     width: 58%;
     float: right;
+}
+
+.cloud_tt_message {
+    border-bottom: 1px solid #eee;
+}
+
+.cloud_tt_message h5{
+    color: #444;
 }
 
 .btn-new {
@@ -222,4 +291,51 @@ a.cloud_list {
 
 .padding-medium {
     padding: 20px;
+}
+
+.padding-left-right-height {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.btn-file {
+    position: relative;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+#selectedFiles div {
+    padding-left: 4px;
+}
+
+#selectedFiles div:after {
+    content: ",";
+}
+
+.cloud_elem .glyphicon-pencil:hover {
+    color: #0097CF;
+}
+
+.cloud_elem .glyphicon-trash:hover {
+    color: #941400;
+}
+
+.cloud_elem .glyphicon-log-in:hover {
+    color: #330099;
+}
+
+.cloud_elem .glyphicon-cog:hover {
+    color: #777777;
 }
