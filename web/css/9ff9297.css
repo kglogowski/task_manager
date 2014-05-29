@@ -1,0 +1,80 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.clear {
+    clear: both;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+}
+
+.ajax-load {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: rgba(0,0,20,0.9);
+    background-image: url('/js/ajax/img/aw_loading2.gif');
+    background-repeat:no-repeat;
+    background-position:center; 
+}
+
+.relative {
+    position: relative;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.input-group-addon {
+    cursor: pointer;
+}
+
+.hr {
+    border-bottom: 1px solid #ccc;
+}
+
+.hr:hover {
+    background-color: #fff5dc;
+}
+
+.content {
+    margin: 50px auto;
+}
+
+.ct {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.right {
+    float: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.span-remove {
+    color: #cc0000;
+}
+
+.span-remove:hover {
+    color: #ff0000;
+}
+
+table span {
+}
+
+.edit {
+    margin: 0 auto;
+    width: 500px;
+}
