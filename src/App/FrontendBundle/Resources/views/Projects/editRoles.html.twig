@@ -1,4 +1,7 @@
 {% extends "::frontend.html.twig" %}
+{% block templatestyle %}
+    {% include 'AppHelperBundle:basic:ajax.html.twig' %}
+{% endblock %}
 {% block content %}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
 
@@ -47,9 +50,33 @@
             </div>
         </div>
     </form>
+    <div class="well-sm">
+        <button id="add-uzytkownik-to-project" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Dodaj użytkownika</button>
+    </div>
+    <div class="modal fade bs-example-modal-lg" aria-hidden="true" aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+                    <h4 id="myLargeModalLabel" class="modal-title">Dodanie użytkownika do projektu</h4>
+                </div>
+                <div id="modal-body-add-user" class="modal-body"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <div class="clear"></div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
+<script type="text/javascript">
+    $().ready(function(){
+       $('#add-uzytkownik-to-project').click(function(){
+           ajaxChangeContent({
+               id: '#modal-body-add-user',
+               url: '{{ url('projects_user_add') }}'
+           });
+       });
+    });
+</script>
 {% endblock content %}

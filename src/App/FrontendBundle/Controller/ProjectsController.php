@@ -132,6 +132,11 @@ class ProjectsController extends TmController {
                     'role' => $role
         ));
     }
+    
+    public function addUserToProjectAction() {
+        return $this->render('AppFrontendBundle:Projects:addUserToProject.html.twig', array(
+        ));
+    }
 
     public function isLider($projekt, $uzytkownik = null) {
         $uzytkownik = $uzytkownik != null ? $uzytkownik : $this->getUser();

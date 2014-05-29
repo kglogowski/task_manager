@@ -363,6 +363,7 @@ class Projekt
     }
     
     public function getTimeToFinish()  {
-        return $this->getTermin()->diff(new \DateTime('now'))->days;
+        $now = new \DateTime('now');
+        return $this->getTermin() < $now ? 'przekroczono czas' : $this->getTermin()->diff($now)->days;
     }
 }
