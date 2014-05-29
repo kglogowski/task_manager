@@ -6,7 +6,12 @@ vendor/*
 */logs/*
 */cache/*
 web/uploads/*
+web/upload/*
+web/upload/pliki_wiadomosci/*
 web/bundles/*
+htdocs/uploads/*
+htdocs/upload/*
+htdocs/bundles/*
 
 # Configuration files
 app/config/parameters.ini
