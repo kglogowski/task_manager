@@ -11,7 +11,7 @@
             {{ 'brak zadań' }}
         {% else %}
             {% for myTask in collMyTask %}
-                {{ myTask.label }}<br />
+                {{ myTask.label ~ ' Projekt: ' ~ myTask.projekt.label  }}<br />
             {% endfor %}
         {% endif %}
     </div>
