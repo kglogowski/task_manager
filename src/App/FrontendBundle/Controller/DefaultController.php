@@ -2,13 +2,18 @@
 
 namespace App\FrontendBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use App\LibBundle\TmController;
+use Data\DatabaseBundle\Entity\Projekt;
+use Data\DatabaseBundle\Entity\Task;
 
-class DefaultController extends Controller {
+class DefaultController extends TmController {
 
     public function indexAction() {
-        
-        return $this->render('AppFrontendBundle:Default:index.html.twig');
+        $m = $this->getDoctrine()->getManager();
+        $collMyTask = $m->getRepository('DataDatabaseBundle:Task')->findByAktualnyUzytkownik($this->getUser());
+        return $this->render('AppFrontendBundle:Default:index.html.twig', array(
+            'collMyTask' => $collMyTask
+        ));
     }
 
 }

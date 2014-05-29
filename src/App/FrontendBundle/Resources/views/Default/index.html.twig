@@ -5,9 +5,15 @@
 
 {% block content %}
 <div class="cloud">
-    <div class="cloud_tt"><h3>Moje zadania</h3></div>
+    <div class="cloud_tt"><h3>Moje zadania <small>Przypisane na mnie</small></h3></div>
     <div class="cloud_ct">
-    {{ 'brak zadań' }}
+        {% if collMyTask|length == 0 %}
+            {{ 'brak zadań' }}
+        {% else %}
+            {% for myTask in collMyTask %}
+                {{ myTask.label }}<br />
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 <div class="cloud">
