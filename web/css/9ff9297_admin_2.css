@@ -1,0 +1,32 @@
+.content {
+    margin: 50px auto;
+}
+
+.ct {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.right {
+    float: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.span-remove {
+    color: #cc0000;
+}
+
+.span-remove:hover {
+    color: #ff0000;
+}
+
+table span {
+}
+
+.edit {
+    margin: 0 auto;
+    width: 500px;
+}
