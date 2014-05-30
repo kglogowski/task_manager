@@ -387,3 +387,6 @@ a.cloud_list:hover {
 .cloud_elem .glyphicon-cog:hover {
     color: #777777;
 }
+.row-border {
+    border: 1px solid #2D2400;
+}

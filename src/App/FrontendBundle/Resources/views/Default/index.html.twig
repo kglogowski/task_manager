@@ -10,8 +10,33 @@
         {% if collMyTask|length == 0 %}
             {{ 'brak zadań' }}
         {% else %}
+        <div class="cloud_elem_th">
+            <div class="row well-sm">
+                <div class="col-md-3">Nazwa projektu</div>
+                <div class="col-md-3">Nazwa zadania</div>
+                <div class="col-md-3">Status zadania</div>
+                <div class="col-md-3">Akcja</div>
+            </div>
+        </div>
             {% for myTask in collMyTask %}
-                {{ myTask.label ~ ' Projekt: ' ~ myTask.projekt.label  }}<br />
+        <div class="cloud_elem">
+            <div class="row well-sm">
+                <div class="col-md-3">
+                        {{ myTask.projekt.label }}
+                </div>
+                <div class="col-md-3">
+                        {{ myTask.label }}
+                </div>
+                <div class="col-md-3">
+                        {{ myTask.getStatusLabel() }}
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url('tasks', { projekt_nazwa: myTask.projekt.name, task_id: myTask.id }) }}">
+                        <div data-toggle="tooltip" data-placement="top" title="Przejdź do zadania" class="glyphicon glyphicon-log-in"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
             {% endfor %}
         {% endif %}
     </div>
@@ -22,8 +47,33 @@
         {% if collSentTask|length == 0 %}
             {{ 'brak odesłanych zadań' }}
         {% else %}
+        <div class="cloud_elem_th">
+            <div class="row well-sm">
+                <div class="col-md-3">Nazwa projektu</div>
+                <div class="col-md-3">Nazwa zadania</div>
+                <div class="col-md-3">Status zadania</div>
+                <div class="col-md-3">Akcja</div>
+            </div>
+        </div>
             {% for sentTask in collSentTask %}
-                {{ sentTask.label ~ ' Projekt: ' ~ sentTask.projekt.label  }}<br />
+        <div class="cloud_elem">
+            <div class="row well-sm">
+                <div class="col-md-3">
+                        {{ sentTask.projekt.label }}
+                </div>
+                <div class="col-md-3">
+                        {{ sentTask.label }}
+                </div>
+                <div class="col-md-3">
+                        {{ sentTask.getStatusLabel() }}
+                </div>
+                <div class="col-md-3">
+                    <a href="{{ url('tasks', { projekt_nazwa: sentTask.projekt.name, task_id: sentTask.id }) }}">
+                        <div data-toggle="tooltip" data-placement="top" title="Przejdź do zadania" class="glyphicon glyphicon-log-in"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
             {% endfor %}
         {% endif %}
     </div>
