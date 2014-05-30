@@ -132,7 +132,7 @@ class ProjectsController extends TmController {
                     'role' => $role
         ));
     }
-    
+
     public function addUserToProjectAction() {
         return $this->render('AppFrontendBundle:Projects:addUserToProject.html.twig', array(
         ));
@@ -142,42 +142,43 @@ class ProjectsController extends TmController {
         $uzytkownik = $uzytkownik != null ? $uzytkownik : $this->getUser();
         return $this->getDoctrine()->getManager()->getRepository('DataDatabaseBundle:UzytkownikProjekt')->findByProjektAndUzytkownik($projekt, $uzytkownik)->getRola();
     }
-    
+
     public function editProjectAction($projekt_nazwa) {
-                $m = $this->getDoctrine()->getManager();
+        $m = $this->getDoctrine()->getManager();
         $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
         $projekt = $projektRepo->findOneByName($projekt_nazwa);
         if (!$projekt instanceof Projekt) {
             return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
         }
 
-                
 
-                $form = $this->createFormBuilder($projekt)
-                ->add('label', null, array('label' => 'Zmień nazwę','attr' => array ( 'class' =>  'form-control' )))
-                ->add('name', null, array('label' => 'Url projektu','attr' => array ( 'class' =>  'form-control' )))
-                ->add('status','choice', array(
+
+        $form = $this->createFormBuilder($projekt)
+                ->add('label', null, array('label' => 'Zmień nazwę', 'attr' => array('class' => 'form-control')))
+                ->add('name', null, array('label' => 'Url projektu', 'attr' => array('class' => 'form-control')))
+                ->add('status', 'choice', array(
                     'label' => 'Status',
-                    'attr' => array ( 'class' =>  'filter-option pull-left' ),
+                    'attr' => array(
+                        'class' => 'form-control selectpicker',
+                        'data-style' => 'btn-default',
+                    ),
                     'choices' => Projekt::GetStatusy(),
                     'required' => false))
-                ->add('save', 'submit', array('label' => 'Zapisz','attr' => array ( 'class' =>  'btn btn-success' )))
+                ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
                 ->getForm()
         ;
-                               if ($this->getRequest()->getMethod() === 'POST') {
+        if ($this->getRequest()->getMethod() === 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();
-                 }
-                   return $this->redirect($this->generateUrl('projects'));
-    
-      }
-              return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
+            }
+            return $this->redirect($this->generateUrl('projects'));
+        }
+        return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
                     'form' => $form->createView(),
         ));
-                               
     }
 
 }
