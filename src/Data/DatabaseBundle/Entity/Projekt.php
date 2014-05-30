@@ -124,6 +124,10 @@ class Projekt
         self::STATUS_DEKORACJA    =>  'Dekoracja',
         self::STATUS_ZAMKNIETY    =>  'Zamknięty',
     );
+    
+     public static function GetStatusy(){ 
+    return self::$arrStatusLabel; 
+    }
 
     public function getStatusLabelByKey($key) {
         return self::$arrStatusLabel[$key];
