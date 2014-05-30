@@ -257,6 +257,7 @@ class TaskController extends TmController {
                                     ->setTyp($plik->getMimeType())
                             ;
                             $m->persist($plikTask);
+                            $m->flush();
                             $plikTask->move($plik);
                         } else {
                             $errorString .= ', plik ' . $plik->getClientOriginalName() . ' jest za duży lub niepoprawny';

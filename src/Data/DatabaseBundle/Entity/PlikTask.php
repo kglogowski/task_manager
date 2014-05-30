@@ -129,7 +129,6 @@ class PlikTask
     public function move(UploadedFile $plik) {
         $task = $this->getTask();
         $projectId = $task->getProjekt()->getId();
-        echo $_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/' . $projectId . '/' . $task->getId() . '/'; die;
         $plik->move($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/' . $projectId . '/' . $task->getId() . '/', $this->getId());
     }
     
