@@ -109,7 +109,7 @@ class PlikWiadomosci {
         $task = $wiadomosc->getTask();
         $projectId = $task->getProjekt()->getId();
         $wiadomoscId = $this->getWiadomosc()->getId();
-        $file = $plik->move($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projectId . '/' . $task->getId() . '/' . $wiadomosc->getId() . '/' . '/', $this->getId());
+        $plik->move($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projectId . '/' . $task->getId() . '/' . $wiadomosc->getId() . '/' , $this->getId());
     }
 
     protected static $arrTypes = array(
