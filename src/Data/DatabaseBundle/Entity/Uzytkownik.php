@@ -77,7 +77,7 @@ class Uzytkownik implements AdvancedUserInterface {
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_active", type="boolean", nullable=true, options={"default" = "false"})
+     * @ORM\Column(name="is_active", type="boolean", nullable=true, options={"default" = "0"})
      */
     private $is_active;
 

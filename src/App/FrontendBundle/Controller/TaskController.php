@@ -106,6 +106,9 @@ class TaskController extends TmController {
                     $task
                             ->setAktualnyUzytkownik($aktualnyId)
                             ->setStatus($statusId);
+                    if($this->getUser()->getId() != $aktualnyId) {
+                        $task->setPoprzedniUzytkownik($this->getUser()->getId());
+                    }
                     $m->persist($task);
                     $m->flush();
                     return $this->redirectWithFlash('tasks', 'Wiadmość została dodana' . $errorString, 'success', array(

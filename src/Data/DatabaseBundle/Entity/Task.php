@@ -85,6 +85,13 @@ class Task {
     /**
      * @var integer
      *
+     * @ORM\Column(name="poprzedni_uzytkownik", type="integer", nullable=true)
+     */
+    private $poprzedniUzytkownik;
+    
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="creator", type="integer")
      */
     private $creator;
@@ -349,6 +356,26 @@ class Task {
         return $this->aktualnyUzytkownik;
     }
 
+    /**
+     * Get poprzedniUzytkownik
+     *
+     * @return integer 
+     */
+    public function getPoprzedniUzytkownik() {
+        return $this->poprzedniUzytkownik;
+    }
+
+    /**
+     * 
+     * @param type integer $poprzedniUzytkownik
+     * @return Task
+     */
+    public function setPoprzedniUzytkownik($poprzedniUzytkownik) {
+        $this->poprzedniUzytkownik = $poprzedniUzytkownik;
+        return $this;
+    }
+
+        
     public function getUzytkownicy() {
         return $this->uzytkownicy->toArray();
     }

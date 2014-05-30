@@ -19,7 +19,13 @@
 <div class="cloud">
     <div class="cloud_tt"><h3>Moje zadania <small>Odesłane</small></h3></div>
     <div class="cloud_ct">
-    {{ 'brak odesłanych zadań' }}
+        {% if collSentTask|length == 0 %}
+            {{ 'brak odesłanych zadań' }}
+        {% else %}
+            {% for sentTask in collSentTask %}
+                {{ sentTask.label ~ ' Projekt: ' ~ sentTask.projekt.label  }}<br />
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 <div class="clear"></div>
