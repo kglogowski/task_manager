@@ -31,7 +31,10 @@ class UzytkownikController extends Controller
             if($form->isValid()) {
                 $factory = $this->get('security.encoder_factory');
                 $encoder = $factory->getEncoder($object);
-                $object->setHaslo($form['haslo']->getData(), $factory);
+                $object
+                        ->setHaslo($form['haslo']->getData(), $factory)
+                        ->setIsActive(TRUE)
+                        ->addRole($m->getRepository('DataDatabaseBundle:Role')->findOneByNazwa('ROLE_USER'));
                 $m->persist($object);
                 $m->flush();
                 return $this->redirect($this->generateUrl('uzytkownik_show'));

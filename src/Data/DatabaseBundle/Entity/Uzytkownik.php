@@ -275,6 +275,7 @@ class Uzytkownik implements AdvancedUserInterface {
 
     public function setIsActive($is_active = false) {
         $this->is_active = $is_active;
+        return $this;
     }
 
     public function getRoles() {
