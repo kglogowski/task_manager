@@ -6,10 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Data\DatabaseBundle\Entity\UzytkownikProjekt;
 use Data\DatabaseBundle\Entity\Task;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Projekt
  *
+ * @ORM\Entity
+ * @UniqueEntity(fields="name", message="inny projekt korzysta z podanego adresu url.")
  * @ORM\Table(name="projekty")
  * @ORM\Entity(repositoryClass="Data\DatabaseBundle\Entity\ProjektRepository")
  */
@@ -27,7 +30,7 @@ class Projekt
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 

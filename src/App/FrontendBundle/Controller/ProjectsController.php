@@ -173,8 +173,10 @@ class ProjectsController extends TmController {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();
+                
+                return $this->redirect($this->generateUrl('projects'));
             }
-            return $this->redirect($this->generateUrl('projects'));
+            
         }
         return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
                     'form' => $form->createView(),
