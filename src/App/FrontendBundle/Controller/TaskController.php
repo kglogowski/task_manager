@@ -122,6 +122,7 @@ class TaskController extends TmController {
                         'task' => $task,
                         'creator' => $creator,
                         'form' => $form->createView(),
+                        'aktualny' => $aktualny,
             ));
         } else {
             $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($projekt->getCreator());
