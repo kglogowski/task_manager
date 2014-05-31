@@ -50,7 +50,7 @@
                     <a href="{{ url('projects_edit', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Edytuj projekt" class="glyphicon glyphicon-pencil"></div>
                     </a>
-                    <a href="">
+                    <a href="{{ url('projects_delete', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Usuń projekt" class="glyphicon glyphicon-trash"></div>
                     </a>
                     {% endif %}
