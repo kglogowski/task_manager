@@ -46,6 +46,14 @@
     background-color: #fff5dc;
 }
 
+.form-validate .error_list {
+    color: #993300;
+    background: #ffcccc;
+    padding: 4px 10px;
+    margin-top: 4px;
+    border: 1px solid #993300;
+    border-radius: 4px;
+}
 body {
     background-color: #ffe !important;
 }

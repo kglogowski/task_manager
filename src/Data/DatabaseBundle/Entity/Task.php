@@ -106,7 +106,7 @@ class Task {
     /**
      * @ORM\ManyToMany(targetEntity="Uzytkownik", inversedBy="tasks", cascade={"persist"})
      * @ORM\JoinTable(name="uzytkownicy_taski",
-     * joinColumns={@ORM\JoinColumn(name="task_id", referencedColumnName="id")},
+     * joinColumns={@ORM\JoinColumn(name="task_id", referencedColumnName="id", onDelete="CASCADE")},
      * inverseJoinColumns={@ORM\JoinColumn(name="uzytkownik_id", referencedColumnName="id")}
      * )
      */
@@ -398,6 +398,9 @@ class Task {
 
     public function getWiadomosci() {
         return $this->wiadomosci->toArray();
+    }
+        public function getMessage() {
+        return $this->wiadomosci;
     }
 
     public function addWiadomosc(Wiadomosc $uzytkownik) {
