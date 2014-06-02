@@ -36,16 +36,28 @@
             arr[1] = 'nazwisko=' + $(idLoad).find("input[name='nazwisko']").val();
             arr[2] = 'login=' + $(idLoad).find("input[name='login']").val();
             arr[3] = 'email=' + $(idLoad).find("input[name='email']").val();
-            dataString = arr.join('&');
-            ajaxChangeContent({
-                append: false,
-                data: dataString,
-                url: '{{ url('profile_edit_change_basic') }}',
-                id: '#profile-edit-basic-btn',
-                idLoad: idLoad,
-                msg: 'Dane zostały zaktualizowane',
-                msgTo: '.panel-body'
+
+            $fe = new FormValidator(idLoad);
+            $fe.validateText({
+                'name': 'imie',
+                'value': $(idLoad).find("input[name='imie']").val(),
+                'required': true,
+                'max_lenght': '255'
             });
+
+            if ($fe.isValid()) {
+                dataString = arr.join('&');
+                ajaxChangeContent({
+                    append: false,
+                    data: dataString,
+                    url: '{{ url('profile_edit_change_basic') }}',
+                    id: '#profile-edit-basic-btn',
+                    idLoad: idLoad,
+                    msg: 'Dane zostały zaktualizowane'
+                });
+            } else {
+                $fe.showErrors();
+            }
         });
     });
 </script>
