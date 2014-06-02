@@ -28,8 +28,8 @@ class ProjectsController extends TmController {
                     'Projekt' => new Projekt()
         ));
     }
-    
-        public function zakonczoneAction() {
+
+    public function zakonczoneAction() {
         $m = $this->getDoctrine()->getManager();
         $uzytkownik = $this->getUser();
 
@@ -49,19 +49,23 @@ class ProjectsController extends TmController {
                     'Projekt' => new Projekt()
         ));
     }
-    
-            public function skasowaneAction() {
+
+    public function skasowaneAction() {
         $m = $this->getDoctrine()->getManager();
         $uzytkownik = $this->getUser();
 
         $collMyProjekt = $m->createQuery("
-            SELECT *
+            SELECT p.label, p.status as status_projektu, p.name, up.rola as rola_uzytkownika, p.termin as termin
                 FROM DataDatabaseBundle:Projekt p
-                WHERE  p.skasowane = 1
-        ")->getResult();
+                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
+                WHERE up.uzytkownik = :uzytkownik_id
+                AND p.skasowane = 1
+        ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->getResult();
 
         return $this->render('AppFrontendBundle:Projects:skasowane.html.twig', array(
-                    'myProjects' => $collMyProjekt
+                    'myProjects' => $collMyProjekt,
+                    'UzytkownikProjekt' => new UzytkownikProjekt(),
+                    'Projekt' => new Projekt()
         ));
     }
 
@@ -212,17 +216,16 @@ class ProjectsController extends TmController {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();
-                
+
                 return $this->redirect($this->generateUrl('projects'));
             }
-            
         }
         return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
                     'form' => $form->createView(),
         ));
     }
-    
-     public function deleteProjectAction($projekt_nazwa) {
+
+    public function deleteProjectAction($projekt_nazwa) {
         $m = $this->getDoctrine()->getManager();
         $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
         $projekt = $projektRepo->findOneByName($projekt_nazwa);
@@ -230,13 +233,51 @@ class ProjectsController extends TmController {
         if (!$projekt instanceof Projekt) {
             return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
         }
-        $id =  $projekt->getId();
-        echo $id;
-        
         $m->getRepository('DataDatabaseBundle:Projekt')->addToDeleteProjekt($projekt);
-        
+
 
         return $this->redirect($this->generateUrl('projects'));
-     }
+    }
+
+    public function restoreProjectAction($projekt_nazwa) {
+        $m = $this->getDoctrine()->getManager();
+        $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
+        $projekt = $projektRepo->findOneByName($projekt_nazwa);
+
+        if (!$projekt instanceof Projekt) {
+            return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
+        }
+
+        $m->getRepository('DataDatabaseBundle:Projekt')->removeFromDeleteProjekt($projekt);
+
+
+        return $this->redirect($this->generateUrl('projects_skasowane'));
+    }
+
+    public function deleteHardProjectAction($projekt_nazwa) {
+        $m = $this->getDoctrine()->getManager();
+        $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
+        $projekt = $projektRepo->findOneByName($projekt_nazwa);
+
+        if (!$projekt instanceof Projekt) {
+            return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
+        }
+
+        $tasks = $projekt->getTasks();
+        foreach($tasks as $task) {
+            $message = $tasks->getMessage();
+            $id = $tasks->getId();
+            foreach ($mess as $message){
+                $m->getRepository('DataDatabaseBundle:PlikWiadomosci')->deleteMessagePliki($mess->getId());
+                $m->getRepository('DataDatabaseBundle:wiadomosc')->deleteMessage($mess->getId());
+            }
+            $m->getRepository('DataDatabaseBundle:PlikiTask')->deleteTaskPliki($id);
+            $m->getRepository('DataDatabaseBundle:Task')->deleteTask($id);
+            
+        }
+        $m->getRepository('DataDatabaseBundle:Projekt')->deleteProjekt($projekt);
+
+        return $this->redirect($this->generateUrl('projects_skasowane'));
+    }
 
 }

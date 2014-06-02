@@ -17,11 +17,15 @@
 {{ form_label(form.name) }}
 {{ form_widget(form.name) }}
 
+{{ form_label(form.status) }}
+{{ form_widget(form.status) }}
+
 {{ form_widget(form.save) }}
 </form>
 
   </div>
   </div>
+{{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'homepage'}) }}
   <script>
     $('.selectpicker').selectpicker();
 </script>

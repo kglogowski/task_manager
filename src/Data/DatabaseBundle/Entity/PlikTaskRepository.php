@@ -18,7 +18,7 @@ class PlikTaskRepository extends EntityRepository
        $this->getEntityManager()
                 ->createQueryBuilder()
                 ->delete('DataDatabaseBundle:PlikiTask', 'u')
-                ->where('u.projekt_id = '.$task_id)
+                ->where('u.task_id = '.$task_id)
                 ->getQuery()
                 ->execute();
     }

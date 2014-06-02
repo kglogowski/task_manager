@@ -9,7 +9,7 @@ projects:
 projects_new:
     pattern: /nowy-projekt
     defaults: { _controller: AppFrontendBundle:Projects:new }
-projects_end:
+projects_zakonczone:
     pattern: /projekty-zakonczone
     defaults: { _controller: AppFrontendBundle:Projects:zakonczone }
 projects_skasowane:
@@ -19,10 +19,19 @@ projects_skasowane:
 projects_edit:
     pattern: /projekt-edycja/{projekt_nazwa}
     defaults: { _controller: AppFrontendBundle:Projects:editProject } 
+
+projects_restore:
+    pattern: /projekt-przywroc/{projekt_nazwa}
+    defaults: { _controller: AppFrontendBundle:Projects:restoreProject } 
+    
 projects_delete:
     pattern: /projekt-delete/{projekt_nazwa}
     defaults: { _controller: AppFrontendBundle:Projects:deleteProject } 
-
+    
+projects_hard_delete:
+    pattern: /projekt-hard-delete/{projekt_nazwa}
+    defaults: { _controller: AppFrontendBundle:Projects:deleteHardProject }
+    
 projects_edit_roles:
     pattern: /projekt-edycja-rol/{projekt_nazwa}
     defaults: { _controller: AppFrontendBundle:Projects:editRoles }

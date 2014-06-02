@@ -110,7 +110,7 @@ class Projekt
      /**
      * @ORM\Column(type="boolean", nullable=true )
      */
-    public $skasowane;
+    private $skasowane;
 
     public function __construct() {
         $this->uzytkownicy_projekty = new ArrayCollection();
