@@ -18,6 +18,7 @@ class ProjectsController extends TmController {
                 LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
                 WHERE up.uzytkownik = :uzytkownik_id
                 AND p.status != :status_zamkniety
+                AND p.skasowane != 1
         ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
                 ->getResult();
 

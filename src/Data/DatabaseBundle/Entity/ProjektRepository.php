@@ -30,7 +30,7 @@ class ProjektRepository extends EntityRepository {
        $this->getEntityManager()
                 ->createQueryBuilder()
                 ->delete('DataDatabaseBundle:Projekt', 'u')
-                ->where('u.Gallery = '.$projekt->getId())
+                ->where('u.id = '.$projekt->getId())
                 ->getQuery()
                 ->execute();
     }
@@ -39,7 +39,7 @@ class ProjektRepository extends EntityRepository {
         $this->getEntityManager()
                 ->createQueryBuilder()
                 ->update('DataDatabaseBundle:Projekt', 'u')
-                ->set('u.delete', 'true')
+                ->set('u.skasowane', 'true')
                 ->where('u.id = ' . $projekt->getId())
                 ->getQuery()
                 ->execute();
