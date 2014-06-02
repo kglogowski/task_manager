@@ -25,12 +25,15 @@ $.extend(FormValidator.prototype, {
     addError: function(name, error) {
         this.errors[name] = error;
     },
+    clean: function() {
+        $id = this.id;
+        $($id).find('.error_list').remove();
+    },
     isValid: function() {
         i = 0;
         $id = this.id;
         for(var name in this.errors) {
             $input = $($id).find("input[name='"+name+"']");
-            $input.parent().children('.error_list').remove();
             i++;
         }
         return i == 0 ? true : false;
