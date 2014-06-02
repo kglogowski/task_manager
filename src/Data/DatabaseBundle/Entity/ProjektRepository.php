@@ -26,5 +26,23 @@ class ProjektRepository extends EntityRepository {
         ;
     }
     
+    public function deleteProjekt(Projekt $projekt) {
+       $this->getEntityManager()
+                ->createQueryBuilder()
+                ->delete('DataDatabaseBundle:Projekt', 'u')
+                ->where('u.Gallery = '.$projekt->getId())
+                ->getQuery()
+                ->execute();
+    }
     
+    public function addToDeleteProjekt(Projekt $projekt){
+        $this->getEntityManager()
+                ->createQueryBuilder()
+                ->update('DataDatabaseBundle:Projekt', 'u')
+                ->set('u.delete', 'true')
+                ->where('u.id = ' . $projekt->getId())
+                ->getQuery()
+                ->execute();
+    }
+      
 }
