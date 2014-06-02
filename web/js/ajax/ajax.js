@@ -18,7 +18,7 @@ $.extend(FormValidator.prototype, {
             this.addError(name, 'Za mało znaków "minimum: '+min_lenght+'"');
         }
         if (max_lenght != false && max_lenght < value.length) {
-            this.addError(name, 'Za dużo znaków "maksimum: '+min_lenght+'"');
+            this.addError(name, 'Za dużo znaków "maksimum: '+max_lenght+'"');
         }
 
     },
@@ -27,7 +27,10 @@ $.extend(FormValidator.prototype, {
     },
     isValid: function() {
         i = 0;
+        $id = this.id;
         for(var name in this.errors) {
+            $input = $($id).find("input[name='"+name+"']");
+            $input.parent().children('.error_list').remove();
             i++;
         }
         return i == 0 ? true : false;
@@ -36,8 +39,8 @@ $.extend(FormValidator.prototype, {
         $id = this.id;
         $arr = this.errors;
         for(var name in $arr) {
-            $($id).find("input[name='"+name+"']");
-            alert($arr[name]);
+            $input = $($id).find("input[name='"+name+"']");
+            $input.parent().append('<div class="error_list">'+$arr[name]+'</div>');
         }
     }
 });

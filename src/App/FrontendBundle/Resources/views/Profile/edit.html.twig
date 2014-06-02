@@ -94,6 +94,24 @@
                 'required': true,
                 'max_lenght': '255'
             });
+            $fe.validateText({
+                'name': 'nazwisko',
+                'value': $(idLoad).find("input[name='nazwisko']").val(),
+                'required': true,
+                'max_lenght': '255'
+            });
+            $fe.validateText({
+                'name': 'login',
+                'value': $(idLoad).find("input[name='login']").val(),
+                'required': true,
+                'max_lenght': '255'
+            });
+            $fe.validateText({
+                'name': 'email',
+                'value': $(idLoad).find("input[name='email']").val(),
+                'required': true,
+                'max_lenght': '255'
+            });
 
             if ($fe.isValid()) {
                 dataString = arr.join('&');
