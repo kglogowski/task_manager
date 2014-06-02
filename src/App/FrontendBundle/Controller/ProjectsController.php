@@ -55,19 +55,13 @@ class ProjectsController extends TmController {
         $uzytkownik = $this->getUser();
 
         $collMyProjekt = $m->createQuery("
-            SELECT p.label, p.status as status_projektu, p.name, up.rola as rola_uzytkownika, p.termin as termin
+            SELECT *
                 FROM DataDatabaseBundle:Projekt p
-                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
-                WHERE up.uzytkownik = :uzytkownik_id
-                AND p.status = :status_zamkniety
-                AND p.skasowane is null
-        ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
-                ->getResult();
+                WHERE  p.skasowane = 1
+        ")->getResult();
 
-        return $this->render('AppFrontendBundle:Projects:zakonczone.html.twig', array(
-                    'myProjects' => $collMyProjekt,
-                    'UzytkownikProjekt' => new UzytkownikProjekt(),
-                    'Projekt' => new Projekt()
+        return $this->render('AppFrontendBundle:Projects:skasowane.html.twig', array(
+                    'myProjects' => $collMyProjekt
         ));
     }
 
