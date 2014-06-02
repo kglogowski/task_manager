@@ -29,6 +29,7 @@ class TaskController extends TmController {
             }
             $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getCreator());
             $aktualny = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik());
+            $arrUzytkownicyToDropDown = array('_vns_' => 'Aktualny: ' . $aktualny->getLogin() . ' ') + $task->getUzytkownicyToDropdown();
             $form = $this->createFormBuilder()
                     ->add('tekst', 'textarea', array(
                         'attr' => array(
@@ -39,7 +40,7 @@ class TaskController extends TmController {
                         )
                     ))
                     ->add('aktualny', 'choice', array(
-                        'choices' => array('_vns_' => 'Aktualny: ' . $aktualny->getLogin() . ' ') + $task->getUzytkownicyToDropdown(),
+                        'choices' => $arrUzytkownicyToDropDown,
                         'required' => 'true',
                         'attr' => array(
                             'class' => 'form-control selectpicker',
@@ -75,6 +76,12 @@ class TaskController extends TmController {
                 $form->handleRequest($request);
                 if ($form->isValid()) {
                     $data = $form->getData();
+                    if ($data['tekst'] === NULL) {
+                        return $this->redirectWithFlash('tasks', 'Treść wiadomości nie może być pusta', 'error', array(
+                                    'projekt_nazwa' => $projekt->getName(),
+                                    'task_id' => $task->getId()
+                        ));
+                    }
                     $aktualnyId = $data['aktualny'] == '_vns_' ? $task->getAktualnyUzytkownik() : $data['aktualny'];
                     $statusId = $data['status'] == '_vns_' ? $task->getStatus() : $data['status'];
                     $wiadomosc = new \Data\DatabaseBundle\Entity\Wiadomosc();
@@ -107,7 +114,7 @@ class TaskController extends TmController {
                     $task
                             ->setAktualnyUzytkownik($aktualnyId)
                             ->setStatus($statusId);
-                    if($this->getUser()->getId() != $aktualnyId) {
+                    if ($this->getUser()->getId() != $aktualnyId) {
                         $task->setPoprzedniUzytkownik($this->getUser()->getId());
                     }
                     $m->persist($task);
