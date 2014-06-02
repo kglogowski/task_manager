@@ -18,6 +18,7 @@ class ProjectsController extends TmController {
                 LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
                 WHERE up.uzytkownik = :uzytkownik_id
                 AND p.status != :status_zamkniety
+                AND p.skasowane is null
         ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
                 ->getResult();
 
@@ -132,7 +133,7 @@ class ProjectsController extends TmController {
                     'role' => $role
         ));
     }
-    
+
     public function addUserToProjectAction() {
         return $this->render('AppFrontendBundle:Projects:addUserToProject.html.twig', array(
         ));
@@ -142,5 +143,64 @@ class ProjectsController extends TmController {
         $uzytkownik = $uzytkownik != null ? $uzytkownik : $this->getUser();
         return $this->getDoctrine()->getManager()->getRepository('DataDatabaseBundle:UzytkownikProjekt')->findByProjektAndUzytkownik($projekt, $uzytkownik)->getRola();
     }
+
+    public function editProjectAction($projekt_nazwa) {
+        $m = $this->getDoctrine()->getManager();
+        $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
+        $projekt = $projektRepo->findOneByName($projekt_nazwa);
+        if (!$projekt instanceof Projekt) {
+            return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
+        }
+
+
+
+        $form = $this->createFormBuilder($projekt)
+                ->add('label', null, array('label' => 'Zmień nazwę', 'attr' => array('class' => 'form-control')))
+                ->add('name', null, array('label' => 'Url projektu', 'attr' => array('class' => 'form-control')))
+                ->add('status', 'choice', array(
+                    'label' => 'Status',
+                    'attr' => array(
+                        'class' => 'form-control selectpicker',
+                        'data-style' => 'btn-default',
+                    ),
+                    'choices' => Projekt::GetStatusy(),
+                    'error_mapping' => 'jazda',
+                    'invalid_message' => 'jazda',
+                    'required' => false))
+                ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
+                ->getForm()
+        ;
+        if ($this->getRequest()->getMethod() === 'POST') {
+            $form->bind($this->getRequest());
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($projekt);
+                $em->flush();
+                
+                return $this->redirect($this->generateUrl('projects'));
+            }
+            
+        }
+        return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
+                    'form' => $form->createView(),
+        ));
+    }
+    
+     public function deleteProjectAction($projekt_nazwa) {
+        $m = $this->getDoctrine()->getManager();
+        $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
+        $projekt = $projektRepo->findOneByName($projekt_nazwa);
+
+        if (!$projekt instanceof Projekt) {
+            return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
+        }
+        $id =  $projekt->getId();
+        echo $id;
+        
+        $m->getRepository('DataDatabaseBundle:Projekt')->addToDeleteProjekt($projekt);
+        
+
+        return $this->redirect($this->generateUrl('projects'));
+     }
 
 }

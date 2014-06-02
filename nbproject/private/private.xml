@@ -3,9 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/krzysztofglogowski/Projects/task_manager/src/Data/DatabaseBundle/Entity/UzytkownikProjekt.php</file>
-            <file>file:/Users/krzysztofglogowski/Projects/task_manager/src/App/FrontendBundle/Controller/ProjectsController.php</file>
-            <file>file:/Users/krzysztofglogowski/Projects/task_manager/src/App/FrontendBundle/Resources/views/Projects/editRoles.html.twig</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Controller/ProjectsController.php</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/Data/DatabaseBundle/Entity/ProjektRepository.php</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Resources/config/routing.yml</file>
         </group>
     </open-files>
 </project-private>

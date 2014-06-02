@@ -378,27 +378,4 @@ class Projekt
         $now = new \DateTime('now');
         return $this->getTermin() < $now ? 'przekroczono czas' : $this->getTermin()->diff($now)->days;
     }
-
-    /**
-     * Set skasowane
-     *
-     * @param boolean $skasowane
-     * @return Projekt
-     */
-    public function setSkasowane($skasowane)
-    {
-        $this->skasowane = $skasowane;
-
-        return $this;
-    }
-
-    /**
-     * Get skasowane
-     *
-     * @return boolean 
-     */
-    public function getSkasowane()
-    {
-        return $this->skasowane;
-    }
 }

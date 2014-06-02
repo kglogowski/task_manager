@@ -12,4 +12,23 @@ use Doctrine\ORM\EntityRepository;
  */
 class WiadomoscRepository extends EntityRepository
 {
+                public function getMessageIdFromTask(String $task_id) {
+              $db = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('g')
+                 ->from('DataDatabaseBundle:Wiadomosc','g')
+                 ->where('g.projekt_id =' . $task_id)   
+                ->getQuery();
+            
+              return  $db ;
+    }
+    
+                        public function deleteMessage(String $task_id) {
+       $this->getEntityManager()
+                ->createQueryBuilder()
+                ->delete('DataDatabaseBundle:PlikiWiadomosci', 'u')
+                ->where('u.projekt_id = '.$task_id)
+                ->getQuery()
+                ->execute();
+    }
 }

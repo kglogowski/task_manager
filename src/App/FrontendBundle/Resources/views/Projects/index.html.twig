@@ -7,6 +7,13 @@
     <a href="{{ url('projects_new') }}">
         <div data-toggle="tooltip" data-placement="bottom" title="Nowy projekt" class="modernizator_field"><span class="glyphicon glyphicon-plus-sign"></span></div>
     </a>
+        <a href="{{ url('projects_new') }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Zakończone" class="modernizator_field"><span class="glyphicon glyphicon-check"></span></div>
+    </a>
+         </a>
+        <a href="{{ url('projects_new') }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Kosz" class="modernizator_field"><span class="glyphicon glyphicon-trash"></span></div>
+    </a>
 </div>
 {% endif%}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
@@ -47,10 +54,10 @@
                     <a href="{{ url('projects_edit_roles', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Zmień role w projekcie" class="glyphicon glyphicon-cog"></div>
                     </a>
-                    <a href="">
+                    <a href="{{ url('projects_edit', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Edytuj projekt" class="glyphicon glyphicon-pencil"></div>
                     </a>
-                    <a href="">
+                    <a href="{{ url('projects_delete', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Usuń projekt" class="glyphicon glyphicon-trash"></div>
                     </a>
                     {% endif %}

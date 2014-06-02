@@ -12,4 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class TaskRepository extends EntityRepository
 {
+    
+            public function getTaskIdFromProjekt(Projekt $projekt) {
+              $db = $this->getEntityManager()
+                ->createQueryBuilder()
+                ->select('g')
+                 ->from('DataDatabaseBundle:Task','g')
+                 ->where('g.projekt_id =' . $projekt->getId())   
+                ->getQuery();
+            
+              return  $db ;
+    }
+    
+            public function deleteTask(String $task_id) {
+       $this->getEntityManager()
+                ->createQueryBuilder()
+                ->delete('DataDatabaseBundle:Task', 'u')
+                ->where('u.projekt_id = '.$id)
+                ->getQuery()
+                ->execute();
+    }
 }
