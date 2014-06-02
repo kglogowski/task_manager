@@ -28,6 +28,48 @@ class ProjectsController extends TmController {
                     'Projekt' => new Projekt()
         ));
     }
+    
+        public function zakonczoneAction() {
+        $m = $this->getDoctrine()->getManager();
+        $uzytkownik = $this->getUser();
+
+        $collMyProjekt = $m->createQuery("
+            SELECT p.label, p.status as status_projektu, p.name, up.rola as rola_uzytkownika, p.termin as termin
+                FROM DataDatabaseBundle:Projekt p
+                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
+                WHERE up.uzytkownik = :uzytkownik_id
+                AND p.status = :status_zamkniety
+                AND p.skasowane is null
+        ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
+                ->getResult();
+
+        return $this->render('AppFrontendBundle:Projects:zakonczone.html.twig', array(
+                    'myProjects' => $collMyProjekt,
+                    'UzytkownikProjekt' => new UzytkownikProjekt(),
+                    'Projekt' => new Projekt()
+        ));
+    }
+    
+            public function skasowaneAction() {
+        $m = $this->getDoctrine()->getManager();
+        $uzytkownik = $this->getUser();
+
+        $collMyProjekt = $m->createQuery("
+            SELECT p.label, p.status as status_projektu, p.name, up.rola as rola_uzytkownika, p.termin as termin
+                FROM DataDatabaseBundle:Projekt p
+                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
+                WHERE up.uzytkownik = :uzytkownik_id
+                AND p.status = :status_zamkniety
+                AND p.skasowane is null
+        ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
+                ->getResult();
+
+        return $this->render('AppFrontendBundle:Projects:zakonczone.html.twig', array(
+                    'myProjects' => $collMyProjekt,
+                    'UzytkownikProjekt' => new UzytkownikProjekt(),
+                    'Projekt' => new Projekt()
+        ));
+    }
 
     public function newAction() {
         $m = $this->getDoctrine()->getManager();

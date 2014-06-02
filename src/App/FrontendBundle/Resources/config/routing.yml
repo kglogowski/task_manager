@@ -9,6 +9,12 @@ projects:
 projects_new:
     pattern: /nowy-projekt
     defaults: { _controller: AppFrontendBundle:Projects:new }
+projects_end:
+    pattern: /projekty-zakonczone
+    defaults: { _controller: AppFrontendBundle:Projects:zakonczone }
+projects_skasowane:
+    pattern: /projekty-skasowane
+    defaults: { _controller: AppFrontendBundle:Projects:skasowane }
 
 projects_edit:
     pattern: /projekt-edycja/{projekt_nazwa}
