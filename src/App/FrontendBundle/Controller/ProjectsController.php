@@ -163,6 +163,8 @@ class ProjectsController extends TmController {
                         'data-style' => 'btn-default',
                     ),
                     'choices' => Projekt::GetStatusy(),
+                    'error_mapping' => 'jazda',
+                    'invalid_message' => 'jazda',
                     'required' => false))
                 ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
                 ->getForm()
@@ -173,12 +175,18 @@ class ProjectsController extends TmController {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();
+                
+                return $this->redirect($this->generateUrl('projects'));
             }
-            return $this->redirect($this->generateUrl('projects'));
+            
         }
         return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
                     'form' => $form->createView(),
         ));
     }
+    
+     public function deleteProjectAction($projekt_nazwa) {
+         
+     }
 
 }

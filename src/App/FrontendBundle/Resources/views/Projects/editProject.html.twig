@@ -9,7 +9,17 @@
         <h3>Edytuj projekt</h3>
     </div>
     <div class="cloud_ct">
-  {{ form(form) }}
+    <div class="error_list">{{ form_errors(form.name) }} </div>    
+ <form method="POST" action="">
+{{ form_label(form.label) }}
+{{ form_widget(form.label) }}
+
+{{ form_label(form.name) }}
+{{ form_widget(form.name) }}
+
+{{ form_widget(form.save) }}
+</form>
+
   </div>
   </div>
   <script>

@@ -13,6 +13,9 @@ projects_new:
 projects_edit:
     pattern: /projekt-edycja/{projekt_nazwa}
     defaults: { _controller: AppFrontendBundle:Projects:editProject } 
+projects_delete:
+    pattern: /projekt-delete/{projekt_nazwa}
+    defaults: { _controller: AppFrontendBundle:Projects:deleteProject } 
 
 projects_edit_roles:
     pattern: /projekt-edycja-rol/{projekt_nazwa}
