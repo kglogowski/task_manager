@@ -46,7 +46,7 @@
     background-color: #fff5dc;
 }
 
-.error_list {
+.form-validate .error_list {
     color: #993300;
     background: #ffcccc;
     padding: 4px 10px;
