@@ -108,6 +108,7 @@ class Task {
      * @ORM\JoinTable(name="uzytkownicy_taski",
      * joinColumns={@ORM\JoinColumn(name="task_id", referencedColumnName="id")},
      * inverseJoinColumns={@ORM\JoinColumn(name="uzytkownik_id", referencedColumnName="id")}
+     * @ORM\JoinColumn(onDelete="CASCADE", onUpdate="CASCADE")
      * )
      */
     private $uzytkownicy;

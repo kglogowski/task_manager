@@ -106,6 +106,11 @@ class Projekt
      * @ORM\OneToMany(targetEntity="UzytkownikProjekt", mappedBy="projekt")
      */
     private $uzytkownicy_projekty;
+    
+     /**
+     * @ORM\Column(type="boolean", nullable=true )
+     */
+    public $delete;
 
     public function __construct() {
         $this->uzytkownicy_projekty = new ArrayCollection();

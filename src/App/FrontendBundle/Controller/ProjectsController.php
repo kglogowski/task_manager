@@ -186,7 +186,20 @@ class ProjectsController extends TmController {
     }
     
      public function deleteProjectAction($projekt_nazwa) {
-         
+        $m = $this->getDoctrine()->getManager();
+        $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
+        $projekt = $projektRepo->findOneByName($projekt_nazwa);
+
+        if (!$projekt instanceof Projekt) {
+            return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
+        }
+        $id =  $projekt->getId();
+        echo $id;
+        
+        $m->getRepository('DataDatabaseBundle:Projekt')->addToDeleteProjekt($projekt);
+        
+
+        return $this->redirect($this->generateUrl('projects'));
      }
 
 }
