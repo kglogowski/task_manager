@@ -106,9 +106,8 @@ class Task {
     /**
      * @ORM\ManyToMany(targetEntity="Uzytkownik", inversedBy="tasks", cascade={"persist"})
      * @ORM\JoinTable(name="uzytkownicy_taski",
-     * joinColumns={@ORM\JoinColumn(name="task_id", referencedColumnName="id")},
+     * joinColumns={@ORM\JoinColumn(name="task_id", referencedColumnName="id", onDelete="CASCADE")},
      * inverseJoinColumns={@ORM\JoinColumn(name="uzytkownik_id", referencedColumnName="id")}
-     * @ORM\JoinColumn(onDelete="CASCADE", onUpdate="CASCADE")
      * )
      */
     private $uzytkownicy;
