@@ -12,13 +12,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class WiadomoscRepository extends EntityRepository {
 
-    public function deleteMessage(String $message_id) {
-        $this->getEntityManager()
-                ->createQueryBuilder()
-                ->delete('DataDatabaseBundle:Wiadomosc', 'u')
-                ->where('u.id = ' . $message_id)
-                ->getQuery()
-                ->execute();
-    }
 
 }

@@ -250,30 +250,35 @@ class ProjectsController extends TmController {
         return $this->redirect($this->generateUrl('projects_skasowane'));
     }
 
-    public function deleteHardProjectAction($projekt_nazwa) {
+public function deleteHardProjectAction($projekt_nazwa) {
         $m = $this->getDoctrine()->getManager();
         $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
         $projekt = $projektRepo->findOneByName($projekt_nazwa);
-
         if (!$projekt instanceof Projekt) {
             return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
         }
-
         $tasks = $projekt->getTasks();
         foreach($tasks as $task) {
-            $message = $task->getMessage();
+            $messages = $task->getWiadomosci();
             $id = $task->getId();
-            foreach ($message as $mess){
-                $id_mess = $mess->getId();              
-                $m->getRepository('DataDatabaseBundle:PlikWiadomosci')->deleteMessagePliki($id_mess);
-                $m->getRepository('DataDatabaseBundle:wiadomosc')->deleteMessage($id_mess);
+            foreach ($messages as $message) {
+                $plikiWiadomosci = $message->getPlikiWiadomosci();
+                foreach ($plikiWiadomosci as $plikWiadomosci) {
+                    $m->remove($plikWiadomosci);
+                }
+                $m->remove($message);
             }
-            $m->getRepository('DataDatabaseBundle:PlikiTask')->deleteTaskPliki($id);
-            $m->getRepository('DataDatabaseBundle:Task')->deleteTask($id);
-            
+            $m->remove($task);
         }
-        $m->getRepository('DataDatabaseBundle:Projekt')->deleteProjekt($projekt);
-
+        foreach ($projekt->getUzytkownicyProjekty() as $up) {
+            $m->remove($up);
+        }
+        $m->remove($projekt);
+        $m->flush();
+        if($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId()){
+          rmdir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId());  
+        }
+        
         return $this->redirect($this->generateUrl('projects_skasowane'));
     }
 

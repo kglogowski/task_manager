@@ -13,13 +13,4 @@ use Doctrine\ORM\EntityRepository;
 class PlikTaskRepository extends EntityRepository
 {
     
-        
-            public function deleteTaskPliki(String $task_id) {
-       $this->getEntityManager()
-                ->createQueryBuilder()
-                ->delete('DataDatabaseBundle:PlikiTask', 'u')
-                ->where('u.task_id = '.$task_id)
-                ->getQuery()
-                ->execute();
-    }
 }

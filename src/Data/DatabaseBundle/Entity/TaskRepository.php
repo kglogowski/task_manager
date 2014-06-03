@@ -12,13 +12,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class TaskRepository extends EntityRepository {
 
-    public function deleteTask(String $id) {
-        $this->getEntityManager()
-                ->createQueryBuilder()
-                ->delete('DataDatabaseBundle:Task', 'u')
-                ->where('u.id = ' . $id)
-                ->getQuery()
-                ->execute();
-    }
 
 }
