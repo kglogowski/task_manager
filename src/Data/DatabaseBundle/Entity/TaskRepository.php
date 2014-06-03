@@ -3,6 +3,7 @@
 namespace Data\DatabaseBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Data\DatabaseBundle\Entity\Task;
 
 /**
  * TaskRepository
@@ -11,6 +12,28 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class TaskRepository extends EntityRepository {
-
+    public function findByAktualnyUzytkownikNieZakonczone($user) {
+        $query = $this->getEntityManager()->createQuery("
+            SELECT t
+                FROM DataDatabaseBundle:Task t
+                WHERE t.aktualnyUzytkownik = :aktualnyUzytkownik
+                AND t.status != :zamkniety
+        ");
+        $query->setParameter(":aktualnyUzytkownik", $user);
+        $query->setParameter(":zamkniety", Task::STATUS_ZAMKNIETY);
+        return $query->getResult();
+    }
+    
+    public function findByPoprzedniUzytkownikNieZakonczone($user) {
+        $query = $this->getEntityManager()->createQuery("
+            SELECT t
+                FROM DataDatabaseBundle:Task t
+                WHERE t.poprzedniUzytkownik = :poprzedniUzytkownik
+                AND t.status != :zamkniety
+        ");
+        $query->setParameter(":poprzedniUzytkownik", $user);
+        $query->setParameter(":zamkniety", Task::STATUS_ZAMKNIETY);
+        return $query->getResult();
+    }
 
 }
