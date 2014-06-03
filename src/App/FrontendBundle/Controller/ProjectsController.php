@@ -261,11 +261,12 @@ class ProjectsController extends TmController {
 
         $tasks = $projekt->getTasks();
         foreach($tasks as $task) {
-            $message = $tasks->getMessage();
-            $id = $tasks->getId();
-            foreach ($mess as $message){
-                $m->getRepository('DataDatabaseBundle:PlikWiadomosci')->deleteMessagePliki($mess->getId());
-                $m->getRepository('DataDatabaseBundle:wiadomosc')->deleteMessage($mess->getId());
+            $message = $task->getMessage();
+            $id = $task->getId();
+            foreach ($message as $mess){
+                $id_mess = $mess->getId();              
+                $m->getRepository('DataDatabaseBundle:PlikWiadomosci')->deleteMessagePliki($id_mess);
+                $m->getRepository('DataDatabaseBundle:wiadomosc')->deleteMessage($id_mess);
             }
             $m->getRepository('DataDatabaseBundle:PlikiTask')->deleteTaskPliki($id);
             $m->getRepository('DataDatabaseBundle:Task')->deleteTask($id);
