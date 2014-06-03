@@ -9,6 +9,28 @@
     <a href="{{ url('task_new', {projekt_nazwa: projekt.name}) }}">
         <div data-toggle="tooltip" data-placement="bottom" title="Nowe zadanie" class="modernizator_field"><span class="glyphicon glyphicon-plus-sign"></span></div>
     </a>
+    {% if not archiwalne %}
+    {% if task %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id}) }}?archiwalne=1">
+        <div data-toggle="tooltip" data-placement="bottom" title="Pokaż archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-open"></span></div>
+    </a>
+    {% else %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name}) }}?archiwalne=1">
+        <div data-toggle="tooltip" data-placement="bottom" title="Pokaż archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-open"></span></div>
+    </a>
+    {% endif%}
+    {% else %}
+    {% if task %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id}) }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Schowaj archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-close"></span></div>
+    </a>
+    {% else %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name}) }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Schowaj archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-close"></span></div>
+    </a>
+    {% endif%}
+    {% endif %}
+
 </div>
 {% endif%}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
@@ -18,8 +40,8 @@
         <h4>Zadania</h4>
     </div>
     <div class="cloud_ct">
-        {% for task in projekt.getTasks() %}
-        <a class="cloud_list" href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id}) }}">
+        {% for task in archiwalne ? projekt.tasks : projekt.getActiveTasks() %}
+        <a class="cloud_list" href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id, archiwalne: archiwalne ? true : null}) }}">
             <div class="cloud_elem padding-low">
                 <div class="left lt">
                     <div data-toggle="tooltip" data-placement="top" title="Status {{ task.getStatusLabel() }}" class="left"><span class="glyphicon glyphicon-tag {{ task.getStatusClass() }}"></span></div> 
@@ -69,6 +91,7 @@
         <div><b><i>Zadanie aktualnie przypisane jest na {{ aktualny.login }}</i></b></div>
     </div>
 </div>
+{% if not task.isZakonczony %}
 <div class="btn-new">
     <div>
         <a id="dodaj_wiadomosc" style="float: right" class="btn btn-default btn-block" href="javascript:void(0)">Napisz wiadomość</a>
@@ -98,6 +121,13 @@
         </div>
     </div>
 </div>
+{% else %}
+<div class="btn-new">
+    <div>
+        <a href="{{ url('taskReopen', { task_id: task.id }) }}" id="dodaj_wiadomosc" style="float: right" class="btn btn-danger btn-block" >Przywróć zadanie</a>
+    </div>
+</div>
+{% endif %}
 {% for wiadomosc in task.wiadomosci %}
 <div class="cloud-rt">
     <div class="cloud_tt_message">

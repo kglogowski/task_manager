@@ -16,5 +16,9 @@ class TmController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         return $this->redirect($this->generateUrl($route, $args));
     }
     
-
+    public function isLider($projekt, $uzytkownik = null) {
+        $uzytkownik = $uzytkownik != null ? $uzytkownik : $this->getUser();
+        return $this->getDoctrine()->getManager()->getRepository('DataDatabaseBundle:UzytkownikProjekt')->findByProjektAndUzytkownik($projekt, $uzytkownik)->getRola();
+    }
+    
 }

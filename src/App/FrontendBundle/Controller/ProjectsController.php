@@ -139,10 +139,6 @@ class ProjectsController extends TmController {
         ));
     }
 
-    public function isLider($projekt, $uzytkownik = null) {
-        $uzytkownik = $uzytkownik != null ? $uzytkownik : $this->getUser();
-        return $this->getDoctrine()->getManager()->getRepository('DataDatabaseBundle:UzytkownikProjekt')->findByProjektAndUzytkownik($projekt, $uzytkownik)->getRola();
-    }
 
     public function editProjectAction($projekt_nazwa) {
         $m = $this->getDoctrine()->getManager();
