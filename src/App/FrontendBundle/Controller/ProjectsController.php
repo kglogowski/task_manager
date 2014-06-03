@@ -268,16 +268,22 @@ public function deleteHardProjectAction($projekt_nazwa) {
                 }
                 $m->remove($message);
             }
+            foreach ($task->getPlikiTask() as $plikTask) {
+                $m->remove($plikTask);
+            }
             $m->remove($task);
         }
         foreach ($projekt->getUzytkownicyProjekty() as $up) {
             $m->remove($up);
         }
         $m->remove($projekt);
-        $m->flush();
-        if($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId()){
-          rmdir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId());  
+        if(is_dir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId())){
+            $this->deleteDir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId());
         }
+        if(is_dir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/'.$projekt->getId())){
+            $this->deleteDir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/'.$projekt->getId());
+        }
+        $m->flush();
         
         return $this->redirect($this->generateUrl('projects_skasowane'));
     }
