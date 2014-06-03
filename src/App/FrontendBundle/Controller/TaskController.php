@@ -10,6 +10,7 @@ class TaskController extends TmController {
 
     public function indexAction($projekt_nazwa, $task_id) {
         $task = null;
+        $archiwalne = $this->getRequest()->get('archiwalne');
         $m = $this->getDoctrine()->getManager();
         $projekt = $m->getRepository('DataDatabaseBundle:Projekt')->findOneByName($projekt_nazwa);
         if (!$projekt instanceof Projekt) {
@@ -24,9 +25,9 @@ class TaskController extends TmController {
             if ($task->getProjekt()->getId() != $projekt->getId()) {
                 return $this->redirectWithFlash('projects', 'Zadanie jest przypisane do innego projektu', 'error');
             }
-            if ($task->getStatus() == Task::STATUS_ZAMKNIETY) {
-                return $this->redirectWithFlash('projects', 'Zadanie jest zamknięte', 'info');
-            }
+//            if ($task->getStatus() == Task::STATUS_ZAMKNIETY) {
+//                return $this->redirectWithFlash('projects', 'Zadanie jest zamknięte', 'info');
+//            }
             $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getCreator());
             $aktualny = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik());
             $arrUzytkownicyToDropDown = array('_vns_' => 'Aktualny: ' . $aktualny->getLogin() . ' ') + $task->getUzytkownicyToDropdown();
@@ -131,6 +132,7 @@ class TaskController extends TmController {
                         'creator' => $creator,
                         'form' => $form->createView(),
                         'aktualny' => $aktualny,
+                        'archiwalne' => $archiwalne,
             ));
         } else {
             $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($projekt->getCreator());
@@ -140,6 +142,7 @@ class TaskController extends TmController {
                     'projekt' => $projekt,
                     'task' => $task,
                     'creator' => $creator,
+                    'archiwalne' => $archiwalne,
         ));
     }
 
@@ -319,4 +322,34 @@ class TaskController extends TmController {
         die;
     }
 
+    public function taskReopenAction($task_id) {
+        $m = $this->getDoctrine()->getManager();
+        $task = $m->getRepository('DataDatabaseBundle:Task')->find($task_id);
+        if(!$task instanceof Task) {
+            return $this->redirectWithFlash('projects', 'Podane zadanie nie istnieje', 'error');
+        }
+        if(!$task->isZakonczony()) {
+            return $this->redirectWithFlash('projects', 'Zadanie nie jest zamknięte', 'error');
+        }
+        
+        $projekt = $task->getProjekt();
+        if($projekt->isZakonczony()) {
+            return $this->redirectWithFlash('projects', 'Nie można otworzyć zadania, ponieważ projekt jest zamknięty', 'error');
+        }
+        
+        if(!$this->isLider($projekt)) {
+            return $this->redirectWithFlash('projects', 'Nie posiadasz wystarczających praw aby otworzyć projekt, skontaktuj się z liderem projektu', 'error');
+        }
+        
+        $task->setStatus(Task::STATUS_PRZYWROCONY);
+        $m->persist($task);
+        
+        $m->flush();
+        return $this->redirectWithFlash('tasks', 'Zadanie zostało przywrócone', 'success', array(
+                'projekt_nazwa' => $projekt->getName(),
+                'task_id' => $task->getId()
+            )
+        );
+    }
+    
 }

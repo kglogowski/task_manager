@@ -133,7 +133,17 @@ class Projekt
         self::STATUS_ZAMKNIETY    =>  'Zamknięty',
     );
     
-     public static function GetStatusy(){ 
+    public static function GetStatusyKoncowe() {
+        return array(
+            self::STATUS_ZAMKNIETY
+        );
+    }
+
+    public function isZakonczony() {
+        return in_array($this->getStatus(), Task::GetStatusyKoncowe());
+    }
+
+        public static function GetStatusy(){ 
     return self::$arrStatusLabel; 
     }
 
@@ -356,6 +366,17 @@ class Projekt
      */
     public function getTasks() {
         return $this->tasks;
+    }
+    
+    public function getActiveTasks() {
+        $tasks = $this->tasks;
+        $arrTasks = array();
+        foreach ($tasks as $task) {
+            if(!$task->isZakonczony()) {
+                $arrTasks[] = $task;
+            }
+        }
+        return $arrTasks;
     }
 
     public function removeTask(Task $task) {

@@ -48,6 +48,10 @@ task_new:
     pattern: /projekt-nowe-zadanie/{projekt_nazwa}
     defaults: { _controller: AppFrontendBundle:Task:new }
 
+taskReopen:
+    pattern: /task-przywroc/{task_id}
+    defaults: { _controller: AppFrontendBundle:Task:taskReopen }
+
 plikWiadomoscPobierz:
     pattern:  /projekt-wiadomosc/pobierz-plik-zadania/{plikWiadomosciId}
     defaults: { _controller: AppFrontendBundle:Task:plikWiadomoscPobierz}

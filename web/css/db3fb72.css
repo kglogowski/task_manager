@@ -305,7 +305,8 @@ a.cloud_list:hover {
 .status_test_pozytywny,
 .status_wgrywany,
 .status_wgrany,
-.status_zamknięty {
+.status_zamknięty,
+.status_przywrocony{
     padding-right: 6px;
     padding-left: 6px;
     text-shadow: -1px 0 #777, 0 1px #777,
@@ -339,6 +340,9 @@ a.cloud_list:hover {
 }
 .status_zamknięty {
     color: #ccc;
+}
+.status_przywrocony {
+    color: #ffcc99;
 }
 
 .padding-low {

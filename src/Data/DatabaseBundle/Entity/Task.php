@@ -138,6 +138,7 @@ class Task {
     CONST STATUS_WGRYWANY = 7;
     CONST STATUS_WGRANY = 8;
     CONST STATUS_ZAMKNIETY = 9;
+    CONST STATUS_PRZYWROCONY = 10;
 
     protected static $arrStatusLabel = array(
         self::STATUS_NOWY => 'Nowy',
@@ -149,6 +150,7 @@ class Task {
         self::STATUS_WGRYWANY => 'Wgrywany',
         self::STATUS_WGRANY => 'Wgrany',
         self::STATUS_ZAMKNIETY => 'Zamknięty',
+        self::STATUS_PRZYWROCONY => 'Przywrocony',
     );
     protected static $arrStatusClass = array(
         self::STATUS_NOWY => 'status_nowy',
@@ -160,6 +162,7 @@ class Task {
         self::STATUS_WGRYWANY => 'status_wgrywany',
         self::STATUS_WGRANY => 'status_wgrany',
         self::STATUS_ZAMKNIETY => 'status_zamknięty',
+        self::STATUS_PRZYWROCONY => 'status_przywrocony',
     );
 
     public static function GetStatusyForDropDown() {
@@ -312,6 +315,16 @@ class Task {
      */
     public function getStatus() {
         return $this->status;
+    }
+
+    public static function GetStatusyKoncowe() {
+        return array(
+            self::STATUS_ZAMKNIETY
+        );
+    }
+
+    public function isZakonczony() {
+        return in_array($this->getStatus(), Task::GetStatusyKoncowe());
     }
 
     /**
