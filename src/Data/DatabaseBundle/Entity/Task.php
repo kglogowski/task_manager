@@ -412,6 +412,9 @@ class Task {
     public function getWiadomosci() {
         return $this->wiadomosci->toArray();
     }
+        public function getMessage() {
+        return $this->wiadomosci;
+    }
 
     public function addWiadomosc(Wiadomosc $uzytkownik) {
         $this->wiadomosci->add($uzytkownik);

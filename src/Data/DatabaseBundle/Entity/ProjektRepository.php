@@ -44,5 +44,15 @@ class ProjektRepository extends EntityRepository {
                 ->getQuery()
                 ->execute();
     }
+    
+        public function removeFromDeleteProjekt(Projekt $projekt){
+        $this->getEntityManager()
+                ->createQueryBuilder()
+                ->update('DataDatabaseBundle:Projekt', 'u')
+                ->set('u.skasowane', 'null')
+                ->where('u.id = ' . $projekt->getId())
+                ->getQuery()
+                ->execute();
+    }
       
 }

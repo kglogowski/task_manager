@@ -19,7 +19,7 @@
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
 <div class="cloud">
     <div class="cloud_tt">
-        <h3>Moje projekty</h3>
+        <h3>Usunięte Moje projekty</h3>
     </div>
     <div class="cloud_ct">
         <div class="cloud_elem_th">
@@ -50,6 +50,9 @@
                     <a href="{{ url('tasks', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Przejdź do projektu" class="glyphicon glyphicon-log-in"></div>
                     </a>
+                    <a href="{{ url('projects_restore', { projekt_nazwa: project.name }) }}">
+                        <div data-toggle="tooltip" data-placement="top" title="Przywróć projekt" class="glyphicon glyphicon-download"></div>
+                    </a>
                     {% if UzytkownikProjekt.getRolaLabelByKey(project.rola_uzytkownika) == 'Lider' %}
                     <a href="{{ url('projects_edit_roles', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Zmień role w projekcie" class="glyphicon glyphicon-cog"></div>
@@ -57,8 +60,8 @@
                     <a href="{{ url('projects_edit', { projekt_nazwa: project.name }) }}">
                         <div data-toggle="tooltip" data-placement="top" title="Edytuj projekt" class="glyphicon glyphicon-pencil"></div>
                     </a>
-                    <a href="{{ url('projects_delete', { projekt_nazwa: project.name }) }}">
-                        <div data-toggle="tooltip" data-placement="top" title="Usuń projekt" class="glyphicon glyphicon-trash"></div>
+                    <a href="{{ url('projects_hard_delete', { projekt_nazwa: project.name }) }}">
+                        <div data-toggle="tooltip" data-placement="top" title="Trwale usuń projekt, bez możliwościu późniejszego przywrócenia" class="glyphicon glyphicon-trash"></div>
                     </a>
                     {% endif %}
                 </div>
@@ -69,7 +72,7 @@
 </div>
 <div class="cloud">
     <div class="cloud_tt">
-        <h3>Pozostałe projekty</h3>
+        <h3>Pozostałe usunięte projekty</h3>
     </div>
 </div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'homepage'}) }}
