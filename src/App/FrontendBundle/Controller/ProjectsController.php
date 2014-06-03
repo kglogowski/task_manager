@@ -59,7 +59,7 @@ class ProjectsController extends TmController {
                 FROM DataDatabaseBundle:Projekt p
                 LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
                 WHERE up.uzytkownik = :uzytkownik_id
-                AND p.skasowane = 1
+                AND p.skasowane = true
         ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->getResult();
 
         return $this->render('AppFrontendBundle:Projects:skasowane.html.twig', array(
