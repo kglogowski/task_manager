@@ -142,28 +142,41 @@ class ProjectsController extends TmController {
         $request = $this->get('request');
         if ($request->isMethod('POST')) {
             $liders = 0;
-            foreach ($request->request as $key => $param) {
-                if ($param == UzytkownikProjekt::ROLA_LIDER) {
-                    ++$liders;
-                    if ($liders > 1) {
-                        return $this->redirectWithFlash('projects_edit_roles', 'Maksymalnie może być jeden lider projektu', 'error', array(
-                                    'projekt_nazwa' => $projekt->getName(),
-                        ));
+            $form = $this->createForm(new \App\FrontendBundle\Lib\Form\AddUserToProjectForm($m, $projekt));
+            if ($request->request->has($form->getName())) {
+                $form->handleRequest($request);
+                $data = $form->getData();
+                foreach ($data['uzytkownicy'] as $uzytkownikId) {
+                    $uzytkownik = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($uzytkownikId);
+                    if($this->isLider($projekt, $uzytkownik)) {
+                        $liders++;
                     }
                 }
-                $u = $m->find('DataDatabaseBundle:Uzytkownik', $key);
-                $u->setRoleProjektuByProjektId($projekt->getId(), $param);
-                $m->persist($u);
-            }
-            if ($liders == 0) {
-                return $this->redirectWithFlash('projects_edit_roles', 'Nalezy wybrać lidera projektu', 'error', array(
+                die;
+            } else {
+                foreach ($request->request as $key => $param) {
+                    if ($param == UzytkownikProjekt::ROLA_LIDER) {
+                        ++$liders;
+                        if ($liders > 1) {
+                            return $this->redirectWithFlash('projects_edit_roles', 'Maksymalnie może być jeden lider projektu', 'error', array(
+                                        'projekt_nazwa' => $projekt->getName(),
+                            ));
+                        }
+                    }
+                    $u = $m->find('DataDatabaseBundle:Uzytkownik', $key);
+                    $u->setRoleProjektuByProjektId($projekt->getId(), $param);
+                    $m->persist($u);
+                }
+                if ($liders == 0) {
+                    return $this->redirectWithFlash('projects_edit_roles', 'Nalezy wybrać lidera projektu', 'error', array(
+                                'projekt_nazwa' => $projekt->getName(),
+                    ));
+                }
+                $m->flush();
+                return $this->redirectWithFlash('projects_edit_roles', 'Zmieniono role w projekcie', 'success', array(
                             'projekt_nazwa' => $projekt->getName(),
                 ));
             }
-            $m->flush();
-            return $this->redirectWithFlash('projects_edit_roles', 'Zmieniono role w projekcie', 'success', array(
-                        'projekt_nazwa' => $projekt->getName(),
-            ));
         }
 
 
@@ -176,11 +189,14 @@ class ProjectsController extends TmController {
     }
 
     public function addUserToProjectAction(Request $request) {
-        echo $request->get('projekt_name');
+        $m = $this->getDoctrine()->getManager();
+        $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
+        $projekt = $projektRepo->findOneByName($request->get('projekt_name'));
+        $form = $this->createForm(new \App\FrontendBundle\Lib\Form\AddUserToProjectForm($m, $projekt));
         return $this->render('AppFrontendBundle:Projects:addUserToProject.html.twig', array(
+                    'form' => $form->createView(),
         ));
     }
-
 
     public function editProjectAction($projekt_nazwa) {
         $m = $this->getDoctrine()->getManager();
@@ -252,7 +268,7 @@ class ProjectsController extends TmController {
         return $this->redirect($this->generateUrl('projects_skasowane'));
     }
 
-public function deleteHardProjectAction($projekt_nazwa) {
+    public function deleteHardProjectAction($projekt_nazwa) {
         $m = $this->getDoctrine()->getManager();
         $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
         $projekt = $projektRepo->findOneByName($projekt_nazwa);
@@ -260,7 +276,7 @@ public function deleteHardProjectAction($projekt_nazwa) {
             return $this->redirectWithFlash('projects', 'Nie istnieje taki projekt', 'error');
         }
         $tasks = $projekt->getTasks();
-        foreach($tasks as $task) {
+        foreach ($tasks as $task) {
             $messages = $task->getWiadomosci();
             $id = $task->getId();
             foreach ($messages as $message) {
@@ -279,14 +295,14 @@ public function deleteHardProjectAction($projekt_nazwa) {
             $m->remove($up);
         }
         $m->remove($projekt);
-        if(is_dir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId())){
-            $this->deleteDir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/'.$projekt->getId());
+        if (is_dir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projekt->getId())) {
+            $this->deleteDir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projekt->getId());
         }
-        if(is_dir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/'.$projekt->getId())){
-            $this->deleteDir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/'.$projekt->getId());
+        if (is_dir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/' . $projekt->getId())) {
+            $this->deleteDir($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_task/' . $projekt->getId());
         }
         $m->flush();
-        
+
         return $this->redirect($this->generateUrl('projects_skasowane'));
     }
 
