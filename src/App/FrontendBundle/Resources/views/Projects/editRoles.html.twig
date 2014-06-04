@@ -66,17 +66,20 @@
     </div>
 </div>
 
-
 <div class="clear"></div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
 <script type="text/javascript">
+     {% for MyProject in projekt %}
+         var path = '{{ url('projects_user_add') }}';
+      {% endfor %}
     $().ready(function(){
        $('#add-uzytkownik-to-project').click(function(){
            ajaxChangeContent({
                id: '#modal-body-add-user',
-               url: '{{ url('projects_user_add') }}'
+               url: path
            });
        });
     });
 </script>
+
 {% endblock content %}
