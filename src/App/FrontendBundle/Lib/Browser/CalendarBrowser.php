@@ -1,5 +1,6 @@
 <?php
 
+namespace App\FrontendBundle\Lib\Browser;
 use Data\DatabaseBundle\Entity\Uzytkownik;
 
 class CalendarBrowser {
@@ -19,7 +20,7 @@ class CalendarBrowser {
     }
     
     
-    public function getFirstDayOfCalendar() {
+    public function getFirstDayOfCalendar($month) {
         
     }
 
