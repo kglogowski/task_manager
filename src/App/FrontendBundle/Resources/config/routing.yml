@@ -80,3 +80,6 @@ profile_edit_change_basic:
     pattern:  /profil/edytuj-change-basic
     defaults: { _controller: AppFrontendBundle:Profile:changeBasic }
   
+profile_edit_change_password:
+    pattern:  /profil/edytuj-change-password
+    defaults: { _controller: AppFrontendBundle:Profile:changePassword }
