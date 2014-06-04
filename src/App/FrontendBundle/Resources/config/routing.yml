@@ -65,7 +65,7 @@ wiadomosc_delete:
     defaults: { _controller: AppFrontendBundle:Task:usunWiadomosc }
     
 calendar:
-    pattern: /kalendarz
+    pattern: /kalendarz/{year}/{month}
     defaults: { _controller: AppFrontendBundle:Calendar:index }
 
 settings:

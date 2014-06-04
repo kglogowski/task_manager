@@ -9,7 +9,7 @@
             <span class="glyphicon glyphicon-tasks"></span>
         </div>
     </a>
-    <a href="{{ url('calendar') }}">
+    <a href="{{ url('calendar', { year: "now"|date('Y'), month: "now"|date('m') }) }}">
         <div data-toggle="tooltip" title="Kalendarz" class="nav-element left {% if(app.request.get('_route') matches('/calendar/')) %} nav-element-active {% endif %}">
             <span class="glyphicon glyphicon-calendar"></span>
         </div>
