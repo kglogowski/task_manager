@@ -37,7 +37,7 @@ projects_edit_roles:
     defaults: { _controller: AppFrontendBundle:Projects:editRoles }
     
 projects_user_add:
-    pattern: /projekt-dodanie-uzytkownika
+    pattern: /projekt-dodanie-uzytkownika/{projekt_name}
     defaults: { _controller: AppFrontendBundle:Projects:addUserToProject }
 
 tasks:

@@ -5,6 +5,7 @@ namespace App\FrontendBundle\Controller;
 use App\LibBundle\TmController;
 use Data\DatabaseBundle\Entity\Projekt;
 use Data\DatabaseBundle\Entity\UzytkownikProjekt;
+use Symfony\Component\HttpFoundation\Request;
 
 class ProjectsController extends TmController {
 
@@ -174,7 +175,8 @@ class ProjectsController extends TmController {
         ));
     }
 
-    public function addUserToProjectAction() {
+    public function addUserToProjectAction(Request $request) {
+        echo $request->get('projekt_name');
         return $this->render('AppFrontendBundle:Projects:addUserToProject.html.twig', array(
         ));
     }
