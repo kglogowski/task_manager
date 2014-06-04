@@ -10,8 +10,8 @@ class DefaultController extends TmController {
 
     public function indexAction() {
         $m = $this->getDoctrine()->getManager();
-        $collMyTask = $m->getRepository('DataDatabaseBundle:Task')->findByAktualnyUzytkownik($this->getUser());
-        $collSentTask = $m->getRepository('DataDatabaseBundle:Task')->findByPoprzedniUzytkownik($this->getUser());
+        $collMyTask = $m->getRepository('DataDatabaseBundle:Task')->findByAktualnyUzytkownikNieZakonczone($this->getUser());
+        $collSentTask = $m->getRepository('DataDatabaseBundle:Task')->findByPoprzedniUzytkownikNieZakonczone($this->getUser());
         return $this->render('AppFrontendBundle:Default:index.html.twig', array(
             'collMyTask' => $collMyTask,
             'collSentTask' => $collSentTask,
