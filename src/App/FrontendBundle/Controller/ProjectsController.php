@@ -22,9 +22,31 @@ class ProjectsController extends TmController {
                 AND p.skasowane is null
         ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
                 ->getResult();
+        $projekt = $m->createQuery("
+            SELECT p.label, p.status as status_projektu, p.name, up.rola as rola_uzytkownika, p.termin as termin
+                FROM DataDatabaseBundle:Projekt p
+                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
+                WHERE p.status != :status_zamkniety
+                AND p.skasowane is null
+        ")->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
+                ->getResult();
+        $restProjects = array();
+        $counter = 0;
+            foreach($projekt as $p1) {
+              foreach($collMyProjekt as $p2){
+                  if($p1==$p2 ){
+                    $counter=$counter+1;
+                  }
+                  if($counter == 0){
+                       $restProjects[] = $p1;
+                  }
+              }
+            }
+        
 
         return $this->render('AppFrontendBundle:Projects:index.html.twig', array(
                     'myProjects' => $collMyProjekt,
+                    'restProjects' => $restProjects,
                     'UzytkownikProjekt' => new UzytkownikProjekt(),
                     'Projekt' => new Projekt()
         ));
