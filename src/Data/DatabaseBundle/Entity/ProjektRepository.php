@@ -121,7 +121,7 @@ class ProjektRepository extends EntityRepository {
                 LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
                 WHERE up.uzytkownik = :uzytkownik_id
                 AND p.skasowane = true
-        ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
+        ")->setParameter(':uzytkownik_id', $uzytkownik->getId())
                         ->getResult();
     }
 
