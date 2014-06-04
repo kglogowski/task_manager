@@ -41,8 +41,8 @@ class ProjectsController extends TmController {
         $m = $this->getDoctrine()->getManager();
         $uzytkownik = $this->getUser();
         $projektRepo = $m->getRepository('DataDatabaseBundle:Projekt');
-        $collMyProjekt = $projektRepo->getProjectByUserZakonczone($uzytkownik);
-        $restProject = $projektRepo->getRestOfProjectZakonczone($uzytkownik);
+        $collMyProjekt = $projektRepo->getProjectByUserSkasowane($uzytkownik);
+        $restProject = $projektRepo->getRestOfProjectSkasowane($uzytkownik);
 
         return $this->render('AppFrontendBundle:Projects:skasowane.html.twig', array(
                     'myProjects' => $collMyProjekt,
