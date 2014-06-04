@@ -160,19 +160,42 @@ class ProjectsController extends TmController {
 
         $request = $this->get('request');
         if ($request->isMethod('POST')) {
-            $liders = 0;
             $form = $this->createForm(new \App\FrontendBundle\Lib\Form\AddUserToProjectForm($m, $projekt));
             if ($request->request->has($form->getName())) {
                 $form->handleRequest($request);
                 $data = $form->getData();
-                foreach ($data['uzytkownicy'] as $uzytkownikId) {
-                    $uzytkownik = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($uzytkownikId);
-                    if($this->isLider($projekt, $uzytkownik)) {
-                        $liders++;
+                $users = $data['uzytkownicy'];
+                $collUp = $projekt->getUzytkownicyProjekty();
+                $arrStarzy = array();
+                foreach ($collUp as $up) {
+                    $u = $up->getUzytkownik();
+                    if (!in_array($u->getId(), $users)) {
+                        if ($this->isLider($projekt, $u)) {
+                            return $this->redirectWithFlash('projects_edit_roles', 'Nie można usunąć lidera projektu', 'error', array(
+                                        'projekt_nazwa' => $projekt->getName(),
+                            ));
+                        }
+                        $m->remove($up);
+                    } else {
+                        $arrStarzy[] = $u->getId();
                     }
                 }
-                die;
+                $arrResult = array_diff($users, $arrStarzy);
+                foreach ($arrResult as $uzytkownikId) {
+                    $uzytkownik = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($uzytkownikId);
+                    $newUp = new UzytkownikProjekt();
+                    $newUp
+                            ->setProjekt($projekt)
+                            ->setUzytkownik($uzytkownik)
+                            ->setRola(UzytkownikProjekt::ROLA_POMOCNIK);
+                    $m->persist($newUp);
+                }
+                $m->flush();
+                return $this->redirectWithFlash('projects_edit_roles', 'Zaktualizowano użytkowników należących do projektu', 'success', array(
+                            'projekt_nazwa' => $projekt->getName(),
+                ));
             } else {
+                $liders = 0;
                 foreach ($request->request as $key => $param) {
                     if ($param == UzytkownikProjekt::ROLA_LIDER) {
                         ++$liders;

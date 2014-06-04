@@ -16,9 +16,15 @@ class TmController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
         return $this->redirect($this->generateUrl($route, $args));
     }
     
+    /**
+     * 
+     * @param \Data\DatabaseBundle\Entity\Projekt $projekt
+     * @param \Data\DatabaseBundle\Entity\Uzytkownik $uzytkownik
+     * @return type
+     */
     public function isLider($projekt, $uzytkownik = null) {
         $uzytkownik = $uzytkownik != null ? $uzytkownik : $this->getUser();
-        return $this->getDoctrine()->getManager()->getRepository('DataDatabaseBundle:UzytkownikProjekt')->findByProjektAndUzytkownik($projekt, $uzytkownik)->getRola();
+        return $this->getDoctrine()->getManager()->getRepository('DataDatabaseBundle:UzytkownikProjekt')->findByProjektAndUzytkownik($projekt, $uzytkownik)->getRola() == \Data\DatabaseBundle\Entity\UzytkownikProjekt::ROLA_LIDER ? true : false;
     }
     
     public function deleteDir($dirPath) {
