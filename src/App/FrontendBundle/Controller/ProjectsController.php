@@ -22,31 +22,28 @@ class ProjectsController extends TmController {
                 AND p.skasowane is null
         ")->setParameter(':uzytkownik_id', $uzytkownik->getId())->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
                 ->getResult();
-        $projekt = $m->createQuery("
-            SELECT p.label, p.status as status_projektu, p.name, up.rola as rola_uzytkownika, p.termin as termin
-                FROM DataDatabaseBundle:Projekt p
-                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
-                WHERE p.status != :status_zamkniety
-                AND p.skasowane is null
-        ")->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
+        $projektSubQuery = $m->createQuery("                    
+            SELECT pp.id
+                        FROM DataDatabaseBundle:UzytkownikProjekt up
+                        JOIN DataDatabaseBundle:Projekt pp WITH pp.id = up.projekt
+                        WHERE up.uzytkownik = :uzytkownik_id
+        ")
+                ->setParameter(':uzytkownik_id', $uzytkownik->getId())
                 ->getResult();
-        $restProjects = array();
-        $counter = 0;
-            foreach($projekt as $p1) {
-              foreach($collMyProjekt as $p2){
-                  if($p1==$p2 ){
-                    $counter=$counter+1;
-                  }
-                  if($counter == 0){
-                       $restProjects[] = $p1;
-                  }
-              }
-            }
-        
-
+        $projekt = $m->createQuery("
+            SELECT p
+                FROM DataDatabaseBundle:Projekt p
+                WHERE p.id NOT IN (
+                    :array
+                )
+                AND p.status != :status_zamkniety
+        ")
+                ->setParameter(':status_zamkniety', Projekt::STATUS_ZAMKNIETY)
+                ->setParameter(':array', $projektSubQuery)
+                ->getResult();
         return $this->render('AppFrontendBundle:Projects:index.html.twig', array(
                     'myProjects' => $collMyProjekt,
-                    'restProjects' => $restProjects,
+                    'restProjects' => $projekt,
                     'UzytkownikProjekt' => new UzytkownikProjekt(),
                     'Projekt' => new Projekt()
         ));
