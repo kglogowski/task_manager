@@ -3,6 +3,8 @@
 namespace App\FrontendBundle\Lib\Browser;
 
 use App\FrontendBundle\Lib\Browser\Calendar;
+use Data\DatabaseBundle\Entity\Projekt;
+use Data\DatabaseBundle\Entity\Task;
 
 class CalendarElement {
 
@@ -25,7 +27,7 @@ class CalendarElement {
     public function getEventsHtml($day) {
         $pr = $this->getProjektyToHtml($day);
         $t = $this->getTasksToHtml($day);
-        return $pr.$t;
+        return $pr . $t;
     }
 
     public function getProjektyToHtml($day) {
@@ -33,28 +35,50 @@ class CalendarElement {
         $projekty = $this->getManager()->getRepository('DataDatabaseBundle:Projekt')->getProjektyByUzytkownikAndDate($this->getUzytkownik(), $day);
         foreach ($projekty as $projekt) {
             /* var $projekt \Data\DatabaseBundle\Entity\Projekt */
-            $strReturn .= '<a href="'.$this->generateUrlProjekt($projekt).'"><div class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do projektu">Zakończenie projektu "'.$projekt->getLabel().'"</div></a><br />';
+            $strReturn .= '<a href="' . $this->generateUrlProjekt($projekt) . '"><div style="' . $this->generateStyleProjektLine($projekt) . '" class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do projektu">Zakończenie projektu "' . $projekt->getLabel() . '"</div></a><br />';
         }
         return $strReturn;
     }
+
     public function getTasksToHtml($day) {
         $strReturn = '';
         $tasks = $this->getManager()->getRepository('DataDatabaseBundle:Task')->getTasksByUzytkownikAndDate($this->getUzytkownik(), $day);
         foreach ($tasks as $task) {
             /* var $task \Data\DatabaseBundle\Entity\Task */
-            $strReturn .= '<a href="'.$this->generateUrlTask($task).'"><div class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do zadania">Zakończenie zadania "'.$task->getLabel().'"</div></a><br />';
+            $strReturn .= '<a href="' . $this->generateUrlTask($task) . '">
+                                <div style="' . $this->generateStyleTaskLine($task) . '" class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do zadania">
+                                  Zakończenie zadania "' . $task->getLabel() . '"<span class="glyphicon glyphicon-bookmark '.$task->getPriorytetClass().'"></span>
+                                </div>
+                           </a><br />
+                           ';
         }
         return $strReturn;
     }
-    
-    public function generateUrlProjekt(\Data\DatabaseBundle\Entity\Projekt $projekt) {
-        return Calendar::GenerateRoute('tasks', array('projekt_nazwa' => $projekt->getName()));
+
+    public function generateStyleProjektLine(Projekt $projekt) {
+        $return = '';
+        if($projekt->getStatus() == Projekt::STATUS_ZAMKNIETY) {
+            $return .= 'text-decoration: line-through; ';
+        }
+        return $return;
     }
     
-    public function generateUrlTask(\Data\DatabaseBundle\Entity\Task $task) {
+    public function generateStyleTaskLine(Task $task) {
+        $return = '';
+        if($task->getStatus() == Task::STATUS_ZAMKNIETY) {
+            $return .= 'text-decoration: line-through; ';
+        }
+        return $return;
+    }
+
+    public function generateUrlProjekt(Projekt $projekt) {
+        return Calendar::GenerateRoute('tasks', array('projekt_nazwa' => $projekt->getName()));
+    }
+
+    public function generateUrlTask(Task $task) {
         return Calendar::GenerateRoute('tasks', array(
-            'projekt_nazwa' => $task->getProjekt()->getName(),
-            'task_id'       => $task->getId()
+                    'projekt_nazwa' => $task->getProjekt()->getName(),
+                    'task_id' => $task->getId()
         ));
     }
 
