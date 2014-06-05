@@ -7,6 +7,7 @@ use Data\DatabaseBundle\Entity\Role;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Data\DatabaseBundle\Entity\UzytkownikProjekt;
 
 /**
  * Uzytkownik

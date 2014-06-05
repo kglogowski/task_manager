@@ -40,9 +40,13 @@ class TaskRepository extends EntityRepository {
         return $this->getEntityManager()->createQuery("
             SELECT t
                 FROM DataDatabaseBundle:Task t
-                WHERE t.termin = :dt
+                LEFT JOIN DataDatabaseBundle:Projekt p WITH p.id = t.projekt
+                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
+                WHERE up.uzytkownik = :uzytkownik_id
+                AND t.termin = :dt
         ")
                 ->setParameter(':dt', $date)
+                ->setParameter(':uzytkownik_id', $uzytkownik->getId())
                 ->getResult();
     }
 
