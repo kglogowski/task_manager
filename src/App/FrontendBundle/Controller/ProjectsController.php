@@ -223,8 +223,6 @@ class ProjectsController extends TmController {
                         'data-style' => 'btn-default',
                     ),
                     'choices' => Projekt::GetStatusy(),
-                    'error_mapping' => 'jazda',
-                    'invalid_message' => 'jazda',
                     'required' => false))
                 ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
                 ->getForm()
