@@ -12,13 +12,19 @@ class Calendar {
     private $m;
     private $uzytkownik;
     private $arrItems;
-
-    public function __construct($year, $month, $m, Uzytkownik $uzytkownik) {
+    /**
+     *
+     * @var \Symfony\Bundle\FrameworkBundle\Controller\Controller
+     */
+    protected static $controller;
+    
+    public function __construct($year, $month, $m, Uzytkownik $uzytkownik, $controller) {
         $this->year = $year;
         $this->month = $month;
         $this->uzytkownik = $uzytkownik;
         $this->m = $m;
         $this->arrItems = array();
+        self::$controller = $controller;
         $this->generateCalendar();
     }
 
@@ -117,6 +123,41 @@ class Calendar {
             return ++$day;
         }
     }
+    
+    public function generateUrlPreviousDate() {
+        $year = $this->getYear();
+        $month = $this->getMonth();
+        if($month == 1) {
+            $month = 12;
+            $year--;
+        } else {
+            $month--;
+        }
+        return self::GenerateRoute('calendar', array(
+            'year' => $year,
+            'month' => $month >= 10 ? $month : '0'.$month
+        ));
+    }
+    
+    private function generateUrlNextDate() {
+        $year = $this->getYear();
+        $month = $this->getMonth();
+        if($month == 12) {
+            $month = 1;
+            $year++;
+        } else {
+            $month++;
+        }
+        return self::GenerateRoute('calendar', array(
+            'year' => $year,
+            'month' => $month >= 10 ? $month : '0'.$month
+        ));
+    }
+    
+    public static function GenerateRoute($name, $array = array()) {
+        return self::$controller->generateUrl($name, $array);
+    }
+
 
     private function generateCalendar() {
         $length = $this->getLengthOfMonth();
@@ -166,6 +207,8 @@ class Calendar {
         $return = '
             <div class="cloud">
                 <div class="cloud_tt">
+                    <a href="'.$this->generateUrlPreviousDate().'"><div style="float: left; font-size: 26px;"><span class="glyphicon glyphicon-chevron-left"></span></div></a>
+                    <a href="'.$this->generateUrlNextDate().'"><div style="float: right; font-size: 26px;"><span class="glyphicon glyphicon-chevron-right"></span></div></a>
                     <h3>Kalendarz na ' . Calendar::GetLabelMonth((int) $this->getMonth()) . ' ' . $this->getYear() . '</h3>
                 </div>
                 <div class="cloud_ct">
@@ -182,8 +225,7 @@ class Calendar {
             $return.=$objItem->generate();
         }
         $return.='</div></div>';
-        echo $return;
-        return '';
+        return $return;
     }
 
 }

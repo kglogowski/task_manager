@@ -33,7 +33,7 @@ class CalendarElement {
         $projekty = $this->getManager()->getRepository('DataDatabaseBundle:Projekt')->getProjektyByUzytkownikAndDate($this->getUzytkownik(), $day);
         foreach ($projekty as $projekt) {
             /* var $projekt \Data\DatabaseBundle\Entity\Projekt */
-            $strReturn .= '<div>Zakończenie projektu "'.$projekt->getLabel().'"</div>';
+            $strReturn .= '<a href="'.$this->generateUrlProjekt($projekt).'"><div class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do projektu">Zakończenie projektu "'.$projekt->getLabel().'"</div></a><br />';
         }
         return $strReturn;
     }
@@ -42,9 +42,20 @@ class CalendarElement {
         $tasks = $this->getManager()->getRepository('DataDatabaseBundle:Task')->getTasksByUzytkownikAndDate($this->getUzytkownik(), $day);
         foreach ($tasks as $task) {
             /* var $task \Data\DatabaseBundle\Entity\Task */
-            $strReturn .= '<div>Zakończenie zadania "'.$task->getLabel().'"</div>';
+            $strReturn .= '<a href="'.$this->generateUrlTask($task).'"><div class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do zadania">Zakończenie zadania "'.$task->getLabel().'"</div></a><br />';
         }
         return $strReturn;
+    }
+    
+    public function generateUrlProjekt(\Data\DatabaseBundle\Entity\Projekt $projekt) {
+        return Calendar::GenerateRoute('tasks', array('projekt_nazwa' => $projekt->getName()));
+    }
+    
+    public function generateUrlTask(\Data\DatabaseBundle\Entity\Task $task) {
+        return Calendar::GenerateRoute('tasks', array(
+            'projekt_nazwa' => $task->getProjekt()->getName(),
+            'task_id'       => $task->getId()
+        ));
     }
 
     public function generate() {
