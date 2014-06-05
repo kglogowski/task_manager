@@ -35,5 +35,15 @@ class TaskRepository extends EntityRepository {
         $query->setParameter(":zamkniety", Task::STATUS_ZAMKNIETY);
         return $query->getResult();
     }
+    
+    public function getTasksByUzytkownikAndDate(Uzytkownik $uzytkownik, $date) {
+        return $this->getEntityManager()->createQuery("
+            SELECT t
+                FROM DataDatabaseBundle:Task t
+                WHERE t.termin = :dt
+        ")
+                ->setParameter(':dt', $date)
+                ->getResult();
+    }
 
 }

@@ -146,5 +146,15 @@ class ProjektRepository extends EntityRepository {
                         ->setParameter(':array', $projektSubQuery)
                         ->getResult();
     }
+    
+    public function getProjektyByUzytkownikAndDate(Uzytkownik $uzytkownik, $date) {
+        return $this->getEntityManager()->createQuery("
+            SELECT p
+                FROM DataDatabaseBundle:Projekt p
+                WHERE p.termin = :dt
+        ")
+                ->setParameter(':dt', $date)
+                ->getResult();
+    }
 
 }
