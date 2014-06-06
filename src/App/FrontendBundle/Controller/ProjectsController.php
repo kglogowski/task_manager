@@ -224,12 +224,21 @@ class ProjectsController extends TmController {
                     ),
                     'choices' => Projekt::GetStatusy(),
                     'required' => false))
+                ->add('termin', 'date', array(
+                    'widget' => 'single_text',
+                    'format' => 'dd-MM-yyyy',
+                    'attr' => array(
+                        'class' => 'form-control date_to',
+                        'placeholder' => 'Podaj termin'
+                    ))
+                )
                 ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
                 ->getForm()
         ;
         if ($this->getRequest()->getMethod() === 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
+               
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();

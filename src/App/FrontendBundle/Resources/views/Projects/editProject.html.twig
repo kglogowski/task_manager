@@ -4,6 +4,7 @@
 {% endblock %}
 {% block content %}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
+{{ include('AppHelperBundle:ui:datapicker.html.twig', { arrObj: ['.date_to'] } ) }}
 <div class="cloud">
     <div class="cloud_tt">
         <h3>Edytuj projekt</h3>
@@ -11,21 +12,30 @@
     <div class="cloud_ct">
     <div class="error_list">{{ form_errors(form.name) }} </div>    
  <form method="POST" action="">
+      <div class="well-sm">
 {{ form_label(form.label) }}
 {{ form_widget(form.label) }}
-
+</div>
+ <div class="well-sm">
 {{ form_label(form.name) }}
 {{ form_widget(form.name) }}
-
+</div>
+ <div class="well-sm">
 {{ form_label(form.status) }}
 {{ form_widget(form.status) }}
-
+</div>
+ <div class="well-sm">
+{{ form_label(form.termin) }}
+{{ form_widget(form.termin) }}
+</div>
+ <div class="well-sm">
 {{ form_widget(form.save) }}
+</div>
 </form>
 
   </div>
   </div>
-{{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'homepage'}) }}
+{{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
   <script>
     $('.selectpicker').selectpicker();
 </script>
