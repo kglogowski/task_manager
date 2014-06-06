@@ -243,7 +243,7 @@ class ProjectsController extends TmController {
                 $em->persist($projekt);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('projects'));
+                 return $this->redirectWithFlash('projects', 'projekt został zaktualizowany', 'success');
             }
         }
         return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
