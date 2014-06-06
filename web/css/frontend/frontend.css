@@ -350,3 +350,7 @@ a.cloud_list:hover {
 .active_day {
     background-color: #eeffdd;
 }
+
+.calendar_line {
+    display: inline-block;
+}

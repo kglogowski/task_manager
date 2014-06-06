@@ -151,9 +151,12 @@ class ProjektRepository extends EntityRepository {
         return $this->getEntityManager()->createQuery("
             SELECT p
                 FROM DataDatabaseBundle:Projekt p
-                WHERE p.termin = :dt
+                LEFT JOIN DataDatabaseBundle:UzytkownikProjekt up WITH p.id = up.projekt
+                WHERE up.uzytkownik = :uzytkownik_id
+                AND p.termin = :dt
         ")
                 ->setParameter(':dt', $date)
+                ->setParameter(':uzytkownik_id', $uzytkownik->getId())
                 ->getResult();
     }
 
