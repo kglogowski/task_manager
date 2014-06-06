@@ -235,10 +235,10 @@ class ProjectsController extends TmController {
                 ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
                 ->getForm()
         ;
-        if ($this->getRequest()->getMethod() === 'POST') {
+        if ($this->getRequest()->getMethod() == 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
-               
+              
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();

@@ -83,3 +83,7 @@ profile_edit_change_basic:
 profile_edit_change_password:
     pattern:  /profil/edytuj-change-password
     defaults: { _controller: AppFrontendBundle:Profile:changePassword }
+    
+task_edit:
+    pattern:  /edytowanie-zadania/{projekt_nazwa}/{task_id}
+    defaults: { _controller: AppFrontendBundle:Task:taskEdit}

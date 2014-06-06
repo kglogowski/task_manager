@@ -1,10 +1,12 @@
 {% extends "::frontend.html.twig" %}
 {% block templatestyle %}
     {% include 'AppHelperBundle:basic:ajax.html.twig' %}
+    {% include 'AppHelperBundle:ui:load.html.twig' %}
 {% endblock %}
 {% block content %}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
 {{ include('AppHelperBundle:ui:datapicker.html.twig', { arrObj: ['.date_to'] } ) }}
+
 <div class="cloud">
     <div class="cloud_tt">
         <h3>Edytuj projekt</h3>
@@ -29,6 +31,7 @@
 {{ form_widget(form.termin) }}
 </div>
  <div class="well-sm">
+{{ form_rest(form) }}
 {{ form_widget(form.save) }}
 </div>
 </form>
