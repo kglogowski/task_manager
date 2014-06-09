@@ -1,6 +1,7 @@
 {% extends "::frontend.html.twig" %}
 {% block templatestyle %}
         {% include 'AppHelperBundle:ui:load.html.twig' %}
+        {% include 'AppHelperBundle:basic:ajax.html.twig' %}
 {% endblock %}
 {% block content %}
 
@@ -35,7 +36,7 @@
 {% endif%}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
 
-<div class="cloud-lt">
+<div class="cloud-lt task_list">
     <div class="cloud_tt">
         <h4>Zadania</h4>
     </div>
@@ -97,6 +98,7 @@
         <div><b><i>Zadanie aktualnie przypisane jest na {{ aktualny.login }}</i></b></div>
     </div>
 </div>
+{% if app.user.isAssignedToTask(task) %}
 {% if not task.isZakonczony %}
 <div class="btn-new">
     <div>
@@ -134,13 +136,16 @@
     </div>
 </div>
 {% endif %}
-{% for wiadomosc in task.wiadomosci %}
+{% endif %}
+{% for key, wiadomosc in task.wiadomosci %}
 <div class="cloud-rt">
     <div class="cloud_tt_message">
         <div class="left"><h5>{{ wiadomosc.uzytkownik.login }} <small>{{ wiadomosc.createdAt|date('d-m-Y') }}</small></h5></div>
         <div class="right"><h5><small>#{{ wiadomosc.numer }}</small></h5></div>
+        {% if key == 0 and app.user.id == wiadomosc.uzytkownik.id %}
         <a onclick="return confirm('Czy napewno chcesz usunąć wiadomość?')" href="{{ url('wiadomosc_delete', {wiadomoscId: wiadomosc.id}) }}"><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-trash"></span></h5></div></a>
-        <a href=""><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-pencil"></span></h5></div></a>
+        <a class="edit_message" data-toggle="modal" data-target=".bs-example-modal-lg" data-id="{{ wiadomosc.id }}" href="javascript:void(0)"><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-pencil"></span></h5></div></a>
+        {% endif %}
         <div class="clear"></div>
     </div>
     <div class="cloud_ct padding-medium">
@@ -183,6 +188,17 @@
 </div>
 {% endif %}
 <div class="clear"></div>
+<div class="modal fade bs-example-modal-lg" aria-hidden="true" aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+                <h4 id="myLargeModalLabel" class="modal-title">Edycja wiadomości</h4>
+            </div>
+            <div id="modal-body-edit-message" class="modal-body"></div>
+        </div>
+    </div>
+</div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
 
 {{ tinymce_init() }}
@@ -201,6 +217,13 @@
                 $dwf.addClass('show');
                 $dw.html('Ukryj formularz');
             }
+        });
+
+        $em = $('.edit_message');
+        $em.click(function() {
+            $.get("{{ url('wiadomosc_edit') }}?wiadomosc_id="+$em.attr('data-id'), function(data){
+                $('#modal-body-edit-message').html(data);
+            });
         });
     });
 </script>

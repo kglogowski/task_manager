@@ -1,0 +1,38 @@
+{% include 'AppHelperBundle:basic:ajax.html.twig' %}
+<form id="edit_form" action="{{ url('wiadomosc_edit_form_valid',{wiadomosc_id: wiadomosc.id}) }}" method="POST" {{ form_enctype(form) }}>
+    <div class="well-sm">
+        {{ form_widget(form.tekst,{'value': wiadomosc.tresc}) }}
+    </div>
+    <div class="well-sm">
+        {{ form_widget(form.aktualny) }}
+    </div>
+    <div class="well-sm">
+        {{ form_widget(form.status) }}
+    </div>
+    <div class="well-sm">
+        {% for plik in wiadomosc.plikiWiadomosci %}
+            <div><a class="delete_file_from_message" class="" data-id="{{ plik.id }}" href="javascript:void(0)"><span style="color: #990033" class="glyphicon glyphicon-remove"></span></a> {{ plik.label }}</div>
+        {% endfor %}
+    </div>
+    <div class="well-sm">
+        {{ form_widget(form._token) }}
+        {{ form_widget(form.save) }}
+    </div>
+</form>
+
+{{ tinymce_init() }}
+
+<script type="text/javascript">
+    $('.selectpicker').selectpicker();
+    $().ready(function() {
+        $dffm = $('.delete_file_from_message');
+        $dffm.click(function(){
+            $this = $(this);
+            $.get("{{ url('file_delete_from_message') }}?plik_id="+$(this).attr('data-id'),function(data, status){
+                if(status == 'success') {
+                    $this.parent().remove();
+                }
+            });
+        });
+    });
+</script>

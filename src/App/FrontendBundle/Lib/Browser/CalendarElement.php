@@ -34,7 +34,7 @@ class CalendarElement {
         $strReturn = '';
         $projekty = $this->getManager()->getRepository('DataDatabaseBundle:Projekt')->getProjektyByUzytkownikAndDate($this->getUzytkownik(), $day);
         foreach ($projekty as $projekt) {
-            /* var $projekt \Data\DatabaseBundle\Entity\Projekt */
+            /* @var $projekt \Data\DatabaseBundle\Entity\Projekt */
             $strReturn .= '<a href="' . $this->generateUrlProjekt($projekt) . '"><div style="' . $this->generateStyleProjektLine($projekt) . '" class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do projektu">Zakończenie projektu "' . $projekt->getLabel() . '"</div></a><br />';
         }
         return $strReturn;
@@ -44,7 +44,7 @@ class CalendarElement {
         $strReturn = '';
         $tasks = $this->getManager()->getRepository('DataDatabaseBundle:Task')->getTasksByUzytkownikAndDate($this->getUzytkownik(), $day);
         foreach ($tasks as $task) {
-            /* var $task \Data\DatabaseBundle\Entity\Task */
+            /* @var $task \Data\DatabaseBundle\Entity\Task */
             $strReturn .= '<a href="' . $this->generateUrlTask($task) . '">
                                 <div style="' . $this->generateStyleTaskLine($task) . '" class="calendar_line" data-toggle="tooltip" data-placement="top" title="Przejdź do zadania">
                                   Zakończenie zadania "' . $task->getLabel() . '"<span class="glyphicon glyphicon-bookmark '.$task->getPriorytetClass().'"></span>

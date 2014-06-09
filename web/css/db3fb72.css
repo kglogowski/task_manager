@@ -16,8 +16,8 @@
     height: 100%;
     top: 0px;
     left: 0px;
-    background-color: rgba(0,0,20,0.9);
-    background-image: url('/js/ajax/img/aw_loading2.gif');
+    background-color: #000000;
+    background-image: url('/js/ajax/img/aw_loading.gif');
     background-repeat:no-repeat;
     background-position:center; 
 }
@@ -409,4 +409,9 @@ a.cloud_list:hover {
 
 .calendar_line {
     display: inline-block;
+}
+
+.task_list {
+    max-height: 500px;
+    overflow: auto;
 }

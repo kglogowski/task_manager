@@ -5,6 +5,9 @@ namespace App\FrontendBundle\Controller;
 use App\LibBundle\TmController;
 use Data\DatabaseBundle\Entity\Projekt;
 use Data\DatabaseBundle\Entity\Task;
+use Data\DatabaseBundle\Entity\Wiadomosc;
+use Symfony\Component\HttpFoundation\Request;
+use Data\DatabaseBundle\Entity\PlikWiadomosci;
 
 class TaskController extends TmController {
 
@@ -159,6 +162,7 @@ class TaskController extends TmController {
             $user = $up->getUzytkownik();
             $uzytkownicy[$user->getId()] = $user->getLogin();
         }
+
 
 
         $form = $this
@@ -325,35 +329,116 @@ class TaskController extends TmController {
     public function taskReopenAction($task_id) {
         $m = $this->getDoctrine()->getManager();
         $task = $m->getRepository('DataDatabaseBundle:Task')->find($task_id);
-        if(!$task instanceof Task) {
+        if (!$task instanceof Task) {
             return $this->redirectWithFlash('projects', 'Podane zadanie nie istnieje', 'error');
         }
-        if(!$task->isZakonczony()) {
+        if (!$task->isZakonczony()) {
             return $this->redirectWithFlash('projects', 'Zadanie nie jest zamknięte', 'error');
         }
-        
+
         $projekt = $task->getProjekt();
-        if($projekt->isZakonczony()) {
+        if ($projekt->isZakonczony()) {
             return $this->redirectWithFlash('projects', 'Nie można otworzyć zadania, ponieważ projekt jest zamknięty', 'error');
         }
-        
-        if(!$this->isLider($projekt)) {
+
+        if (!$this->isLider($projekt)) {
             return $this->redirectWithFlash('projects', 'Nie posiadasz wystarczających praw aby otworzyć projekt, skontaktuj się z liderem projektu', 'error');
         }
-        
+
         $task->setStatus(Task::STATUS_PRZYWROCONY);
         $m->persist($task);
-        
+
         $m->flush();
         return $this->redirectWithFlash('tasks', 'Zadanie zostało przywrócone', 'success', array(
-                'projekt_nazwa' => $projekt->getName(),
-                'task_id' => $task->getId()
-            )
+                    'projekt_nazwa' => $projekt->getName(),
+                    'task_id' => $task->getId()
+                        )
         );
     }
-    
-    public function taskEditAction($projekt_nazwa,$task_id){
-        
+
+    public function usunWiadomoscAction($wiadomoscId) {
+        $m = $this->getDoctrine()->getManager();
+        $wiadomosc = $m->getRepository('DataDatabaseBundle:Wiadomosc')->find($wiadomoscId);
+        $task = $wiadomosc->getTask();
+        $projekt = $task->getProjekt();
+        if ($wiadomosc->getUzytkownik() !== $this->getUser()) {
+            return $this->redirectWithFlash('tasks', 'Nie jesteś właścicelem tej wiadomości', 'error', array(
+                        'projekt_nazwa' => $projekt->getName(),
+                        'task_id' => $task->getId()
+            ));
+        }
+        if (!$wiadomosc->canBeDelete()) {
+            return $this->redirectWithFlash('tasks', 'Można usunąć jedynie najnowszą wiadomość w zadaniu', 'error', array(
+                        'projekt_nazwa' => $projekt->getName(),
+                        'task_id' => $task->getId()
+            ));
+        }
+        $wiadomosc->delete($m);
+        return $this->redirectWithFlash('tasks', 'Wiadomość została usunięta', 'success', array(
+                    'projekt_nazwa' => $projekt->getName(),
+                    'task_id' => $task->getId()
+        ));
+    }
+
+    public function edytujWiadomoscAction(Request $request) {
+        $m = $this->getDoctrine()->getManager();
+        $objWiadomosc = $m->getRepository('DataDatabaseBundle:Wiadomosc')->find((int) $request->get('wiadomosc_id'));
+        if (!$objWiadomosc instanceof Wiadomosc) {
+            
+        }
+        $form = $this->createForm(new \App\FrontendBundle\Lib\Form\WiadomoscEditForm($m, $objWiadomosc));
+
+        return $this->render('AppFrontendBundle:Task:edytujWiadomosc.html.twig', array(
+                    'form' => $form->createView(),
+                    'wiadomosc' => $objWiadomosc,
+        ));
+    }
+
+    public function edytujWiadomoscFormValidAction(Request $request) {
+        $m = $this->getDoctrine()->getManager();
+        $wiadomosc = $m->getRepository('DataDatabaseBundle:Wiadomosc')->find((int) $request->get('wiadomosc_id'));
+        $task = $wiadomosc->getTask();
+        $projekt = $task->getProjekt();
+        $editForm = $this->createForm(new \App\FrontendBundle\Lib\Form\WiadomoscEditForm($m, $wiadomosc));
+        $editForm->handleRequest($request);
+        if ($editForm->isValid()) {
+            $data = $editForm->getData();
+            if ($editForm->isValid()) {
+                $aktualnyId = $data['aktualny'] == '_vns_' ? $task->getAktualnyUzytkownik() : $data['aktualny'];
+                $statusId = $data['status'] == '_vns_' ? $task->getStatus() : $data['status'];
+                $wiadomosc
+                        ->setUpdatedAt(new \DateTime('now'))
+                        ->setTresc($data['tekst'])
+                        ->setUzytkownik($this->getUser());
+                $task
+                        ->setAktualnyUzytkownik($aktualnyId)
+                        ->setStatus($statusId);
+                if ($this->getUser()->getId() != $aktualnyId) {
+                    $task->setPoprzedniUzytkownik($this->getUser()->getId());
+                }
+                $m->persist($task);
+                $m->persist($wiadomosc);
+                $m->flush();
+                return $this->redirectWithFlash('tasks', 'Wiadmość została zaktualizowana', 'success', array(
+                            'projekt_nazwa' => $projekt->getName(),
+                            'task_id' => $task->getId()
+                ));
+            }
+        }
+    }
+
+    public function fileDeleteFromMessageAction(Request $request) {
+        $m = $this->getDoctrine()->getManager();
+        $plik = $m->getRepository("DataDatabaseBundle:PlikWiadomosci")->find($request->get('plik_id'));
+        if (!$plik instanceof PlikWiadomosci) {
+            
+        }
+        $plik->delete($m);
+        return new \Symfony\Component\HttpFoundation\Response();
+    }
+
+    public function taskEditAction($projekt_nazwa, $task_id) {
+
         $m = $this->getDoctrine()->getManager();
         $task = $m->getRepository('DataDatabaseBundle:Task')->findOneById($task_id);
 
@@ -362,21 +447,21 @@ class TaskController extends TmController {
             return $this->redirectWithFlash('projects', 'Nie ma tekigo projektu', 'error');
         }
 
-            $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getCreator());
-            $aktualny = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik());
-           
+        $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getCreator());
+        $aktualny = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik());
+
         $aktualniUzytkownicyZadania = array();
         foreach ($task->getUzytkownicy() as $user) {
             $aktualniUzytkownicyZadania[$user->getId()] = $user->getLogin();
         }
 
         $uzytkownicy = array();
-             $collUp = $projekt->getUzytkownicyProjekty();
-             foreach ($collUp as $up) {
-                $user = $up->getUzytkownik();
-                 $uzytkownicy[$user->getId()] = $user->getLogin();
+        $collUp = $projekt->getUzytkownicyProjekty();
+        foreach ($collUp as $up) {
+            $user = $up->getUzytkownik();
+            $uzytkownicy[$user->getId()] = $user->getLogin();
         }
- 
+
 
 
         $form = $this->createFormBuilder($task)
@@ -395,7 +480,7 @@ class TaskController extends TmController {
 //                ))
                 ->add('AktualnyUzytkownik', 'choice', array(
                     'label' => 'Aktualnie przypisany użytkownik',
-                    'choices' =>$aktualniUzytkownicyZadania ,
+                    'choices' => $aktualniUzytkownicyZadania,
                     'preferred_choices' => array($aktualny->getLogin()),
                     'required' => 'true',
                     'attr' => array(
@@ -437,7 +522,7 @@ class TaskController extends TmController {
                     )
                 ))
                 ->getForm();
-        
+
         if ($this->getRequest()->getMethod() == 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
@@ -445,26 +530,25 @@ class TaskController extends TmController {
 //                foreach ($data['uzytkownicy'] as $userId) {
 //                    $task->addUzytkownik($m->find('DataDatabaseBundle:Uzytkownik', $userId));
 //                }
-                 $task
-                       ->setAktualnyUzytkownik($data['AktualnyUzytkownik'])
-                       ->setPriorytet($data['priorytet'])
-                       ->setTermin($data['termin'])
-                       ->setOpis($data['opis'])
-                       ->setUpdatedAt();
+                $task
+                        ->setAktualnyUzytkownik($data['AktualnyUzytkownik'])
+                        ->setPriorytet($data['priorytet'])
+                        ->setTermin($data['termin'])
+                        ->setOpis($data['opis'])
+                        ->setUpdatedAt();
                 $m->persist($task);
                 $m->flush();
-                return $this->redirectWithFlash('tasks', 'Zaktualizowano zadanie', 'success', 
-                        array('projekt_nazwa' => 
+                return $this->redirectWithFlash('tasks', 'Zaktualizowano zadanie', 'success', array('projekt_nazwa' =>
                             $projekt->getName(),
                             'task_id' => $task_id));
             }
         }
-        
+
         return $this->render('AppFrontendBundle:Task:editTask.html.twig', array(
                     'form' => $form->createView(),
                     'projekt' => $projekt,
                     'task' => $task
         ));
-  
-    } 
+    }
+
 }

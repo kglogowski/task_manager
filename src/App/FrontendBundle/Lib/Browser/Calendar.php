@@ -18,11 +18,18 @@ class Calendar {
      */
     protected static $controller;
     
-    public function __construct($year, $month, $m, Uzytkownik $uzytkownik, $controller) {
+    /**
+     * 
+     * @param int $year
+     * @param int $month
+     * @param \Data\DatabaseBundle\Entity\Uzytkownik $uzytkownik
+     * @param \Symfony\Bundle\FrameworkBundle\Controller\Controller $controller
+     */
+    public function __construct($year, $month, Uzytkownik $uzytkownik, $controller) {
         $this->year = $year;
         $this->month = $month;
         $this->uzytkownik = $uzytkownik;
-        $this->m = $m;
+        $this->m = $controller->getDoctrine()->getManager();
         $this->arrItems = array();
         self::$controller = $controller;
         $this->generateCalendar();
