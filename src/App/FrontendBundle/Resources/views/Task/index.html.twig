@@ -64,7 +64,13 @@
         <h4>
             Zadanie stworzył: {{ creator.login }} dnia {{ task.createdAt|date('d-m-Y') }}<br />
             <small>{{ task.label }}</small>
+                        <a style="float: right" href="{{ url('task_edit', {projekt_nazwa: projekt.name,task_id: task.id}) }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Edytuj zadanie" class="modernizator_field">
+            <span class="glyphicon glyphicon-pencil"></span></div>
+    </a>
         </h4>
+        
+
     </div>
     <div class="cloud_ct padding-medium">
         {{ task.opis|raw  }}

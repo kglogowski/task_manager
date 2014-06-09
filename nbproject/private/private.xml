@@ -3,7 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/xampp/htdocs/task_manager/src/Data/DatabaseBundle/Entity/Task.php</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Resources/views/Task/index.html.twig</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Resources/views/Projects/new.html.twig</file>
             <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Controller/ProjectsController.php</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/Data/DatabaseBundle/Entity/Projekt.php</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Resources/config/routing.yml</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Resources/views/Projects/editProject.html.twig</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Resources/views/Task/editTask.html.twig</file>
+            <file>file:/C:/xampp/htdocs/task_manager/src/App/FrontendBundle/Controller/TaskController.php</file>
         </group>
     </open-files>
 </project-private>

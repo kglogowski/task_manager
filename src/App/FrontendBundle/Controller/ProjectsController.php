@@ -223,20 +223,27 @@ class ProjectsController extends TmController {
                         'data-style' => 'btn-default',
                     ),
                     'choices' => Projekt::GetStatusy(),
-                    'error_mapping' => 'jazda',
-                    'invalid_message' => 'jazda',
                     'required' => false))
+                ->add('termin', 'date', array(
+                    'widget' => 'single_text',
+                    'format' => 'dd-MM-yyyy',
+                    'attr' => array(
+                        'class' => 'form-control date_to',
+                        'placeholder' => 'Podaj termin'
+                    ))
+                )
                 ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
                 ->getForm()
         ;
-        if ($this->getRequest()->getMethod() === 'POST') {
+        if ($this->getRequest()->getMethod() == 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
+              
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('projects'));
+                 return $this->redirectWithFlash('projects', 'projekt został zaktualizowany', 'success');
             }
         }
         return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(

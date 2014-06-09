@@ -426,14 +426,129 @@ class TaskController extends TmController {
             }
         }
     }
-    
+
     public function fileDeleteFromMessageAction(Request $request) {
         $m = $this->getDoctrine()->getManager();
         $plik = $m->getRepository("DataDatabaseBundle:PlikWiadomosci")->find($request->get('plik_id'));
-        if(!$plik instanceof PlikWiadomosci) {
+        if (!$plik instanceof PlikWiadomosci) {
+            
         }
         $plik->delete($m);
         return new \Symfony\Component\HttpFoundation\Response();
+    }
+
+    public function taskEditAction($projekt_nazwa, $task_id) {
+
+        $m = $this->getDoctrine()->getManager();
+        $task = $m->getRepository('DataDatabaseBundle:Task')->findOneById($task_id);
+
+        $projekt = $m->getRepository('DataDatabaseBundle:Projekt')->findOneByName($projekt_nazwa);
+        if (!$projekt instanceof Projekt) {
+            return $this->redirectWithFlash('projects', 'Nie ma tekigo projektu', 'error');
+        }
+
+        $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getCreator());
+        $aktualny = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik());
+
+        $aktualniUzytkownicyZadania = array();
+        foreach ($task->getUzytkownicy() as $user) {
+            $aktualniUzytkownicyZadania[$user->getId()] = $user->getLogin();
+        }
+
+        $uzytkownicy = array();
+        $collUp = $projekt->getUzytkownicyProjekty();
+        foreach ($collUp as $up) {
+            $user = $up->getUzytkownik();
+            $uzytkownicy[$user->getId()] = $user->getLogin();
+        }
+
+
+
+        $form = $this->createFormBuilder($task)
+//                    ->add('uzytkownicy', 'choice', array(
+//                        'label' => 'Użytkownicy przypisani do zadania',
+//                                        'multiple' => true,
+//                    'choices' => $uzytkownicy,
+//                    'preferred_choices' => $aktualniUzytkownicyZadania,
+//                    'data' => $aktualniUzytkownicyZadania,
+//                    'required' => 'true',
+//                    'attr' => array(
+//                        'class' => 'form-control selectpicker',
+//                        'data-style' => 'btn-default',
+//                        'title' => 'Wybierz osoby które będą wykonywać to zadanie',
+//                    )
+//                ))
+                ->add('AktualnyUzytkownik', 'choice', array(
+                    'label' => 'Aktualnie przypisany użytkownik',
+                    'choices' => $aktualniUzytkownicyZadania,
+                    'preferred_choices' => array($aktualny->getLogin()),
+                    'required' => 'true',
+                    'attr' => array(
+                        'class' => 'form-control selectpicker',
+                        'data-style' => 'btn-default',
+                        'title' => 'Przypnij zadanie na:',
+                    )
+                ))
+                ->add('priorytet', 'choice', array(
+                    'label' => 'Priorytet',
+                    'choices' => Task::GetProtytety(),
+                    'required' => 'true',
+                    'attr' => array(
+                        'class' => 'form-control selectpicker',
+                        'data-style' => 'btn-default',
+                        'title' => 'Ustal priorytet',
+                    )
+                ))
+                ->add('termin', 'date', array(
+                    'label' => 'Termin ukończenia zadania',
+                    'widget' => 'single_text',
+                    'format' => 'dd-MM-yyyy',
+                    'attr' => array(
+                        'class' => 'form-control date_to',
+                        'placeholder' => 'Podaj termin'
+                    ))
+                )
+                ->add('opis', 'textarea', array(
+                    'attr' => array(
+                        'class' => 'tinymce',
+                        'placeholder' => 'Napisz co należy wykonać w zadaniu',
+                        'title' => 'Napisz wiadomość',
+                    )
+                ))
+                ->add('save', 'submit', array(
+                    'label' => 'aktualizuj zadanie',
+                    'attr' => array(
+                        'class' => 'btn btn-success'
+                    )
+                ))
+                ->getForm();
+
+        if ($this->getRequest()->getMethod() == 'POST') {
+            $form->bind($this->getRequest());
+            if ($form->isValid()) {
+                $data = $form->getData();
+//                foreach ($data['uzytkownicy'] as $userId) {
+//                    $task->addUzytkownik($m->find('DataDatabaseBundle:Uzytkownik', $userId));
+//                }
+                $task
+                        ->setAktualnyUzytkownik($data['AktualnyUzytkownik'])
+                        ->setPriorytet($data['priorytet'])
+                        ->setTermin($data['termin'])
+                        ->setOpis($data['opis'])
+                        ->setUpdatedAt();
+                $m->persist($task);
+                $m->flush();
+                return $this->redirectWithFlash('tasks', 'Zaktualizowano zadanie', 'success', array('projekt_nazwa' =>
+                            $projekt->getName(),
+                            'task_id' => $task_id));
+            }
+        }
+
+        return $this->render('AppFrontendBundle:Task:editTask.html.twig', array(
+                    'form' => $form->createView(),
+                    'projekt' => $projekt,
+                    'task' => $task
+        ));
     }
 
 }
