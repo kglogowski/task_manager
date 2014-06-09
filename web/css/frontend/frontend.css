@@ -354,3 +354,8 @@ a.cloud_list:hover {
 .calendar_line {
     display: inline-block;
 }
+
+.task_list {
+    max-height: 500px;
+    overflow: auto;
+}
