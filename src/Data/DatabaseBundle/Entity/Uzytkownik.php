@@ -492,5 +492,9 @@ class Uzytkownik implements AdvancedUserInterface {
             }
         }
     }
+    
+    public function isAssignedToTask(Task $task) {
+        return in_array($task, $this->getTasks());
+    }
 
 }

@@ -13,8 +13,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Data\DatabaseBundle\Entity\WiadomoscRepository")
  */
-class Wiadomosc
-{
+class Wiadomosc {
+
     /**
      * @var integer
      *
@@ -67,7 +67,6 @@ class Wiadomosc
      */
     private $numer;
 
-
     /**
      * @ORM\OneToMany(targetEntity="PlikWiadomosci", mappedBy="wiadomosc")
      */
@@ -76,14 +75,13 @@ class Wiadomosc
     public function __construct() {
         $this->plikiWiadomosci = new ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -93,8 +91,7 @@ class Wiadomosc
      * @param \DateTime $createdAt
      * @return Wiadomosc
      */
-    public function setCreatedAt()
-    {
+    public function setCreatedAt() {
         $this->createdAt = new \DateTime('now');
 
         return $this;
@@ -105,8 +102,7 @@ class Wiadomosc
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -116,8 +112,7 @@ class Wiadomosc
      * @param \DateTime $updatedAt
      * @return Wiadomosc
      */
-    public function setUpdatedAt($updatedAt)
-    {
+    public function setUpdatedAt($updatedAt) {
         $this->updatedAt = $updatedAt;
 
         return $this;
@@ -128,8 +123,7 @@ class Wiadomosc
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -139,8 +133,7 @@ class Wiadomosc
      * @param integer $uzytkownik
      * @return Wiadomosc
      */
-    public function setUzytkownik(Uzytkownik $uzytkownik)
-    {
+    public function setUzytkownik(Uzytkownik $uzytkownik) {
         $this->uzytkownik = $uzytkownik;
 
         return $this;
@@ -151,8 +144,7 @@ class Wiadomosc
      *
      * @return integer 
      */
-    public function getUzytkownik()
-    {
+    public function getUzytkownik() {
         return $this->uzytkownik;
     }
 
@@ -162,8 +154,7 @@ class Wiadomosc
      * @param integer $task
      * @return Wiadomosc
      */
-    public function setTask(Task $task)
-    {
+    public function setTask(Task $task) {
         $this->task = $task;
 
         return $this;
@@ -174,8 +165,7 @@ class Wiadomosc
      *
      * @return Task 
      */
-    public function getTask()
-    {
+    public function getTask() {
         return $this->task;
     }
 
@@ -185,8 +175,7 @@ class Wiadomosc
      * @param string $tresc
      * @return Wiadomosc
      */
-    public function setTresc($tresc)
-    {
+    public function setTresc($tresc) {
         $this->tresc = $tresc;
 
         return $this;
@@ -197,27 +186,61 @@ class Wiadomosc
      *
      * @return string 
      */
-    public function getTresc()
-    {
+    public function getTresc() {
         return $this->tresc;
     }
-    
-    
+
     public function addPlikWiadomosci(PlikWiadomosci $plikWiadomosci) {
         $this->plikiWiadomosci->add($plikWiadomosci);
         return $this;
     }
-    
+
     public function getPlikiWiadomosci() {
         return $this->plikiWiadomosci;
     }
-    
+
     public function setNumer($numer) {
         $this->numer = $numer;
         return $this;
     }
-    
+
     public function getNumer() {
         return $this->numer;
     }
+
+    public function canBeDelete() {
+        $max = $this->getId();
+        $task = $this->getTask();
+        $wiadomosci = $task->getWiadomosci();
+        foreach ($wiadomosci as $w) {
+            if ($w->getId() > $max) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function delete($m) {
+        $task = $this->getTask();
+        $projektId = $task->getProjekt()->getId();
+        $taskId = $task->getId();
+        foreach ($this->getPlikiWiadomosci() as $pw) {
+            /* @var $pw PlikWiadomosci */
+            $dirname = $_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projektId . '/' . $taskId . '/' . $this->getId();
+            $filename = $dirname . '/' . $pw->getId();
+            if (is_file($filename)) {
+                unlink($filename);
+            }
+            $m->remove($pw);
+        }
+        if (isset($dirname)) {
+            if (is_dir($dirname)) {
+                rmdir($dirname);
+            }
+        }
+        $m->remove($this);
+        $m->flush();
+        return true;
+    }
+
 }

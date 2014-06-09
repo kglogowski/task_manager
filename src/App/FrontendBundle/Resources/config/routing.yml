@@ -64,6 +64,22 @@ wiadomosc_delete:
     pattern:  /usuwanie-wiadomosci/{wiadomoscId}
     defaults: { _controller: AppFrontendBundle:Task:usunWiadomosc }
     
+wiadomosc_edit:
+    pattern:  /edycja-wiadomosci
+    defaults: { _controller: AppFrontendBundle:Task:edytujWiadomosc }
+   
+wiadomosc_create:
+    pattern:  /stworz-wiadomosc
+    defaults: { _controller: AppFrontendBundle:Task:stworzWiadomosc }
+    
+wiadomosc_edit_form_valid:
+    pattern:  /edycja-wiadomosci-form-valid/{wiadomosc_id}
+    defaults: { _controller: AppFrontendBundle:Task:edytujWiadomoscFormValid }
+
+file_delete_from_message:
+    pattern:  /file-delete-from-message
+    defaults: { _controller: AppFrontendBundle:Task:fileDeleteFromMessage }
+
 calendar:
     pattern: /kalendarz/{year}/{month}
     defaults: { _controller: AppFrontendBundle:Calendar:index }
