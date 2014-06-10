@@ -10,7 +10,7 @@ class DefaultController extends TmController {
 
     public function indexAction() {
         
-        $this->sendMailInfo(array($this->getUser()), 'Test', 'BODY');
+//        $this->sendMailInfo(array($this->getUser()), 'Test', 'BODY');
         
         $m = $this->getDoctrine()->getManager();
         $collMyTask = $m->getRepository('DataDatabaseBundle:Task')->findByAktualnyUzytkownikNieZakonczone($this->getUser());

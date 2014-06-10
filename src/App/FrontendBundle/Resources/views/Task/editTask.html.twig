@@ -35,6 +35,9 @@
                 {{ form_label(form.opis) }}
                 {{ form_widget(form.opis) }}
             </div>
+{#            <div class="well-sm">
+                {{ include('AppHelperBundle:basic:zalacz_pliki.html.twig',{ name: 'pliki' }) }}
+            </div>#}
             <div class="well-sm">
                 {{ form_widget(form._token) }}
                 {{ form_widget(form.save) }}
