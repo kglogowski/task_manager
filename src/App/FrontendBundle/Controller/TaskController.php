@@ -534,7 +534,8 @@ class TaskController extends TmController {
                 ->add('AktualnyUzytkownik', 'choice', array(
                     'label' => 'Aktualnie przypisany użytkownik',
                     'choices' => $aktualniUzytkownicyZadania,
-                    'preferred_choices' => array($aktualny->getLogin()),
+                    'preferred_choices' => array($aktualny->getId()),
+                    'data' => $aktualny->getId(),
                     'required' => 'true',
                     'attr' => array(
                         'class' => 'form-control selectpicker',
@@ -546,6 +547,8 @@ class TaskController extends TmController {
                     'label' => 'Priorytet',
                     'choices' => Task::GetProtytety(),
                     'required' => 'true',
+                    'preferred_choices' => array($task->getPriorytet()),
+                    'data' => $task->getPriorytet(),
                     'attr' => array(
                         'class' => 'form-control selectpicker',
                         'data-style' => 'btn-default',
@@ -556,6 +559,7 @@ class TaskController extends TmController {
                     'label' => 'Termin ukończenia zadania',
                     'widget' => 'single_text',
                     'format' => 'dd-MM-yyyy',
+                    'data' => $task->getTermin(),
                     'attr' => array(
                         'class' => 'form-control date_to',
                         'placeholder' => 'Podaj termin'
@@ -565,6 +569,7 @@ class TaskController extends TmController {
                     'attr' => array(
                         'class' => 'tinymce',
                         'placeholder' => 'Napisz co należy wykonać w zadaniu',
+                        'data' => $task->getOpis(),
                         'title' => 'Napisz wiadomość',
                     )
                 ))
@@ -575,22 +580,36 @@ class TaskController extends TmController {
                     )
                 ))
                 ->getForm();
-
+        
         if ($this->getRequest()->getMethod() == 'POST') {
-            $form->bind($this->getRequest());
+            $form->handleRequest($this->getRequest());
             if ($form->isValid()) {
                 $data = $form->getData();
-                foreach ($data->getUzytkownicy() as $userId) {
-                    $task->addUzytkownik($m->find('DataDatabaseBundle:Uzytkownik', $userId));
+                $users = $data['uzytkownicy'];
+                $collUt = $task->getUzytkownicy();
+                $arrStarzy = array();
+                foreach ($collUt as $ut) {
+                    if (!in_array($ut->getId(), $users)) {
+                        $task->removeUzytkownik($ut);
+                    } else {
+                        $arrStarzy[] = $ut->getId();
+                    }
+                }
+                $arrResult = array_diff($users, $arrStarzy);
+                foreach ($arrResult as $uzytkownikId) {
+                    $uzytkownik = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($uzytkownikId);
+                    $task->addUzytkownik($uzytkownik);
                 }
                 $task
-                        ->setAktualnyUzytkownik($data->getAktualnyUzytkownik())
-                        ->setPriorytet($data->getPriorytet())
-                        ->setTermin($data->getTermin())
-                        ->setOpis($data->getOpis())
+                        ->setAktualnyUzytkownik($data['AktualnyUzytkownik'])
+                        ->setPriorytet($data['priorytet'])
+                        ->setTermin($data['termin'])
+                        ->setOpis($data['opis'])
                         ->setUpdatedAt();
                 $m->persist($task);
                 $m->flush();
+//                $m->persist($task);
+//                $m->flush();
                 return $this->redirectWithFlash('tasks', 'Zaktualizowano zadanie', 'success', array('projekt_nazwa' =>
                             $projekt->getName(),
                             'task_id' => $task_id));

@@ -200,7 +200,7 @@
     </div>
 </div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
-
+{% if task %}
 <script type="text/javascript">
     $('.selectpicker').selectpicker();
     $().ready(function() {
@@ -235,4 +235,5 @@
         });
     });
 </script>
+{% endif %}
 {% endblock %}

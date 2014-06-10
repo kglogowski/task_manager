@@ -33,7 +33,7 @@
             </div>
             <div class="well-sm">
                 {{ form_label(form.opis) }}
-                {{ form_widget(form.opis) }}
+                {{ form_widget(form.opis,{'value': task.opis}) }}
             </div>
 {#            <div class="well-sm">
                 {{ include('AppHelperBundle:basic:zalacz_pliki.html.twig',{ name: 'pliki' }) }}
