@@ -107,3 +107,7 @@ profile_edit_change_password:
 task_edit:
     pattern:  /edytowanie-zadania/{projekt_nazwa}/{task_id}
     defaults: { _controller: AppFrontendBundle:Task:taskEdit}
+
+ajax_get_new_form_message:
+    pattern:  /ajax-get-new-form-message
+    defaults: { _controller: AppFrontendBundle:Task:getNewFormMessage}

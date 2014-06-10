@@ -105,7 +105,7 @@
         <a id="dodaj_wiadomosc" style="float: right" class="btn btn-default btn-block" href="javascript:void(0)">Napisz wiadomość</a>
     </div>
 </div>
-<div style="display: none" class="cloud-rt">
+<div id="form-new" style="display: none; position: relative" class="cloud-rt">
     <div class="cloud_ct">
         <div id="dodaj_wiadomosc_form">
             <form action="" method="POST" {{ form_enctype(form) }}>
@@ -201,18 +201,26 @@
 </div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
 
-{{ tinymce_init() }}
 <script type="text/javascript">
     $('.selectpicker').selectpicker();
     $().ready(function() {
         $dw = $('#dodaj_wiadomosc');
         $dwf = $('#dodaj_wiadomosc_form').parent().parent();
+        $fn = $('#form-new');
         $dw.click(function() {
+            $dwf.html("");
             if ($dwf.hasClass('show')) {
                 $dwf.fadeIn('medium');
                 $dwf.removeClass('show');
                 $dw.html('Napisz wiadomość');
             } else {
+                $dwf.append('<div class="ajax-load" ></div>');
+                $.get("{{ url('ajax_get_new_form_message') }}?task_id={{ task.id }}",function(m, a){
+                    if(a == 'success') {
+                        $dwf.html(m);
+                        $dwf.find('.ajax-load').remove();
+                    }
+                });
                 $dwf.fadeOut('medium');
                 $dwf.addClass('show');
                 $dw.html('Ukryj formularz');

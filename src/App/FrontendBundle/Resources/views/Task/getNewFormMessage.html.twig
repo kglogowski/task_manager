@@ -1,0 +1,26 @@
+<div class="cloud_ct">
+    <div id="dodaj_wiadomosc_form">
+        <form action="" method="POST" {{ form_enctype(form) }}>
+            <div class="well-sm">
+                {{ form_widget(form.tekst) }}
+            </div>
+            <div class="well-sm">
+                    {{ include('AppHelperBundle:basic:zalacz_pliki.html.twig', {name: 'pliki'}) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form.aktualny) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form.status) }}
+            </div>
+            <div class="well-sm">
+                {{ form_widget(form._token) }}
+                {{ form_widget(form.save) }}
+            </div>
+        </form>
+    </div>
+</div>
+{{ tinymce_init() }}
+<script type="text/javascript">
+    $('.selectpicker').selectpicker();
+</script>

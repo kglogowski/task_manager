@@ -149,6 +149,58 @@ class TaskController extends TmController {
         ));
     }
 
+    public function getNewFormMessageAction(Request $request) {
+        $m = $this->getDoctrine()->getManager();
+        $task = $m->getRepository('DataDatabaseBundle:Task')->find($request->get('task_id'));
+        $creator = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getCreator());
+        $aktualny = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik());
+        $arrUzytkownicyToDropDown = array('_vns_' => 'Aktualny: ' . $aktualny->getLogin() . ' ') + $task->getUzytkownicyToDropdown();
+        $form = $this->createFormBuilder()
+                ->add('tekst', 'textarea', array(
+                    'attr' => array(
+                        'class' => 'tinymce',
+                        'data-theme' => 'bbcode',
+                        'placeholder' => 'Napisz wiadomość',
+                        'title' => 'Napisz wiadomość',
+                    )
+                ))
+                ->add('aktualny', 'choice', array(
+                    'choices' => $arrUzytkownicyToDropDown,
+                    'required' => 'true',
+                    'attr' => array(
+                        'class' => 'form-control selectpicker',
+                        'data-style' => 'btn-default',
+                        'title' => 'Przypnij zadanie na:',
+                    )
+                ))
+                ->add('status', 'choice', array(
+                    'choices' => array('_vns_' => 'Aktualny status: ' . $task->getStatusLabel() . ' ') + Task::GetStatusyForDropDown(),
+                    'required' => 'true',
+                    'attr' => array(
+                        'class' => 'form-control selectpicker',
+                        'data-style' => 'btn-default',
+                        'title' => 'Ustaw status',
+                    )
+                ))
+                ->add('pliki', 'file', array(
+                    'required' => false,
+                    'attr' => array(
+                        'multiple' => 'multiple',
+                        'id' => 'files'
+                    )
+                ))
+                ->add('save', 'submit', array(
+                    'label' => 'Zapisz wiadomość',
+                    'attr' => array(
+                        'class' => 'btn btn-success'
+                    )
+                ))
+                ->getForm();
+        return $this->render('AppFrontendBundle:Task:getNewFormMessage.html.twig', array(
+                    'form' => $form->createView(),
+        ));
+    }
+
     public function newAction($projekt_nazwa) {
         $m = $this->getDoctrine()->getManager();
         $projekt = $m->getRepository('DataDatabaseBundle:Projekt')->findOneByName($projekt_nazwa);
