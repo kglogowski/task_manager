@@ -88,6 +88,10 @@ settings:
     pattern: /ustawienia
     defaults: { _controller: AppFrontendBundle:Settings:index }
 
+Users:
+    pattern:  /users
+    defaults: { _controller: AppFrontendBundle:Users:showAllUsers }
+
 profile_edit:
     pattern:  /profil/edytuj
     defaults: { _controller: AppFrontendBundle:Profile:edit }

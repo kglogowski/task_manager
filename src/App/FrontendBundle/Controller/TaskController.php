@@ -465,19 +465,19 @@ class TaskController extends TmController {
 
 
         $form = $this->createFormBuilder($task)
-//                    ->add('uzytkownicy', 'choice', array(
-//                        'label' => 'Użytkownicy przypisani do zadania',
-//                                        'multiple' => true,
-//                    'choices' => $uzytkownicy,
-//                    'preferred_choices' => $aktualniUzytkownicyZadania,
-//                    'data' => $aktualniUzytkownicyZadania,
-//                    'required' => 'true',
-//                    'attr' => array(
-//                        'class' => 'form-control selectpicker',
-//                        'data-style' => 'btn-default',
-//                        'title' => 'Wybierz osoby które będą wykonywać to zadanie',
-//                    )
-//                ))
+                    ->add('uzytkownicy', 'choice', array(
+                        'label' => 'Użytkownicy przypisani do zadania',
+                                        'multiple' => true,
+                    'choices' => $uzytkownicy,
+                    'preferred_choices' => $aktualniUzytkownicyZadania,
+                    'data' => $aktualniUzytkownicyZadania,
+                    'required' => 'true',
+                    'attr' => array(
+                        'class' => 'form-control selectpicker',
+                        'data-style' => 'btn-default',
+                        'title' => 'Wybierz osoby które będą wykonywać to zadanie',
+                    )
+                ))
                 ->add('AktualnyUzytkownik', 'choice', array(
                     'label' => 'Aktualnie przypisany użytkownik',
                     'choices' => $aktualniUzytkownicyZadania,
@@ -527,14 +527,14 @@ class TaskController extends TmController {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
                 $data = $form->getData();
-//                foreach ($data['uzytkownicy'] as $userId) {
-//                    $task->addUzytkownik($m->find('DataDatabaseBundle:Uzytkownik', $userId));
-//                }
+                foreach ($data->getUzytkownicy() as $userId) {
+                    $task->addUzytkownik($m->find('DataDatabaseBundle:Uzytkownik', $userId));
+                }
                 $task
-                        ->setAktualnyUzytkownik($data['AktualnyUzytkownik'])
-                        ->setPriorytet($data['priorytet'])
-                        ->setTermin($data['termin'])
-                        ->setOpis($data['opis'])
+                        ->setAktualnyUzytkownik($data->getAktualnyUzytkownik())
+                        ->setPriorytet($data->getPriorytet())
+                        ->setTermin($data->getTermin())
+                        ->setOpis($data->getOpis())
                         ->setUpdatedAt();
                 $m->persist($task);
                 $m->flush();
