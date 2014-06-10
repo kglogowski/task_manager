@@ -122,7 +122,22 @@ class TaskController extends TmController {
                         $task->setPoprzedniUzytkownik($this->getUser()->getId());
                     }
                     $m->persist($task);
+                    
+//                    return $this->render('AppFrontendBundle:Common:mailSwitchUserTask.html.twig', array(
+//                                    'wiadomosc' => $wiadomosc,
+//                                ));
                     $m->flush();
+                    if ($this->getUser()->getId() != $aktualnyId) {
+                        $this->sendMailInfo(
+                                array(
+                                    $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik())
+                                ), 
+                                $this->getUser()->getLogin()." przepiął na Ciebie zadanie: ".$task->getLabel(),
+                                $this->renderView('AppFrontendBundle:Common:mailSwitchUserTask.html.twig', array(
+                                    'wiadomosc' => $wiadomosc,
+                                ))
+                        );
+                    }
                     return $this->redirectWithFlash('tasks', 'Wiadmość została dodana' . $errorString, 'success', array(
                                 'projekt_nazwa' => $projekt->getName(),
                                 'task_id' => $task->getId()

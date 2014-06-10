@@ -15,6 +15,12 @@ class ProfileController extends Controller {
     public function changeBasicAction(Request $request) {
 //        $response = array("code" => 100, "success" => true);
 //        return new Response(json_encode($response)); 
+        $u = $this->getDoctrine()->getManager()->getRepository('DataDatabaseBundle:Uzytkownik')->findOneByEmail($request->get('email'));
+        if ($u instanceof \Data\DatabaseBundle\Entity\Uzytkownik && $u->getId() != $this->getUser()->getId()) {
+            return $this->render('AppFrontendBundle:Profile:changeBasic.html.twig', array(
+                        'msg' => $request->get('msg')
+            ));
+        }
         $imie = $request->get('imie');
         $nazwisko = $request->get('nazwisko');
         $login = $request->get('login');

@@ -1,0 +1,8 @@
+{% extends "::mail_info.html.twig" %}
+{% block title %}
+Zadanie zostało przepięte
+{% endblock title %}
+{% block content %}
+<a href="{{ url('tasks', {projekt_nazwa: wiadomosc.task.projekt.name, task_id: wiadomosc.task.id}) }}">&raquo; Przejdź do zadania &laquo;</a>
+{{ wiadomosc.tresc|raw }}
+{% endblock content %}
