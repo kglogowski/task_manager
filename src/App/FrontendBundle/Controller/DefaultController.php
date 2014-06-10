@@ -9,6 +9,9 @@ use Data\DatabaseBundle\Entity\Task;
 class DefaultController extends TmController {
 
     public function indexAction() {
+        
+        $this->sendMailInfo(array($this->getUser()), 'Test', 'BODY');
+        
         $m = $this->getDoctrine()->getManager();
         $collMyTask = $m->getRepository('DataDatabaseBundle:Task')->findByAktualnyUzytkownikNieZakonczone($this->getUser());
         $collSentTask = $m->getRepository('DataDatabaseBundle:Task')->findByPoprzedniUzytkownikNieZakonczone($this->getUser());

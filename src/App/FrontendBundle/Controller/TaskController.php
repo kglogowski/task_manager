@@ -454,6 +454,7 @@ class TaskController extends TmController {
         foreach ($task->getUzytkownicy() as $user) {
             $aktualniUzytkownicyZadania[$user->getId()] = $user->getLogin();
         }
+        $arrChoice = array_keys($aktualniUzytkownicyZadania);
 
         $uzytkownicy = array();
         $collUp = $projekt->getUzytkownicyProjekty();
@@ -464,20 +465,20 @@ class TaskController extends TmController {
 
 
 
-        $form = $this->createFormBuilder($task)
-                    ->add('uzytkownicy', 'choice', array(
-                        'label' => 'Użytkownicy przypisani do zadania',
-                                        'multiple' => true,
+        $form = $this->createFormBuilder()
+                ->add('uzytkownicy', 'choice', array(
+                    'multiple' => true,
                     'choices' => $uzytkownicy,
-                    'preferred_choices' => $aktualniUzytkownicyZadania,
-                    'data' => $aktualniUzytkownicyZadania,
+                    'preferred_choices' => $arrChoice,
+                    'data' => $arrChoice,
+                    'label' => 'Użytkownicy przypisani do zadania',
                     'required' => 'true',
                     'attr' => array(
                         'class' => 'form-control selectpicker',
                         'data-style' => 'btn-default',
-                        'title' => 'Wybierz osoby które będą wykonywać to zadanie',
-                    )
-                ))
+                        'title' => 'Wybierz osoby które będą wykonywać to zadanie'
+                    ))
+                )
                 ->add('AktualnyUzytkownik', 'choice', array(
                     'label' => 'Aktualnie przypisany użytkownik',
                     'choices' => $aktualniUzytkownicyZadania,

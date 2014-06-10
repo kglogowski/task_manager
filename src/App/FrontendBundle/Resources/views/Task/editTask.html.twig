@@ -16,8 +16,7 @@
      <div class="cloud_ct">
         <form action="" method="POST" {{ form_enctype(form) }} >
             <div class="well-sm">
-                 {{ form_label(form.uzytkownicy) }}
-                {{ form_widget(form.uzytkownicy) }}
+                {{ form_row(form.uzytkownicy) }}
             </div>
             <div class="well-sm">
               {{ form_label(form.AktualnyUzytkownik) }}
@@ -36,9 +35,6 @@
                 {{ form_label(form.opis) }}
                 {{ form_widget(form.opis) }}
             </div>
-{#            <div class="well-sm">
-                {{ include('AppHelperBundle:basic:zalacz_pliki.html.twig',{ name: 'pliki' }) }}
-            </div>#}
             <div class="well-sm">
                 {{ form_widget(form._token) }}
                 {{ form_widget(form.save) }}
