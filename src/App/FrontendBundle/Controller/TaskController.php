@@ -349,7 +349,6 @@ class TaskController extends TmController {
                         }
                     }
                 }
-                die;
                 $m->flush();
                 $this->sendMailInfo(
                         $task->getUzytkownicy(), 'Zostało stworzone zadanie o nazwie: ' . $task->getLabel(), $this->renderView('AppFrontendBundle:Common:mailCreateTask.html.twig', array(
