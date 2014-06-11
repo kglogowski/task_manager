@@ -120,7 +120,7 @@ class DefaultController extends Controller {
         }
     }
 
-    public function rememberPasswordAction() {
+    public function recallPasswordAction() {
         $form = $this->createFormBuilder()
                 ->add('email', 'email', array('attr' => array('placeholder' => 'Podaj swój adres email:', 'class' => 'form-control')))
                 ->add('wyslij', 'submit', array('label' => "Wyślij powiadomienie", 'attr' => array('class' => 'btn btn-danger')))
@@ -132,6 +132,7 @@ class DefaultController extends Controller {
             $m = $this->getDoctrine()->getManager();
             $user = $m->getRepository('DataDatabaseBundle:Uzytkownik')->findOneByEmail($form['email']->getData());
             $user->generateToken($m);
+            $user->setActiveToken(TRUE);
             $m->persist($user);
             $m->flush();
             $message = \Swift_Message::newInstance()
@@ -159,15 +160,15 @@ class DefaultController extends Controller {
                 ->add('haslo', 'repeated', array(
                     'invalid_message' => 'Hasła nie zgadzają się',
                     'first_options' => array(
+                        'label' => 'Podaj nowe hasło:',
                         'attr' => array(
                             'placeholder' => 'Hasło',
-                            'class' => 'form-control'
+                            'class' => 'form-control',
                         )
                     ),
                     'second_options' => array(
-                        'label' => false,
+                        'label' => 'Powtórz hasło:',
                         'attr' => array(
-                            'placeholder' => 'Powtórz hasło',
                             'class' => 'form-control'
                         )
                     ),
@@ -181,6 +182,8 @@ class DefaultController extends Controller {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $user->setHaslo($form['haslo']->getData(), $this->get('security.encoder_factory'));
+                $user->generateToken($m);
+                $user->setActiveToken(FALSE);
                 $m->persist($user);
                 $m->flush();
                 $this->get('session')->getFlashbag()->set('success', 'Twoje hasło zostało zmienione');

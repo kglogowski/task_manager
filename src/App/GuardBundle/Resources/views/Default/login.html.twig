@@ -9,7 +9,7 @@
         <div class="form-row"><h4><label class="label label-primary">Panel logowania:</label></h4></div>
         <div class="form-row"><div class="input-group input-group"><span class="input-group-addon glyphicon glyphicon-user"></span>{{ form_widget(objForm.login) }}</div>{{ form_errors(objForm.login) }}</div>
         <div class="form-row"><div class="input-group input-group"><span class="input-group-addon glyphicon glyphicon-lock"></span>{{ form_widget(objForm.haslo) }}</div>{{ form_errors(objForm.haslo) }}</div>
-        <div class="form-row"><a class="btn btn-primary btn-xs right" href="{{ url('_login_remember_password') }}">Zapomniałem hasła</a></div>
+        <div class="form-row"><a class="btn btn-primary btn-xs right" href="{{ url('_login_recall_password') }}">Zapomniałem hasła</a></div>
         <div class="form-row"><div>{{ form_widget(objForm.zaloguj) }}</div></div>
         {{ form_widget(objForm._token) }}
     </form>
