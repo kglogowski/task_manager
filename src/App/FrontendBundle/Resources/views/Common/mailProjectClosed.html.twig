@@ -1,0 +1,10 @@
+{% extends "::mail_info.html.twig" %}
+{% block nav %}
+Projekt: <a style="color: #805600;" href="{{ url('tasks', {projekt_nazwa: projekt.name }) }}">{{ projekt.label }}</a><br />
+{% endblock nav %}
+{% block title %}
+Projekt został zamknięty.<br />
+{% endblock title %}
+{% block content %}
+    {{ aktualny }} zamknął projekt dnia {{ 'now'|date('Y-m-d') }}
+{% endblock content %}

@@ -1,6 +1,7 @@
 {% extends "::frontend.html.twig" %}
 {% block templatestyle %}
         {% include 'AppHelperBundle:ui:load.html.twig' %}
+        {% include 'AppHelperBundle:basic:ajax.html.twig' %}
 {% endblock %}
 {% block content %}
 
@@ -9,17 +10,39 @@
     <a href="{{ url('task_new', {projekt_nazwa: projekt.name}) }}">
         <div data-toggle="tooltip" data-placement="bottom" title="Nowe zadanie" class="modernizator_field"><span class="glyphicon glyphicon-plus-sign"></span></div>
     </a>
+    {% if not archiwalne %}
+    {% if task %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id}) }}?archiwalne=1">
+        <div data-toggle="tooltip" data-placement="bottom" title="Pokaż archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-open"></span></div>
+    </a>
+    {% else %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name}) }}?archiwalne=1">
+        <div data-toggle="tooltip" data-placement="bottom" title="Pokaż archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-open"></span></div>
+    </a>
+    {% endif%}
+    {% else %}
+    {% if task %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id}) }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Schowaj archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-close"></span></div>
+    </a>
+    {% else %}
+    <a href="{{ url('tasks', {projekt_nazwa: projekt.name}) }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Schowaj archiwalne zadania" class="modernizator_field"><span class="glyphicon glyphicon glyphicon-eye-close"></span></div>
+    </a>
+    {% endif%}
+    {% endif %}
+
 </div>
 {% endif%}
 {% include 'AppHelperBundle:basic:flash.html.twig' %}
 
-<div class="cloud-lt">
+<div class="cloud-lt task_list">
     <div class="cloud_tt">
         <h4>Zadania</h4>
     </div>
     <div class="cloud_ct">
-        {% for task in projekt.getTasks() %}
-        <a class="cloud_list" href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id}) }}">
+        {% for task in archiwalne ? projekt.tasks : projekt.getActiveTasks() %}
+        <a class="cloud_list" href="{{ url('tasks', {projekt_nazwa: projekt.name, task_id: task.id, archiwalne: archiwalne ? true : null}) }}">
             <div class="cloud_elem padding-low">
                 <div class="left lt">
                     <div data-toggle="tooltip" data-placement="top" title="Status {{ task.getStatusLabel() }}" class="left"><span class="glyphicon glyphicon-tag {{ task.getStatusClass() }}"></span></div> 
@@ -41,7 +64,13 @@
         <h4>
             Zadanie stworzył: {{ creator.login }} dnia {{ task.createdAt|date('d-m-Y') }}<br />
             <small>{{ task.label }}</small>
+                        <a style="float: right" href="{{ url('task_edit', {projekt_nazwa: projekt.name,task_id: task.id}) }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Edytuj zadanie" class="modernizator_field">
+            <span class="glyphicon glyphicon-pencil"></span></div>
+    </a>
         </h4>
+        
+
     </div>
     <div class="cloud_ct padding-medium">
         {{ task.opis|raw  }}
@@ -69,12 +98,14 @@
         <div><b><i>Zadanie aktualnie przypisane jest na {{ aktualny.login }}</i></b></div>
     </div>
 </div>
+{% if app.user.isAssignedToTask(task) %}
+{% if not task.isZakonczony %}
 <div class="btn-new">
     <div>
         <a id="dodaj_wiadomosc" style="float: right" class="btn btn-default btn-block" href="javascript:void(0)">Napisz wiadomość</a>
     </div>
 </div>
-<div style="display: none" class="cloud-rt">
+<div id="form-new" style="display: none; position: relative" class="cloud-rt">
     <div class="cloud_ct">
         <div id="dodaj_wiadomosc_form">
             <form action="" method="POST" {{ form_enctype(form) }}>
@@ -98,13 +129,23 @@
         </div>
     </div>
 </div>
-{% for wiadomosc in task.wiadomosci %}
+{% else %}
+<div class="btn-new">
+    <div>
+        <a href="{{ url('taskReopen', { task_id: task.id }) }}" id="dodaj_wiadomosc" style="float: right" class="btn btn-danger btn-block" >Przywróć zadanie</a>
+    </div>
+</div>
+{% endif %}
+{% endif %}
+{% for key, wiadomosc in task.wiadomosci %}
 <div class="cloud-rt">
     <div class="cloud_tt_message">
         <div class="left"><h5>{{ wiadomosc.uzytkownik.login }} <small>{{ wiadomosc.createdAt|date('d-m-Y') }}</small></h5></div>
         <div class="right"><h5><small>#{{ wiadomosc.numer }}</small></h5></div>
+        {% if key == 0 and app.user.id == wiadomosc.uzytkownik.id %}
         <a onclick="return confirm('Czy napewno chcesz usunąć wiadomość?')" href="{{ url('wiadomosc_delete', {wiadomoscId: wiadomosc.id}) }}"><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-trash"></span></h5></div></a>
-        <a href=""><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-pencil"></span></h5></div></a>
+        <a class="edit_message" data-toggle="modal" data-target=".bs-example-modal-lg" data-id="{{ wiadomosc.id }}" href="javascript:void(0)"><div style="padding-right: 10px" class="right"><h5><span class="glyphicon glyphicon-pencil"></span></h5></div></a>
+        {% endif %}
         <div class="clear"></div>
     </div>
     <div class="cloud_ct padding-medium">
@@ -147,25 +188,52 @@
 </div>
 {% endif %}
 <div class="clear"></div>
+<div class="modal fade bs-example-modal-lg" aria-hidden="true" aria-labelledby="myLargeModalLabel" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+                <h4 id="myLargeModalLabel" class="modal-title">Edycja wiadomości</h4>
+            </div>
+            <div id="modal-body-edit-message" class="modal-body"></div>
+        </div>
+    </div>
+</div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'projects'}) }}
-
-{{ tinymce_init() }}
+{% if task %}
 <script type="text/javascript">
     $('.selectpicker').selectpicker();
     $().ready(function() {
         $dw = $('#dodaj_wiadomosc');
         $dwf = $('#dodaj_wiadomosc_form').parent().parent();
+        $fn = $('#form-new');
         $dw.click(function() {
+            $dwf.html("");
             if ($dwf.hasClass('show')) {
                 $dwf.fadeIn('medium');
                 $dwf.removeClass('show');
                 $dw.html('Napisz wiadomość');
             } else {
+                $dwf.append('<div class="ajax-load" ></div>');
+                $.get("{{ url('ajax_get_new_form_message') }}?task_id={{ task.id }}",function(m, a){
+                    if(a == 'success') {
+                        $dwf.html(m);
+                        $dwf.find('.ajax-load').remove();
+                    }
+                });
                 $dwf.fadeOut('medium');
                 $dwf.addClass('show');
                 $dw.html('Ukryj formularz');
             }
         });
+
+        $em = $('.edit_message');
+        $em.click(function() {
+            $.get("{{ url('wiadomosc_edit') }}?wiadomosc_id="+$em.attr('data-id'), function(data){
+                $('#modal-body-edit-message').html(data);
+            });
+        });
     });
 </script>
+{% endif %}
 {% endblock %}

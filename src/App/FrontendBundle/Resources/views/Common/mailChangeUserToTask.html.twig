@@ -1,0 +1,26 @@
+{% extends "::mail_info.html.twig" %}
+
+{% block nav %}
+    Projekt: <a style="color: #805600;" href="{{ url('tasks', {projekt_nazwa: task.projekt.name }) }}">{{ task.projekt.label }}</a><br />
+    Zadanie: <a style="color: #805600;" href="{{ url('tasks', {projekt_nazwa: task.projekt.name, task_id: task.id}) }}">{{ task.label }}</a><br />
+    Priorytet: {{ task.getPriorytetLabel() }}
+{% endblock nav %}
+
+{% block title %}
+    {% if add %} Zostałeś dodany do zadania {% else %} Zostałeś usunięty z zadania {% endif %}</br>
+{% endblock title %}
+
+{% block content %}
+    {{ task.opis|raw }}
+    <i style="font-size: smaller">Termin końca zadania wypada: {{ task.termin|date('Y-m-d') }}</i>
+{% endblock content %}
+
+{% block footer %}
+Osoby przypisane do zadania:<br />
+    <div style="padding-left: 10px; text-align: left;">
+        {% for uzytkownik in task.uzytkownicy %}
+            - {{ uzytkownik.login }} <br />
+        {% endfor %}
+    </div>
+<br />
+{% endblock footer %}

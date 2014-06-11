@@ -38,7 +38,7 @@
                         </div>
                         <div class="row well-sm">
                             <div class="col-md-2">
-                                <button id="profile-edit-basic-btn" type="button" class="btn btn-default btn-xs">
+                                <button id="profile-edit-basic-btn" type="button" class="btn btn-primary btn-xs">
                                     <span class="glyphicon glyphicon-ok"></span> Zapisz zmiany
                                 </button>
                             </div>
@@ -46,7 +46,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default form-validate">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
@@ -54,9 +54,27 @@
                         </a>
                     </h4>
                 </div>
-                <div id="collapseTwo" class="panel-collapse collapse">
+                <div id="collapseTwo" class="panel-collapse collapse relative">
                     <div class="panel-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                        <div class="row well-sm">
+                            <div class="col-md-2 well-sm"><label for="imie">Podaj stare hasło: </label></div>
+                            <div class="col-md-4"><input class="form-control" type="password" value="" name="s_pass" /></div>
+                        </div>
+                        <div class="row well-sm">
+                            <div class="col-md-2 well-sm"><label for="imie">Podaj nowe hasło: </label></div>
+                            <div class="col-md-4"><input class="form-control" type="password" value="" name="n_pass" /></div>
+                        </div>
+                        <div class="row well-sm">
+                            <div class="col-md-2 well-sm"><label for="imie">Powtórz nowe hasło: </label></div>
+                            <div class="col-md-4"><input class="form-control" type="password" value="" name="r_pass" /></div>
+                        </div>
+                        <div class="row well-sm">
+                            <div class="col-md-2">
+                                <button id="profile-edit-password-btn" type="button" class="btn btn-primary btn-xs">
+                                    <span class="glyphicon glyphicon-ok"></span> Zmień hasło
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -123,6 +141,61 @@
                     id: '#profile-edit-basic-btn',
                     idLoad: idLoad,
                     msg: 'Dane zostały zaktualizowane'
+                });
+            } else {
+                $fe.showErrors();
+            }
+        });
+
+        $('#profile-edit-password-btn').click(function() {
+            idLoad = '#collapseTwo';
+            arr = new Array();
+            arr[0] = 's_pass=' + $(idLoad).find("input[name='s_pass']").val();
+            arr[1] = 'n_pass=' + $(idLoad).find("input[name='n_pass']").val();
+            $fe = new FormValidator(idLoad);
+            $fe.clean();
+            $fe.validateText({
+                'name': 's_pass',
+                'value': $(idLoad).find("input[name='s_pass']").val(),
+                'required': true,
+                'max_lenght': '255'
+            });
+            $fe.validateText({
+                'name': 'n_pass',
+                'value': $(idLoad).find("input[name='n_pass']").val(),
+                'required': true,
+                'max_lenght': '255'
+            });
+            $fe.validateText({
+                'name': 'r_pass',
+                'value': $(idLoad).find("input[name='r_pass']").val(),
+                'required': true,
+                'max_lenght': '255'
+            });
+            if ($(idLoad).find("input[name='r_pass']").val() != $(idLoad).find("input[name='n_pass']").val()) {
+                $fe.addError('r_pass', 'Hasła nie są identyczne');
+            }
+            if ($fe.isValid()) {
+                dataString = arr.join('&');
+                $(idLoad).append('<div class="ajax-load" ></div>');
+                $.ajax({
+                    url: "{{ url('profile_edit_change_password') }}",
+                    type: "POST",
+                    data: dataString,
+                    success: function(m) {
+                        $(idLoad).find('.ajax-load').remove();
+                        if(m != false) {
+                            arrError = m.split(";");
+                            $fe.addError(arrError[0], arrError[1]);
+                            $fe.showErrors();
+                        } else {
+                            showFlash({
+                                id: '#collapseTwo .panel-body .row:first',
+                                message: 'Hasło zostało zmienione',
+                                type: 'success'
+                            });
+                        }
+                    }
                 });
             } else {
                 $fe.showErrors();

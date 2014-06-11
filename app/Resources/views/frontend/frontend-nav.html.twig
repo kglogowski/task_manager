@@ -9,7 +9,7 @@
             <span class="glyphicon glyphicon-tasks"></span>
         </div>
     </a>
-    <a href="{{ url('calendar') }}">
+    <a href="{{ url('calendar', { year: "now"|date('Y'), month: "now"|date('m') }) }}">
         <div data-toggle="tooltip" title="Kalendarz" class="nav-element left {% if(app.request.get('_route') matches('/calendar/')) %} nav-element-active {% endif %}">
             <span class="glyphicon glyphicon-calendar"></span>
         </div>
@@ -27,6 +27,11 @@
     <a href="{{ url('profile_edit') }}">
         <div data-toggle="tooltip" title="Profil" class="nav-element right {% if(app.request.get('_route') matches('/profile/')) %} nav-element-active {% endif %}">
             <span class="glyphicon glyphicon-user"></span>
+        </div>
+    </a>
+         <a href="{{ url('users') }}">
+        <div data-toggle="tooltip" title="Użytkownicy" class="nav-element right {% if(app.request.get('_route') matches('/users/')) %} nav-element-active {% endif %}">
+            <span class="glyphicon glyphicon-globe"></span>
         </div>
     </a>
     <div class="clear"></div>

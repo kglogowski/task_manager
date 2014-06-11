@@ -111,6 +111,26 @@ class PlikWiadomosci {
         $wiadomoscId = $this->getWiadomosc()->getId();
         $plik->move($_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projectId . '/' . $task->getId() . '/' . $wiadomosc->getId() . '/' , $this->getId());
     }
+    
+    /**
+     * 
+     * @param \Doctrine\ORM\EntityManager $m
+     */
+    public function delete($m) {
+        $wiadomosc = $this->getWiadomosc();
+        $task = $wiadomosc->getTask();
+        $projectId = $task->getProjekt()->getId();
+        $wiadomoscId = $wiadomosc->getId();
+        $filename = $_SERVER['DOCUMENT_ROOT'] . '/upload/pliki_wiadomosci/' . $projectId . '/' . $task->getId() . '/' . $wiadomoscId . '/' . $this->getId();
+        if(is_file($filename)) {
+            unlink($filename);
+        } else {
+            return false;
+        }
+        $m->remove($this);
+        $m->flush();
+        return true;
+    }
 
     protected static $arrTypes = array(
         'application/vnd.hzn-3d-crossword' => '.x3d',

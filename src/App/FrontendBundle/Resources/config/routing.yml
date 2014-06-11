@@ -37,7 +37,7 @@ projects_edit_roles:
     defaults: { _controller: AppFrontendBundle:Projects:editRoles }
     
 projects_user_add:
-    pattern: /projekt-dodanie-uzytkownika
+    pattern: /projekt-dodanie-uzytkownika/{projekt_name}
     defaults: { _controller: AppFrontendBundle:Projects:addUserToProject }
 
 tasks:
@@ -47,6 +47,10 @@ tasks:
 task_new:
     pattern: /projekt-nowe-zadanie/{projekt_nazwa}
     defaults: { _controller: AppFrontendBundle:Task:new }
+
+taskReopen:
+    pattern: /task-przywroc/{task_id}
+    defaults: { _controller: AppFrontendBundle:Task:taskReopen }
 
 plikWiadomoscPobierz:
     pattern:  /projekt-wiadomosc/pobierz-plik-zadania/{plikWiadomosciId}
@@ -60,13 +64,33 @@ wiadomosc_delete:
     pattern:  /usuwanie-wiadomosci/{wiadomoscId}
     defaults: { _controller: AppFrontendBundle:Task:usunWiadomosc }
     
+wiadomosc_edit:
+    pattern:  /edycja-wiadomosci
+    defaults: { _controller: AppFrontendBundle:Task:edytujWiadomosc }
+   
+wiadomosc_create:
+    pattern:  /stworz-wiadomosc
+    defaults: { _controller: AppFrontendBundle:Task:stworzWiadomosc }
+    
+wiadomosc_edit_form_valid:
+    pattern:  /edycja-wiadomosci-form-valid/{wiadomosc_id}
+    defaults: { _controller: AppFrontendBundle:Task:edytujWiadomoscFormValid }
+
+file_delete_from_message:
+    pattern:  /file-delete-from-message
+    defaults: { _controller: AppFrontendBundle:Task:fileDeleteFromMessage }
+
 calendar:
-    pattern: /kalendarz
+    pattern: /kalendarz/{year}/{month}
     defaults: { _controller: AppFrontendBundle:Calendar:index }
 
 settings:
     pattern: /ustawienia
     defaults: { _controller: AppFrontendBundle:Settings:index }
+
+users:
+    pattern:  /users/show
+    defaults: { _controller: AppFrontendBundle:Users:showAllUsers }
 
 profile_edit:
     pattern:  /profil/edytuj
@@ -76,3 +100,14 @@ profile_edit_change_basic:
     pattern:  /profil/edytuj-change-basic
     defaults: { _controller: AppFrontendBundle:Profile:changeBasic }
   
+profile_edit_change_password:
+    pattern:  /profil/edytuj-change-password
+    defaults: { _controller: AppFrontendBundle:Profile:changePassword }
+    
+task_edit:
+    pattern:  /edytowanie-zadania/{projekt_nazwa}/{task_id}
+    defaults: { _controller: AppFrontendBundle:Task:taskEdit}
+
+ajax_get_new_form_message:
+    pattern:  /ajax-get-new-form-message
+    defaults: { _controller: AppFrontendBundle:Task:getNewFormMessage}

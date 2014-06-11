@@ -71,6 +71,40 @@
     <div class="cloud_tt">
         <h3>Pozostałe projekty</h3>
     </div>
+        <div class="cloud_ct">
+        <div class="cloud_elem_th">
+            <div class="row well-sm">
+                <div class="col-md-3">Nazwa projektu</div>
+                <div class="col-md-2">Rola</div>
+                <div class="col-md-3">Status projektu</div>
+                <div class="col-md-2">Termin</div>
+                <div class="col-md-2">Akcja</div>
+            </div>
+        </div>
+        {% for project in restProjects %}
+        <div class="cloud_elem">
+            <div class="row well-sm">
+                <div class="col-md-3">
+                   {{ project.label }}
+                </div>
+                <div class="col-md-2">
+                    <p> brak <brak>
+                </div>
+                <div class="col-md-3">
+                {{ Projekt.getStatusLabelByKey(project.status) }}
+                </div>
+                <div class="col-md-2">
+                {{ project.termin|date('d-m-Y') }}
+                </div>
+                <div class="col-md-2">
+                    <a href="{{ url('tasks', { projekt_nazwa: project.name }) }}">
+                        <div data-toggle="tooltip" data-placement="top" title="Przejdź do projektu" class="glyphicon glyphicon-log-in"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'homepage'}) }}
 {% endblock content %}

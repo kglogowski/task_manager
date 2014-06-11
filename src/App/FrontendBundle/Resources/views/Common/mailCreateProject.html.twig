@@ -1,0 +1,27 @@
+{% extends "::mail_info.html.twig" %}
+
+{% block nav %}
+    Projekt: <a style="color: #805600;" href="{{ url('tasks', {projekt_nazwa: projekt.name }) }}">{{ projekt.label }}</a><br />
+{% endblock nav %}
+
+{% block title %}
+    Projekt został stworzony
+{% endblock title %}
+
+{% block content %}
+    <p>
+        Zostałeś przypisany do tego projektu.<br />
+        Nadawca projektu: {{ projekt.nadawcaNazwa }}<br />
+        Termin końca projektu wypada: {{ projekt.termin|date('Y-m-d') }}
+    </p>
+{% endblock content %}
+
+{% block footer %}
+Osoby przypisane do projektu:<br />
+    <div style="padding-left: 10px">
+        {% for up in arrUP %}
+            - {{ up.uzytkownik.login }} ( rola: {{ up.rolaLabel() }} ) <br />
+        {% endfor %}
+    </div>
+<br />
+{% endblock footer %}

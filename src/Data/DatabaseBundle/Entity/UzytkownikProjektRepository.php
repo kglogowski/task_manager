@@ -33,5 +33,6 @@ class UzytkownikProjektRepository extends EntityRepository {
         $query->setParameter(":uzytkownikId", $uzytkownik->getId());
         return $query->getSingleResult();
     }
+    
 
 }

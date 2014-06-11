@@ -7,6 +7,7 @@ use Data\DatabaseBundle\Entity\Role;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Data\DatabaseBundle\Entity\UzytkownikProjekt;
 
 /**
  * Uzytkownik
@@ -77,6 +78,13 @@ class Uzytkownik implements AdvancedUserInterface {
     /**
      * @var boolean
      *
+     * @ORM\Column(name="active_token", type="boolean", nullable=true, options={"default" = "0"})
+     */
+    private $active_token;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="is_active", type="boolean", nullable=true, options={"default" = "0"})
      */
     private $is_active;
@@ -132,7 +140,7 @@ class Uzytkownik implements AdvancedUserInterface {
      * @ORM\OneToMany(targetEntity="UzytkownikProjekt", mappedBy="uzytkownik")
      */
     private $uzytkownicy_projekty;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Wiadomosc", mappedBy="uzytkownik")
      */
@@ -304,7 +312,7 @@ class Uzytkownik implements AdvancedUserInterface {
 
     public function generateToken($m) {
         $_token = FALSE;
-        $token = md5(time());
+        $token = \md5(time());
         while ($_token == FALSE) {
             if (!$m->getRepository('DataDatabaseBundle:Uzytkownik')->findOneByToken($token)) {
                 $_token = $token;
@@ -312,6 +320,7 @@ class Uzytkownik implements AdvancedUserInterface {
                 $token = md5(time());
             }
         }
+//        echo $_token; die;
         $this->token = $_token;
         return $this;
     }
@@ -471,25 +480,38 @@ class Uzytkownik implements AdvancedUserInterface {
     public function removeTask(Task $tasks) {
         $this->tasks->removeElement($tasks);
     }
-    
+
     public function getRoleProjektuByProjektId($projektId) {
         $collUp = $this->getUzytkownicyProjekty();
         foreach ($collUp as $up) {
-            if($up->getProjekt()->getId() == $projektId) {
+            if ($up->getProjekt()->getId() == $projektId) {
                 return $up->getRola();
             }
         }
         return null;
     }
-    
+
     public function setRoleProjektuByProjektId($projektId, $rola) {
         $collUp = $this->getUzytkownicyProjekty();
         foreach ($collUp as $up) {
-            if($up->getProjekt()->getId() == $projektId) {
+            if ($up->getProjekt()->getId() == $projektId) {
                 $up->setRola($rola);
                 return $this;
             }
         }
     }
+
+    public function isAssignedToTask(Task $task) {
+        return in_array($task, $this->getTasks());
+    }
+
+    public function isActiveToken() {
+        return $this->active_token ? TRUE : FALSE;
+    }
+
+    public function setActiveToken($active_token) {
+        $this->active_token = $active_token;
+    }
+
 
 }

@@ -120,7 +120,7 @@ class DefaultController extends Controller {
         }
     }
 
-    public function rememberPasswordAction() {
+    public function recallPasswordAction() {
         $form = $this->createFormBuilder()
                 ->add('email', 'email', array('attr' => array('placeholder' => 'Podaj swój adres email:', 'class' => 'form-control')))
                 ->add('wyslij', 'submit', array('label' => "Wyślij powiadomienie", 'attr' => array('class' => 'btn btn-danger')))
@@ -131,13 +131,18 @@ class DefaultController extends Controller {
             $form->handleRequest($request);
             $m = $this->getDoctrine()->getManager();
             $user = $m->getRepository('DataDatabaseBundle:Uzytkownik')->findOneByEmail($form['email']->getData());
+            if (!$user instanceof Uzytkownik) {
+                $this->get('session')->getFlashbag()->set('error', 'Podany adres email nie istnieje w bazie danych');
+                return $this->redirect($this->generateUrl('homepage'));
+            }
             $user->generateToken($m);
+            $user->setActiveToken(TRUE);
             $m->persist($user);
             $m->flush();
             $message = \Swift_Message::newInstance()
                     ->setSubject('Zapomniałem hasła')
-                    ->setFrom('send@example.com')
-                    ->setTo('k.glogowski2@gmail.com')
+                    ->setFrom(array($this->container->getParameter('mailer_user') => 'Task manager'))
+                    ->setTo($user->getEmail())
                     ->setBody($this->renderView('AppGuardBundle:Default:_remember_password.html.twig', array('user' => $user)))
                     ->setContentType("text/html");
             $this->get('mailer')->send($message);
@@ -159,15 +164,15 @@ class DefaultController extends Controller {
                 ->add('haslo', 'repeated', array(
                     'invalid_message' => 'Hasła nie zgadzają się',
                     'first_options' => array(
+                        'label' => 'Podaj nowe hasło:',
                         'attr' => array(
                             'placeholder' => 'Hasło',
-                            'class' => 'form-control'
+                            'class' => 'form-control',
                         )
                     ),
                     'second_options' => array(
-                        'label' => false,
+                        'label' => 'Powtórz hasło:',
                         'attr' => array(
-                            'placeholder' => 'Powtórz hasło',
                             'class' => 'form-control'
                         )
                     ),
@@ -181,6 +186,8 @@ class DefaultController extends Controller {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $user->setHaslo($form['haslo']->getData(), $this->get('security.encoder_factory'));
+                $user->generateToken($m);
+                $user->setActiveToken(FALSE);
                 $m->persist($user);
                 $m->flush();
                 $this->get('session')->getFlashbag()->set('success', 'Twoje hasło zostało zmienione');

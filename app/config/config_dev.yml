@@ -33,8 +33,9 @@ assetic:
     use_controller: true
     
 swiftmailer:
-    transport: gmail
-    username: kglogowski2
-    password: KGsupseo1!
+    transport: mail
+    host:      admin.s17.mhost.eu
+    username:  ovengroup.pl
+    password:  EeWq2WYKFD
 #swiftmailer:
 #    delivery_address: me@example.com

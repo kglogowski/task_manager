@@ -10,9 +10,9 @@ _login_path:
 #    pattern:  /register-confirm/{token}
 #    defaults: { _controller: AppGuardBundle:Default:registerConfirm }
     
-_login_remember_password:
-    pattern:  /login-remember-password
-    defaults: { _controller: AppGuardBundle:Default:rememberPassword }
+_login_recall_password:
+    pattern:  /login-recall-password
+    defaults: { _controller: AppGuardBundle:Default:recallPassword }
     
 _forgot_password:
     pattern:  /forgot-password/{token}

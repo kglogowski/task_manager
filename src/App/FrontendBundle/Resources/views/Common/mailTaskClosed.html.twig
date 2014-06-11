@@ -1,0 +1,14 @@
+{% extends "::mail_info.html.twig" %}
+{% block nav %}
+Projekt: <a style="color: #805600;" href="{{ url('tasks', {projekt_nazwa: task.projekt.name }) }}">{{ task.projekt.label }}</a><br />
+Zadanie: <a style="color: #805600;" href="{{ url('tasks', {projekt_nazwa: task.projekt.name, task_id: task.id}) }}">{{ task.label }}</a><br />
+{% endblock nav %}
+{% block title %}
+Zadanie zostało zamknięte.<br />
+{% endblock title %}
+{% block content %}
+    {{ aktualny }} zamknął zadanie dnia {{ 'now'|date('Y-m-d') }}
+{% endblock content %}
+{% block footer %}
+Ilość wiadomości w zadaniu: {{ task.wiadomosci|length }}
+{% endblock footer %}

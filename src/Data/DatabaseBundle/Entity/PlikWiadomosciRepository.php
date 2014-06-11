@@ -12,13 +12,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class PlikWiadomosciRepository extends EntityRepository {
 
-    public function deleteMessagePliki(String $message_id) {
-        $this->getEntityManager()
-                ->createQueryBuilder()
-                ->delete('DataDatabaseBundle:PlikiWiadomosci', 'u')
-                ->where('u.wiadomosc_id = ' . $message_id)
-                ->getQuery()
-                ->execute();
-    }
 
 }

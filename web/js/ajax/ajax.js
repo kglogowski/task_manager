@@ -71,3 +71,11 @@ function ajaxChangeContent(params) {
     });
 
 }
+
+function showFlash(params) {
+    id = params['id'];
+    message = params.hasOwnProperty('message') ? params['message'] : "Wpisz parametr message w wywołaniu funkcji";
+    $(id).parent().find('.alert').remove();
+    $(id).parent().find('input').val("");
+    $(id).before("<div class='alert alert-success'>"+message+"</div>");
+}

@@ -1,0 +1,53 @@
+{% extends "::frontend.html.twig" %}
+{% block templatestyle %}
+        {% include 'AppHelperBundle:basic:ajax.html.twig' %}
+        {% include 'AppHelperBundle:ui:load.html.twig' %}
+{% endblock %}
+
+{% block content %}
+{% include 'AppHelperBundle:basic:flash.html.twig' %}
+{{ include('AppHelperBundle:ui:datapicker.html.twig', { arrObj: ['.date_to'] } ) }}
+
+<div class="cloud">
+    <div class="cloud_tt">
+        <h3>Edytuj zadanie</h3>
+        <small>{{ task.label }}</small>
+    </div>
+     <div class="cloud_ct">
+        <form action="" method="POST" {{ form_enctype(form) }} >
+            <div class="well-sm">
+                {{ form_row(form.uzytkownicy) }}
+            </div>
+            <div class="well-sm">
+              {{ form_label(form.AktualnyUzytkownik) }}
+                {{ form_widget(form.AktualnyUzytkownik) }}
+                
+            </div>
+            <div class="well-sm">
+                 {{ form_label(form.priorytet) }}
+                {{ form_widget(form.priorytet) }}
+            </div>
+            <div class="well-sm">
+                 {{ form_label(form.termin) }}
+                {{ form_widget(form.termin) }}
+            </div>
+            <div class="well-sm">
+                {{ form_label(form.opis) }}
+                {{ form_widget(form.opis,{'value': task.opis}) }}
+            </div>
+{#            <div class="well-sm">
+                {{ include('AppHelperBundle:basic:zalacz_pliki.html.twig',{ name: 'pliki' }) }}
+            </div>#}
+            <div class="well-sm">
+                {{ form_widget(form._token) }}
+                {{ form_widget(form.save) }}
+            </div>
+        </form>
+    </div> 
+    
+    </div>
+{{ tinymce_init() }}
+<script>
+    $('.selectpicker').selectpicker();
+</script>
+{% endblock %}
