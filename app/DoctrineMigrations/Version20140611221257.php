@@ -12,7 +12,12 @@ class Version20140611221257 extends AbstractMigration
 {
     public function up(Schema $schema)
     {
-        // this up() migration is auto-generated, please modify it to your needs
+        $this->connection->exec("
+            INSERT INTO roles (nazwa) VALUES ('ROLE_ADMIN');
+        ");
+        $this->connection->exec("
+            INSERT INTO roles (nazwa) VALUES ('ROLE_USER');
+        ");
 
     }
 

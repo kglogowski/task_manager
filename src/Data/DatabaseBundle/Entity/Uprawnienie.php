@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Uprawnienie
  *
- * @ORM\Table()
+ * @ORM\Table(name="uprawnienia")
  * @ORM\Entity(repositoryClass="Data\DatabaseBundle\Entity\UprawnienieRepository")
  */
 class Uprawnienie
