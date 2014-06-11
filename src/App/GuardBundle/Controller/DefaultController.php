@@ -136,8 +136,8 @@ class DefaultController extends Controller {
             $m->flush();
             $message = \Swift_Message::newInstance()
                     ->setSubject('Zapomniałem hasła')
-                    ->setFrom('send@example.com')
-                    ->setTo('k.glogowski2@gmail.com')
+                    ->setFrom(array($this->container->getParameter('mailer_user') => 'Task manager'))
+                    ->setTo($user->getEmail())
                     ->setBody($this->renderView('AppGuardBundle:Default:_remember_password.html.twig', array('user' => $user)))
                     ->setContentType("text/html");
             $this->get('mailer')->send($message);
