@@ -46,19 +46,21 @@ class TmController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
     }
 
     public function sendMailInfo($collUsers, $subject, $body) {
-        $arrTo = array();
-        foreach ($collUsers as $objUser) {
-            /* @var $objUser \Data\DatabaseBundle\Entity\Uzytkownik  */
-            $arrTo[] = $objUser->getEmail();
+        if ($this->container->getParameter('mailer_available') === TRUE) {
+            $arrTo = array();
+            foreach ($collUsers as $objUser) {
+                /* @var $objUser \Data\DatabaseBundle\Entity\Uzytkownik  */
+                $arrTo[] = $objUser->getEmail();
+            }
+            $from = array($this->container->getParameter('mailer_user') => 'Task manager');
+            $message = \Swift_Message::newInstance()
+                    ->setSubject($subject)
+                    ->setFrom($from)
+                    ->setTo($arrTo)
+                    ->setBody($body)
+                    ->setContentType("text/html");
+            $this->get('mailer')->send($message);
         }
-        $from = array($this->container->getParameter('mailer_user') => 'Task manager');
-        $message = \Swift_Message::newInstance()
-                ->setSubject($subject)
-                ->setFrom($from)
-                ->setTo($arrTo)
-                ->setBody($body)
-                ->setContentType("text/html");
-        $this->get('mailer')->send($message);
         return TRUE;
     }
 

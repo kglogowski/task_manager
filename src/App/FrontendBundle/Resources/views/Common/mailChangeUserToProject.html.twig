@@ -1,0 +1,32 @@
+{% extends "::mail_info.html.twig" %}
+
+{% block nav %}
+Projekt: <a style="color: #805600;" href="{{ url('tasks', {projekt_nazwa: projekt.name }) }}">{{ projekt.label }}</a><br />
+{% endblock nav %}
+
+{% block title %}
+{% if add %} Zostałeś dodany do projektu {% else %} Zostałeś usunięty z projektu {% endif %}</br>
+{% endblock title %}
+
+{% block content %}
+<p>
+    Nadawca projektu: {{ projekt.nadawcaNazwa }}<br />
+    Termin końca projektu wypada: {{ projekt.termin|date('Y-m-d') }}
+</p>
+{% endblock content %}
+
+{% block footer %}
+Osoby przypisane do projektu:<br />
+<div style="padding-left: 10px">
+        {% for up in arrUP %}
+    - {{ up.uzytkownik.login }} ( rola: {{ up.getRolaLabel() }} ) <br />
+        {% endfor %}
+    {% if add %} Dodani: {% else %} Usunięci: {% endif %}</br>
+    <div>
+        {% for u in uzytkownicy %}
+        - {{ u.login }}<br />
+        {% endfor %}
+    </div>
+</div>
+<br />
+{% endblock footer %}

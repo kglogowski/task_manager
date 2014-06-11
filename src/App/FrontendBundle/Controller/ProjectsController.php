@@ -98,6 +98,12 @@ class ProjectsController extends TmController {
                     $m->persist($up);
                 }
                 $m->flush();
+                $this->sendMailInfo(
+                        $arrUzytkownicy, 'Został stworzony projekt o nazwie: ' . $newProjekt->getLabel(), $this->renderView('AppFrontendBundle:Common:mailCreateProject.html.twig', array(
+                            'projekt' => $newProjekt,
+                            'arrUP' => $arrUP,
+                        ))
+                );
                 return $this->redirectWithFlash('projects', 'Stworzono nowy projekt');
             }
         }
@@ -130,6 +136,8 @@ class ProjectsController extends TmController {
                 $users = $data['uzytkownicy'];
                 $collUp = $projekt->getUzytkownicyProjekty();
                 $arrStarzy = array();
+                $arrUsersUnsetMail = array();
+                $arrUsersAddMail = array();
                 foreach ($collUp as $up) {
                     $u = $up->getUzytkownik();
                     if (!in_array($u->getId(), $users)) {
@@ -138,14 +146,17 @@ class ProjectsController extends TmController {
                                         'projekt_nazwa' => $projekt->getName(),
                             ));
                         }
+                        $arrUsersUnsetMail[] = $u;
                         $m->remove($up);
                     } else {
                         $arrStarzy[] = $u->getId();
                     }
                 }
+
                 $arrResult = array_diff($users, $arrStarzy);
                 foreach ($arrResult as $uzytkownikId) {
                     $uzytkownik = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($uzytkownikId);
+                    $arrUsersAddMail[] = $uzytkownik;
                     $newUp = new UzytkownikProjekt();
                     $newUp
                             ->setProjekt($projekt)
@@ -153,7 +164,22 @@ class ProjectsController extends TmController {
                             ->setRola(UzytkownikProjekt::ROLA_POMOCNIK);
                     $m->persist($newUp);
                 }
+                ///TEST
                 $m->flush();
+
+                $this->sendMailInfo($arrUsersAddMail, "Zostałeś dodany do projektu: " . $projekt->getLabel(), $this->renderView("AppFrontendBundle:Common:mailChangeUserToProject.html.twig", array(
+                            'projekt' => $projekt,
+                            'uzytkownicy' => $arrUsersAddMail,
+                            'arrUP' => $projekt->getUzytkownicyProjekty(),
+                            'add' => true,
+                )));
+                $this->sendMailInfo($arrUsersUnsetMail, "Zostałeś usunięty z projektu: " . $projekt->getLabel(), $this->renderView("AppFrontendBundle:Common:mailChangeUserToProject.html.twig", array(
+                            'projekt' => $projekt,
+                            'uzytkownicy' => $arrUsersUnsetMail,
+                            'arrUP' => $projekt->getUzytkownicyProjekty(),
+                            'add' => false,
+                )));
+
                 return $this->redirectWithFlash('projects_edit_roles', 'Zaktualizowano użytkowników należących do projektu', 'success', array(
                             'projekt_nazwa' => $projekt->getName(),
                 ));
@@ -238,12 +264,19 @@ class ProjectsController extends TmController {
         if ($this->getRequest()->getMethod() == 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
-              
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($projekt);
                 $em->flush();
-
-                 return $this->redirectWithFlash('projects', 'projekt został zaktualizowany', 'success');
+                if ($projekt->isZakonczony()) {
+                    $this->sendMailInfo(
+                            $m->getRepository('DataDatabaseBundle:Projekt')->findUzytkownicyByProjekt($projekt), "Projekt: " . $projekt->getLabel() . ' został zamknięty', $this->renderView('AppFrontendBundle:Common:mailProjectClosed.html.twig', array(
+                                'aktualny' => $this->getUser()->getLogin(),
+                                'projekt' => $projekt,
+                            ))
+                    );
+                }
+                return $this->redirectWithFlash('projects', 'projekt został zaktualizowany', 'success');
             }
         }
         return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(

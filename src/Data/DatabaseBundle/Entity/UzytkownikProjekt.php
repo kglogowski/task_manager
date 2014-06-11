@@ -5,14 +5,15 @@ namespace Data\DatabaseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Data\DatabaseBundle\Entity\Projekt;
 use Data\DatabaseBundle\Entity\Uzytkownik;
+
 /**
  * UzytkownikProjekt
  *
  * @ORM\Table(name="uzytkownicy_projekty")
  * @ORM\Entity(repositoryClass="Data\DatabaseBundle\Entity\UzytkownikProjektRepository")
  */
-class UzytkownikProjekt
-{
+class UzytkownikProjekt {
+
     /**
      * @var integer
      *
@@ -42,32 +43,33 @@ class UzytkownikProjekt
      * @ORM\Column(name="rola", type="smallint")
      */
     private $rola;
-    
-    
+
     CONST ROLA_LIDER = 1;
     CONST ROLA_POMOCNIK = 2;
-    
+
     protected static $arrRoleLabel = array(
-        self::ROLA_LIDER    =>  'Lider',
-        self::ROLA_POMOCNIK =>  'Pomocnik'
+        self::ROLA_LIDER => 'Lider',
+        self::ROLA_POMOCNIK => 'Pomocnik'
     );
 
     public function getRolaLabelByKey($key) {
         return self::$arrRoleLabel[$key];
     }
-    
-    
+
+    public function getRolaLabel() {
+        return self::$arrRoleLabel[$this->getRola()];
+    }
+
     public static function GetRoleArray() {
         return self::$arrRoleLabel;
     }
 
-        /**
+    /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -77,8 +79,7 @@ class UzytkownikProjekt
      * @param integer $uzytkownikId
      * @return UzytkownikProjekt
      */
-    public function setUzytkownik(Uzytkownik $uzytkownik)
-    {
+    public function setUzytkownik(Uzytkownik $uzytkownik) {
         $this->uzytkownik = $uzytkownik;
 
         return $this;
@@ -89,8 +90,7 @@ class UzytkownikProjekt
      *
      * @return Uzytkownik 
      */
-    public function getUzytkownik()
-    {
+    public function getUzytkownik() {
         return $this->uzytkownik;
     }
 
@@ -100,8 +100,7 @@ class UzytkownikProjekt
      * @param integer $projekt
      * @return UzytkownikProjekt
      */
-    public function setProjekt(Projekt $projekt)
-    {
+    public function setProjekt(Projekt $projekt) {
         $this->projekt = $projekt;
 
         return $this;
@@ -112,8 +111,7 @@ class UzytkownikProjekt
      *
      * @return Projekt 
      */
-    public function getProjekt()
-    {
+    public function getProjekt() {
         return $this->projekt;
     }
 
@@ -123,8 +121,7 @@ class UzytkownikProjekt
      * @param integer $rola
      * @return UzytkownikProjekt
      */
-    public function setRola($rola)
-    {
+    public function setRola($rola) {
         $this->rola = $rola;
 
         return $this;
@@ -135,8 +132,8 @@ class UzytkownikProjekt
      *
      * @return integer 
      */
-    public function getRola()
-    {
+    public function getRola() {
         return $this->rola;
     }
+
 }

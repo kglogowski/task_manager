@@ -122,19 +122,22 @@ class TaskController extends TmController {
                         $task->setPoprzedniUzytkownik($this->getUser()->getId());
                     }
                     $m->persist($task);
-                    
-//                    return $this->render('AppFrontendBundle:Common:mailSwitchUserTask.html.twig', array(
-//                                    'wiadomosc' => $wiadomosc,
-//                                ));
+
                     $m->flush();
                     if ($this->getUser()->getId() != $aktualnyId) {
                         $this->sendMailInfo(
-                                array(
-                                    $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik())
-                                ), 
-                                $this->getUser()->getLogin()." przepiął na Ciebie zadanie: ".$task->getLabel(),
-                                $this->renderView('AppFrontendBundle:Common:mailSwitchUserTask.html.twig', array(
+                                array($m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik())), $this->getUser()->getLogin() . " przepiął na Ciebie zadanie: " . $task->getLabel(), $this->renderView('AppFrontendBundle:Common:mailSwitchUserTask.html.twig', array(
                                     'wiadomosc' => $wiadomosc,
+                                    'aktualny' => $this->getUser()->getLogin(),
+                                    'task' => $task,
+                                ))
+                        );
+                    }
+                    if ($statusId == Task::STATUS_ZAMKNIETY) {
+                        $this->sendMailInfo(
+                                $task->getUzytkownicy(), "Zadanie: " . $task->getLabel() . ' zostało zamknięte', $this->renderView('AppFrontendBundle:Common:mailTaskClosed.html.twig', array(
+                                    'aktualny' => $this->getUser()->getLogin(),
+                                    'task' => $task,
                                 ))
                         );
                     }
@@ -346,8 +349,22 @@ class TaskController extends TmController {
                         }
                     }
                 }
-
+                $this->sendMailInfo(
+                        $task->getUzytkownicy(), 'Zostało stworzone zadanie o nazwie: ' . $task->getLabel(), $this->renderView('AppFrontendBundle:Common:mailCreateTask.html.twig', array(
+                            'task' => $task,
+                            'aktualny' => $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik()),
+                        ))
+                );
+                return $this->render('AppFrontendBundle:Task:new.html.twig', array(
+                            'form' => $form->createView()
+                ));
                 $m->flush();
+                $this->sendMailInfo(
+                        $task->getUzytkownicy(), 'Zostało stworzone zadanie o nazwie: ' . $task->getLabel(), $this->renderView('AppFrontendBundle:Common:mailCreateTask.html.twig', array(
+                            'task' => $task,
+                            'aktualny' => $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik()),
+                        ))
+                );
                 return $this->redirectWithFlash('tasks', 'Stworzono nowe zadanie', 'success', array('projekt_nazwa' => $projekt->getName()));
             }
         }
@@ -416,6 +433,12 @@ class TaskController extends TmController {
         $m->persist($task);
 
         $m->flush();
+        $this->sendMailInfo(
+                $task->getUzytkownicy(), "Zadanie: " . $task->getLabel() . ' zostało na nowo otwarte', $this->renderView('AppFrontendBundle:Common:mailTaskReopened.html.twig', array(
+                    'aktualny' => $this->getUser()->getLogin(),
+                    'task' => $task,
+                ))
+        );
         return $this->redirectWithFlash('tasks', 'Zadanie zostało przywrócone', 'success', array(
                     'projekt_nazwa' => $projekt->getName(),
                     'task_id' => $task->getId()
@@ -595,7 +618,7 @@ class TaskController extends TmController {
                     )
                 ))
                 ->getForm();
-        
+
         if ($this->getRequest()->getMethod() == 'POST') {
             $form->handleRequest($this->getRequest());
             if ($form->isValid()) {
@@ -603,9 +626,12 @@ class TaskController extends TmController {
                 $users = $data['uzytkownicy'];
                 $collUt = $task->getUzytkownicy();
                 $arrStarzy = array();
+                $arrUsersUnsetMail = array();
+                $arrUsersAddMail = array();
                 foreach ($collUt as $ut) {
                     if (!in_array($ut->getId(), $users)) {
                         $task->removeUzytkownik($ut);
+                        $arrUsersUnsetMail[] = $ut;
                     } else {
                         $arrStarzy[] = $ut->getId();
                     }
@@ -613,6 +639,7 @@ class TaskController extends TmController {
                 $arrResult = array_diff($users, $arrStarzy);
                 foreach ($arrResult as $uzytkownikId) {
                     $uzytkownik = $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($uzytkownikId);
+                    $arrUsersAddMail[] = $uzytkownik;
                     $task->addUzytkownik($uzytkownik);
                 }
                 $task
@@ -622,6 +649,16 @@ class TaskController extends TmController {
                         ->setOpis($data['opis'])
                         ->setUpdatedAt();
                 $m->persist($task);
+
+                $this->sendMailInfo($arrUsersAddMail, "Zostałeś dodany do zadania: " . $projekt->getLabel(), $this->renderView("AppFrontendBundle:Common:mailChangeUserToTask.html.twig", array(
+                            'task' => $task,
+                            'add' => true,
+                )));
+                $this->sendMailInfo($arrUsersUnsetMail, "Zostałeś usunięty z zadania: " . $projekt->getLabel(), $this->renderView("AppFrontendBundle:Common:mailChangeUserToTask.html.twig", array(
+                            'task' => $task,
+                            'add' => false,
+                )));
+
                 $m->flush();
 //                $m->persist($task);
 //                $m->flush();

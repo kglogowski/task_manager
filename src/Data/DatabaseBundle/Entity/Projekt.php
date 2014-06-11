@@ -140,7 +140,7 @@ class Projekt
     }
 
     public function isZakonczony() {
-        return in_array($this->getStatus(), Task::GetStatusyKoncowe());
+        return in_array($this->getStatus(), Projekt::GetStatusyKoncowe());
     }
 
         public static function GetStatusy(){ 
@@ -358,6 +358,11 @@ class Projekt
     public function getUzytkownicyProjekty()
     {
         return $this->uzytkownicy_projekty;
+    }
+    
+    public function getUzytkownicyProjektyArray()
+    {
+        return $this->uzytkownicy_projekty->toArray();
     }
     
     /**
