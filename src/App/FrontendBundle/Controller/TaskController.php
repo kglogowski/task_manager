@@ -349,15 +349,7 @@ class TaskController extends TmController {
                         }
                     }
                 }
-                $this->sendMailInfo(
-                        $task->getUzytkownicy(), 'Zostało stworzone zadanie o nazwie: ' . $task->getLabel(), $this->renderView('AppFrontendBundle:Common:mailCreateTask.html.twig', array(
-                            'task' => $task,
-                            'aktualny' => $m->getRepository('DataDatabaseBundle:Uzytkownik')->find($task->getAktualnyUzytkownik()),
-                        ))
-                );
-                return $this->render('AppFrontendBundle:Task:new.html.twig', array(
-                            'form' => $form->createView()
-                ));
+                die;
                 $m->flush();
                 $this->sendMailInfo(
                         $task->getUzytkownicy(), 'Zostało stworzone zadanie o nazwie: ' . $task->getLabel(), $this->renderView('AppFrontendBundle:Common:mailCreateTask.html.twig', array(
