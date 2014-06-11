@@ -115,8 +115,8 @@ class DefaultController extends Controller {
             $this->get('session')->getFlashbag()->set('success', 'Konto zostało potwierdzone, teraz możesz się zalogować');
             return $this->redirect($this->generateUrl('_login_path'));
         } else {
-            $this->get('session')->getFlashbag()->set('error', 'Podany adres email nie istnieje w bazie danych');
-            return $this->redirect($this->generateUrl('_login_path'));
+            $this->get('session')->getFlashbag()->set('error', 'Błędny adres');
+            return $this->redirect($this->generateUrl('homepage'));
         }
     }
 
@@ -131,6 +131,10 @@ class DefaultController extends Controller {
             $form->handleRequest($request);
             $m = $this->getDoctrine()->getManager();
             $user = $m->getRepository('DataDatabaseBundle:Uzytkownik')->findOneByEmail($form['email']->getData());
+            if (!$user instanceof Uzytkownik) {
+                $this->get('session')->getFlashbag()->set('error', 'Podany adres email nie istnieje w bazie danych');
+                return $this->redirect($this->generateUrl('homepage'));
+            }
             $user->generateToken($m);
             $user->setActiveToken(TRUE);
             $m->persist($user);
