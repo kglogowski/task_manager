@@ -133,14 +133,14 @@ class TaskController extends TmController {
                                 ))
                         );
                     }
-                    if ($statusId == Task::STATUS_ZAMKNIETY) {
-                        $this->sendMailInfo(
-                                $task->getUzytkownicy(), "Zadanie: " . $task->getLabel() . ' zostało zamknięte', $this->renderView('AppFrontendBundle:Common:mailTaskClosed.html.twig', array(
-                                    'aktualny' => $this->getUser()->getLogin(),
-                                    'task' => $task,
-                                ))
-                        );
-                    }
+//                    if ($statusId == Task::STATUS_ZAMKNIETY) {
+//                        $this->sendMailInfo(
+//                                $task->getUzytkownicy(), "Zadanie: " . $task->getLabel() . ' zostało zamknięte', $this->renderView('AppFrontendBundle:Common:mailTaskClosed.html.twig', array(
+//                                    'aktualny' => $this->getUser()->getLogin(),
+//                                    'task' => $task,
+//                                ))
+//                        );
+//                    }
                     return $this->redirectWithFlash('tasks', 'Wiadmość została dodana' . $errorString, 'success', array(
                                 'projekt_nazwa' => $projekt->getName(),
                                 'task_id' => $task->getId()
