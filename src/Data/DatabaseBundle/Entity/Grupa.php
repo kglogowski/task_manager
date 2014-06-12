@@ -5,6 +5,7 @@ namespace Data\DatabaseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Data\DatabaseBundle\Entity\Uzytkownik;
 use Doctrine\Common\Collections\ArrayCollection;
+use Data\DatabaseBundle\Entity\Uprawnienie;
 
 /**
  * Grupa
@@ -43,8 +44,15 @@ class Grupa
      */
     private $uzytkownicy;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Uprawnienie", mappedBy="grupy")
+     */
+    private $uprawnienia;
+    
+    
     public function __construct() {
         $this->uzytkownicy = new ArrayCollection();
+        $this->uprawnienia = new ArrayCollection();
     }
     
     /**
@@ -117,6 +125,18 @@ class Grupa
     
     public function removeUzytkownik(Uzytkownik $uzytkownik) {
         $this->uzytkownicy->removeElement($uzytkownik);
+    }
+
+    public function getUprawnienia() {
+        return $this->uprawnienia;
+    }
+
+    public function addUprawnienia(Uprawnienie $uprawnienie) {
+        $this->uprawnienia->add($uprawnienie);
+    }
+    
+    public function removeUprawnienia(Uprawnienie $uprawnienie) {
+        $this->uprawnienia->removeElement($uprawnienie);
     }
 
 

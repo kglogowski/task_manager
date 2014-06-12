@@ -3,6 +3,9 @@
 namespace Data\DatabaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Data\DatabaseBundle\Entity\BlokUprawnien;
+use Data\DatabaseBundle\Entity\Grupa;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Uprawnienie
@@ -35,7 +38,27 @@ class Uprawnienie
      */
     private $nazwa;
 
+    /**
+     * @var BlokUprawnien
+     *
+     * @ORM\ManyToOne(targetEntity="BlokUprawnien",inversedBy="uprawnienia")
+     * @ORM\JoinColumn(referencedColumnName="id")
+     */
+    private $blok_uprawnien; 
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Grupa", inversedBy="$uprawnienia", cascade={"persist"})
+     * @ORM\JoinTable(name="grupy_uprawnienia",
+     * joinColumns={@ORM\JoinColumn(name="uprawnienie_id", referencedColumnName="id", onDelete="CASCADE")},
+     * inverseJoinColumns={@ORM\JoinColumn(name="grupa_id", referencedColumnName="id")}
+     * )
+     */
+    private $uzytkownicy;
+    
+    public function __construct() {
+        $this->uzytkownicy = new ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -91,4 +114,27 @@ class Uprawnienie
     {
         return $this->nazwa;
     }
+    
+    public function getBlokUprawnien() {
+        return $this->blok_uprawnien;
+    }
+
+    public function setBlokUprawnien(BlokUprawnien $blok_uprawnien) {
+        $this->blok_uprawnien = $blok_uprawnien;
+        return $this;
+    }
+
+    public function getUzytkownicy() {
+        return $this->uzytkownicy;
+    }
+
+    public function addUzytkownik(Uzytkownik $uzytkownik) {
+        $this->uzytkownicy->add($uzytkownik);
+    }
+    
+    public function removeUzytkownik(Uzytkownik $uzytkownik) {
+        $this->uzytkownicy->removeElement($uzytkownik);
+    }
+
+
 }
