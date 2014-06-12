@@ -22,3 +22,4 @@ composer.phar
 
 # User
 web/index.php
+nbproject/private/private.xml
