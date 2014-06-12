@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Data\DatabaseBundle\Entity\UzytkownikProjekt;
+use Data\DatabaseBundle\Entity\Grupa;
 
 /**
  * Uzytkownik
@@ -145,6 +146,14 @@ class Uzytkownik implements AdvancedUserInterface {
      * @ORM\OneToMany(targetEntity="Wiadomosc", mappedBy="uzytkownik")
      */
     private $wiadomosci;
+    
+    /**
+     * @var Grupa
+     *
+     * @ORM\ManyToOne(targetEntity="Grupa",inversedBy="uzytkownicy")
+     * @ORM\JoinColumn(referencedColumnName="id")
+     */
+    private $grupa;
 
     public function __construct() {
         $this->wiadomosci = new ArrayCollection();
@@ -511,6 +520,16 @@ class Uzytkownik implements AdvancedUserInterface {
 
     public function setActiveToken($active_token) {
         $this->active_token = $active_token;
+    }
+
+    
+    public function getGrupa() {
+        return $this->grupa;
+    }
+
+    public function setGrupa(Grupa $grupa) {
+        $this->grupa = $grupa;
+        return $this;
     }
 
 
