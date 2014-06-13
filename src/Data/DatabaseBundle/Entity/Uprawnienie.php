@@ -47,16 +47,16 @@ class Uprawnienie
     private $blok_uprawnien; 
 
     /**
-     * @ORM\ManyToMany(targetEntity="Grupa", inversedBy="$uprawnienia", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Grupa", inversedBy="uprawnienia", cascade={"persist"})
      * @ORM\JoinTable(name="grupy_uprawnienia",
      * joinColumns={@ORM\JoinColumn(name="uprawnienie_id", referencedColumnName="id", onDelete="CASCADE")},
      * inverseJoinColumns={@ORM\JoinColumn(name="grupa_id", referencedColumnName="id")}
      * )
      */
-    private $uzytkownicy;
+    private $grupy;
     
     public function __construct() {
-        $this->uzytkownicy = new ArrayCollection();
+        $this->grupy = new ArrayCollection();
     }
     
     /**
@@ -124,16 +124,16 @@ class Uprawnienie
         return $this;
     }
 
-    public function getUzytkownicy() {
-        return $this->uzytkownicy;
+    public function getGrupy() {
+        return $this->grupy;
     }
 
-    public function addUzytkownik(Uzytkownik $uzytkownik) {
-        $this->uzytkownicy->add($uzytkownik);
+    public function addGrupa(Grupa $grupa) {
+        $this->grupy->add($grupa);
     }
     
-    public function removeUzytkownik(Uzytkownik $uzytkownik) {
-        $this->uzytkownicy->removeElement($uzytkownik);
+    public function removeGrupa(Grupa $grupa) {
+        $this->grupy->removeElement($grupa);
     }
 
 

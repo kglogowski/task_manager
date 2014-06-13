@@ -70,7 +70,10 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-    
+
+parameters:
+    mailer_available: true
+
 #stfalcon_tinymce:
 #    tinymce_buttons:
 #        stfalcon: # Id of the first button
