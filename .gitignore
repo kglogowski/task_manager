@@ -23,3 +23,8 @@ composer.phar
 # User
 web/index.php
 nbproject/private/private.xml
+/nbproject/private/config.properties
+/nbproject/private/private.properties
+/nbproject/private/private.xml
+/nbproject/project.properties
+/nbproject/project.xml
