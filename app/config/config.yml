@@ -72,7 +72,7 @@ swiftmailer:
     spool:     { type: memory }
 
 parameters:
-    mailer_available: true
+    mailer_available: false
 
 #stfalcon_tinymce:
 #    tinymce_buttons:
