@@ -28,3 +28,6 @@ nbproject/private/private.xml
 /nbproject/private/private.xml
 /nbproject/project.properties
 /nbproject/project.xml
+
+#params:
+app/config/settings.yml

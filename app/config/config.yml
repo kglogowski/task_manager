@@ -3,6 +3,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: settings.yml }
 
 framework:
     #esi:             ~
@@ -71,8 +72,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-parameters:
-    mailer_available: false
 
 #stfalcon_tinymce:
 #    tinymce_buttons:
