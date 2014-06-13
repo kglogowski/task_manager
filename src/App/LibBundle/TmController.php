@@ -46,7 +46,7 @@ class TmController extends \Symfony\Bundle\FrameworkBundle\Controller\Controller
     }
 
     public function sendMailInfo($collUsers, $subject, $body) {
-        if ($this->container->getParameter('mailer_available') === TRUE) {
+        if ($this->container->hasParameter('mailer_available') && $this->container->getParameter('mailer_available') === TRUE) {
             $arrTo = array();
             foreach ($collUsers as $objUser) {
                 /* @var $objUser \Data\DatabaseBundle\Entity\Uzytkownik  */
