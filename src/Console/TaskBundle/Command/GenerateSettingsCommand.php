@@ -25,14 +25,12 @@ class GenerateSettingsCommand extends ContainerAwareCommand {
 //        $arrPath = explode('\\', $path);
 //        $className = $arrPath[count($arrPath) - 1];
 //        $lname = strtolower($className);
-        
         $fs = new Filesystem();
         $fn = 'app/config/settings.yml';
         if(!is_file($fn)) {
             $fs->touch($fn);
-            file_put_contents($fn, "
-parameters:
-    mailer_available: true
+            file_put_contents($fn, "parameters:
+    mailer_available: false
             ");
         }
         

@@ -3,7 +3,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-    - { resource: settings.yml }
+    - { resource: settings.yml, ignore_errors: true  }
 
 framework:
     #esi:             ~
