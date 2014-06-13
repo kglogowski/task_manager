@@ -31,6 +31,13 @@ class BlokUprawnien
     private $nazwa;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="identyfikator", type="string", length=5)
+     */
+    private $identyfikator;
+    
+    /**
      * @ORM\OneToMany(targetEntity="Uprawnienie", mappedBy="blokUprawnien")
      */
     private $uprawnienia;
@@ -83,5 +90,15 @@ class BlokUprawnien
     public function removeUprawnienie(Uprawnienie $uprawnienie) {
         $this->uprawnienia->removeElement($uprawnienie);
     }
+    
+    public function getIdentyfikator() {
+        return $this->identyfikator;
+    }
+
+    public function setIdentyfikator($identyfikator) {
+        $this->identyfikator = $identyfikator;
+        return $this;
+    }
+
 
 }

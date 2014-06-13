@@ -130,12 +130,16 @@ class Grupa
     public function getUprawnienia() {
         return $this->uprawnienia;
     }
+    
+    public function getUprawnieniaArray() {
+        return $this->uprawnienia->toArray();
+    }
 
-    public function addUprawnienia(Uprawnienie $uprawnienie) {
+    public function addUprawnienie(Uprawnienie $uprawnienie) {
         $this->uprawnienia->add($uprawnienie);
     }
     
-    public function removeUprawnienia(Uprawnienie $uprawnienie) {
+    public function removeUprawnienie(Uprawnienie $uprawnienie) {
         $this->uprawnienia->removeElement($uprawnienie);
     }
 

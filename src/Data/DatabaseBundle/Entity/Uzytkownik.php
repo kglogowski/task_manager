@@ -146,7 +146,7 @@ class Uzytkownik implements AdvancedUserInterface {
      * @ORM\OneToMany(targetEntity="Wiadomosc", mappedBy="uzytkownik")
      */
     private $wiadomosci;
-    
+
     /**
      * @var Grupa
      *
@@ -522,7 +522,6 @@ class Uzytkownik implements AdvancedUserInterface {
         $this->active_token = $active_token;
     }
 
-    
     public function getGrupa() {
         return $this->grupa;
     }
@@ -532,5 +531,18 @@ class Uzytkownik implements AdvancedUserInterface {
         return $this;
     }
 
+    public function hasUprawnienie($numer) {
+        $grupa = $this->getGrupa();
+        if ($grupa) {
+            $uprawnienia = $grupa->getUprawnieniaArray();
+            foreach ($uprawnienia as $uprawnienie) {
+                /* @var $uprawnienie Uprawnienie */
+                if ($uprawnienie->getNumber() == $numer) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

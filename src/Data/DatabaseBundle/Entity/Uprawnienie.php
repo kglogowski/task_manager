@@ -27,7 +27,7 @@ class Uprawnienie
     /**
      * @var string
      *
-     * @ORM\Column(name="number", type="string", length=4)
+     * @ORM\Column(name="number", type="string", length=10)
      */
     private $number;
 
