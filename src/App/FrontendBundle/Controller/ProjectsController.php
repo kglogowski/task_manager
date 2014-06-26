@@ -53,6 +53,9 @@ class ProjectsController extends TmController {
     }
 
     public function newAction() {
+        if(!$this->getUser()->hasUprawnienie('1')) {
+            return $this->render("::common/AccessDenied.html.twig");
+        }
         $m = $this->getDoctrine()->getManager();
         $form = $this->createForm(new \App\FrontendBundle\Lib\Form\ProjectCreateForm($m));
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+        {% stylesheets %}
+        {% endstylesheets %}
+{#        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}" />
+            <link rel="stylesheet" type="text/css" href="{{ asset('css/frontend/frontend.css') }}" />
+        {% endblock stylesheets %}#}
+
+        {% include 'AppHelperBundle:jquery:load.html.twig' %}
+        {% block templatestyle %}{% endblock %}
+        {{ include('AppHelperBundle:bootstrap:load.html.twig') }}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    </head>
+    <body>
+        ERROR 403
+        Access Denied
+    </body>
+</html>

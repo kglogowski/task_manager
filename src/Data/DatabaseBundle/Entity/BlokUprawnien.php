@@ -38,7 +38,7 @@ class BlokUprawnien
     private $identyfikator;
     
     /**
-     * @ORM\OneToMany(targetEntity="Uprawnienie", mappedBy="blokUprawnien")
+     * @ORM\OneToMany(targetEntity="Uprawnienie", mappedBy="blok_uprawnien")
      */
     private $uprawnienia;
 
