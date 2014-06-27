@@ -19,6 +19,11 @@
             <span class="glyphicon glyphicon-off"></span>
         </div>
     </a>
+    <a href="{{ url('rachunek') }}">
+        <div data-toggle="tooltip" title="Rachunek firmy" class="nav-element right {% if(app.request.get('_route') matches('/rachunek/')) %} nav-element-active {% endif %}">
+            <span class="glyphicon glyphicon glyphicon-usd"></span>
+        </div>
+    </a>
     <a href="{{ url('settings') }}">
         <div data-toggle="tooltip" title="Ustawienia" class="nav-element right {% if(app.request.get('_route') matches('/settings/')) %} nav-element-active {% endif %}">
             <span class="glyphicon glyphicon-cog"></span>
@@ -29,7 +34,7 @@
             <span class="glyphicon glyphicon-user"></span>
         </div>
     </a>
-         <a href="{{ url('users') }}">
+    <a href="{{ url('users') }}">
         <div data-toggle="tooltip" title="Użytkownicy" class="nav-element right {% if(app.request.get('_route') matches('/users/')) %} nav-element-active {% endif %}">
             <span class="glyphicon glyphicon-globe"></span>
         </div>

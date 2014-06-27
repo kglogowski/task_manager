@@ -65,6 +65,11 @@ class ProjectsController extends TmController {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $data = $form->getData();
+                $kwota = \App\LibBundle\Float::toFloat($data['price']);
+                if($kwota == FALSE) {
+                    $this->get('session')->getFlashBag()->set('error', 'Podana kwota jest nieprawidłowa');
+                    return $this->redirect($this->generateUrl('projects_new'));
+                }
                 $link = $this->createLinkFromLabel($data['nazwa']);
                 if ($m->getRepository('DataDatabaseBundle:Projekt')->findOneByName($link) instanceof Projekt) {
                     $this->get('session')->getFlashBag()->set('error', 'Występuje już projekt o podanej nazwie');
@@ -84,6 +89,12 @@ class ProjectsController extends TmController {
                         $arrUP[$u_id]->setRola(UzytkownikProjekt::ROLA_POMOCNIK);
                     }
                 }
+                $rkOperacja = new \Data\DatabaseBundle\Entity\RkOperacja();
+                $rkOperacja
+                        ->setKwotaNetto($kwota)
+                        ->setLabel($data['nazwa'])
+                        ->setConfirm(FALSE);
+                $m->persist($rkOperacja);
                 $newProjekt = new Projekt();
                 $newProjekt
                         ->setCreatedAt()
@@ -94,6 +105,7 @@ class ProjectsController extends TmController {
                         ->setNadawcaNazwa($data['nadawca_nazwa'])
                         ->setNadawcaTelefon($data['nadawca_nr_tel'])
                         ->setStatus(Projekt::STATUS_SPECYFIKACJA)
+                        ->setRkOperacjaId($rkOperacja->getId())
                         ->setCreator($this->getUser()->getId());
                 $m->persist($newProjekt);
                 foreach ($arrUP as $up) {

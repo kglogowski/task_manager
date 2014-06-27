@@ -68,6 +68,12 @@ class ProjectCreateForm extends BaseForm {
                         'placeholder' => 'Podaj termin'
                     ))
                 )
+                ->add('price', 'text', array(
+                    'attr' => array(
+                        'placeholder' => 'Kwota netto za wykonanie projektu',
+                        'class' => 'form-control'
+                    ))
+                )
                 ->add('save', 'submit', array(
                     'label' => 'Zapisz',
                     'attr' => array(

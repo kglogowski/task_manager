@@ -16,8 +16,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="projekty")
  * @ORM\Entity(repositoryClass="Data\DatabaseBundle\Entity\ProjektRepository")
  */
-class Projekt
-{
+class Projekt {
+
     /**
      * @var integer
      *
@@ -68,7 +68,7 @@ class Projekt
      * @ORM\Column(name="status", type="smallint")
      */
     private $status;
-    
+
     /**
      * @var string
      *
@@ -89,50 +89,57 @@ class Projekt
      * @ORM\Column(name="creator", type="integer")
      */
     private $creator;
-    
+
     /**
      * @var \DateTime
      * 
      * @ORM\Column(name="termin", type="datetime", nullable=true)
      */
     private $termin;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Task", mappedBy="projekt")
      */
     private $tasks;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="UzytkownikProjekt", mappedBy="projekt")
      */
     private $uzytkownicy_projekty;
-    
-     /**
+
+    /**
      * @ORM\Column(type="boolean", nullable=true )
      */
     private $skasowane;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="rk_operacja_id", type="integer", nullable=true)
+     */
+    private $rkOperacjaId;
+    
     public function __construct() {
         $this->uzytkownicy_projekty = new ArrayCollection();
         $this->tasks = new ArrayCollection();
     }
-    
+
     CONST STATUS_SPECYFIKACJA = 1;
     CONST STATUS_PROJEKTOWANIE = 2;
     CONST STATUS_IMPLEMENTACJA = 3;
     CONST STATUS_INTEGRACJA = 4;
     CONST STATUS_DEKORACJA = 5;
     CONST STATUS_ZAMKNIETY = 6;
-    
+
     protected static $arrStatusLabel = array(
-        self::STATUS_SPECYFIKACJA    =>  'Specyfikacja',
-        self::STATUS_PROJEKTOWANIE    =>  'Projektowanie',
-        self::STATUS_IMPLEMENTACJA    =>  'Implementacja',
-        self::STATUS_INTEGRACJA    =>  'Integracja',
-        self::STATUS_DEKORACJA    =>  'Dekoracja',
-        self::STATUS_ZAMKNIETY    =>  'Zamknięty',
+        self::STATUS_SPECYFIKACJA => 'Specyfikacja',
+        self::STATUS_PROJEKTOWANIE => 'Projektowanie',
+        self::STATUS_IMPLEMENTACJA => 'Implementacja',
+        self::STATUS_INTEGRACJA => 'Integracja',
+        self::STATUS_DEKORACJA => 'Dekoracja',
+        self::STATUS_ZAMKNIETY => 'Zamknięty',
     );
-    
+
     public static function GetStatusyKoncowe() {
         return array(
             self::STATUS_ZAMKNIETY
@@ -143,21 +150,20 @@ class Projekt
         return in_array($this->getStatus(), Projekt::GetStatusyKoncowe());
     }
 
-        public static function GetStatusy(){ 
-    return self::$arrStatusLabel; 
+    public static function GetStatusy() {
+        return self::$arrStatusLabel;
     }
 
     public function getStatusLabelByKey($key) {
         return self::$arrStatusLabel[$key];
     }
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -167,8 +173,7 @@ class Projekt
      * @param string $name
      * @return Projekt
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -179,8 +184,7 @@ class Projekt
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -190,8 +194,7 @@ class Projekt
      * @param string $label
      * @return Projekt
      */
-    public function setLabel($label)
-    {
+    public function setLabel($label) {
         $this->label = $label;
 
         return $this;
@@ -202,8 +205,7 @@ class Projekt
      *
      * @return string 
      */
-    public function getLabel()
-    {
+    public function getLabel() {
         return $this->label;
     }
 
@@ -213,8 +215,7 @@ class Projekt
      * @param \DateTime $createdAt
      * @return Projekt
      */
-    public function setCreatedAt()
-    {
+    public function setCreatedAt() {
         $this->createdAt = new \DateTime('now');
 
         return $this;
@@ -225,8 +226,7 @@ class Projekt
      *
      * @return \DateTime 
      */
-    public function getCreatedAt()
-    {
+    public function getCreatedAt() {
         return $this->createdAt;
     }
 
@@ -236,8 +236,7 @@ class Projekt
      * @param \DateTime $updatedAt
      * @return Projekt
      */
-    public function setUpdatedAt()
-    {
+    public function setUpdatedAt() {
         $this->updatedAt = new \DateTime('now');
 
         return $this;
@@ -248,8 +247,7 @@ class Projekt
      *
      * @return \DateTime 
      */
-    public function getUpdatedAt()
-    {
+    public function getUpdatedAt() {
         return $this->updatedAt;
     }
 
@@ -259,8 +257,7 @@ class Projekt
      * @param \DateTime $dataZakonczenia
      * @return Projekt
      */
-    public function setDataZakonczenia($date)
-    {
+    public function setDataZakonczenia($date) {
         $this->dataZakonczenia = new \DateTime('now');
         return $this;
     }
@@ -270,8 +267,7 @@ class Projekt
      *
      * @return \DateTime 
      */
-    public function getDataZakonczenia()
-    {
+    public function getDataZakonczenia() {
         return $this->dataZakonczenia == null;
     }
 
@@ -281,8 +277,7 @@ class Projekt
      * @param integer $status
      * @return Projekt
      */
-    public function setStatus($status)
-    {
+    public function setStatus($status) {
         $this->status = $status;
 
         return $this;
@@ -293,8 +288,7 @@ class Projekt
      *
      * @return integer 
      */
-    public function getStatus()
-    {
+    public function getStatus() {
         return $this->status;
     }
 
@@ -325,16 +319,13 @@ class Projekt
         return $this;
     }
 
-        
-    
     /**
      * Add uzytkownicy_projekty
      *
      * @param \Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty
      * @return Projekt
      */
-    public function addUzytkownicyProjekty(\Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty)
-    {
+    public function addUzytkownicyProjekty(\Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty) {
         $this->uzytkownicy_projekty->add($uzytkownicyProjekty);
 
         return $this;
@@ -345,8 +336,7 @@ class Projekt
      *
      * @param \Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty
      */
-    public function removeUzytkownicyProjekty(\Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty)
-    {
+    public function removeUzytkownicyProjekty(\Data\DatabaseBundle\Entity\UzytkownikProjekt $uzytkownicyProjekty) {
         $this->uzytkownicy_projekty->removeElement($uzytkownicyProjekty);
     }
 
@@ -355,16 +345,14 @@ class Projekt
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getUzytkownicyProjekty()
-    {
+    public function getUzytkownicyProjekty() {
         return $this->uzytkownicy_projekty;
     }
-    
-    public function getUzytkownicyProjektyArray()
-    {
+
+    public function getUzytkownicyProjektyArray() {
         return $this->uzytkownicy_projekty->toArray();
     }
-    
+
     /**
      * 
      * @return \Doctrine\Common\Collections\Collection
@@ -372,12 +360,12 @@ class Projekt
     public function getTasks() {
         return $this->tasks;
     }
-    
+
     public function getActiveTasks() {
         $tasks = $this->tasks;
         $arrTasks = array();
         foreach ($tasks as $task) {
-            if(!$task->isZakonczony()) {
+            if (!$task->isZakonczony()) {
                 $arrTasks[] = $task;
             }
         }
@@ -387,7 +375,7 @@ class Projekt
     public function removeTask(Task $task) {
         $this->tasks->removeElement($task);
     }
-    
+
     public function addTask(Task $task) {
         $this->tasks->add($task);
     }
@@ -399,8 +387,8 @@ class Projekt
     public function setCreator($creator) {
         $this->creator = $creator;
     }
-    
-    public function getTimeToFinish()  {
+
+    public function getTimeToFinish() {
         $now = new \DateTime('now');
         return $this->getTermin() < $now ? 'przekroczono czas' : $this->getTermin()->diff($now)->days;
     }
@@ -411,8 +399,7 @@ class Projekt
      * @param boolean $skasowane
      * @return Projekt
      */
-    public function setSkasowane($skasowane)
-    {
+    public function setSkasowane($skasowane) {
         $this->skasowane = $skasowane;
 
         return $this;
@@ -423,8 +410,19 @@ class Projekt
      *
      * @return boolean 
      */
-    public function getSkasowane()
-    {
+    public function getSkasowane() {
         return $this->skasowane;
     }
+
+
+    public function getRkOperacjaId() {
+        return $this->rkOperacjaId;
+    }
+
+    public function setRkOperacjaId($rkOperacjaId) {
+        $this->rkOperacjaId = $rkOperacjaId;
+        return $this;
+    }
+
+
 }

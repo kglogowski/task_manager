@@ -111,3 +111,7 @@ task_edit:
 ajax_get_new_form_message:
     pattern:  /ajax-get-new-form-message
     defaults: { _controller: AppFrontendBundle:Task:getNewFormMessage}
+    
+rachunek:
+   pattern:  /rachunek
+   defaults: { _controller: AppFrontendBundle:Rachunek:index} 
