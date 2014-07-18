@@ -302,42 +302,41 @@ class ProjectsController extends TmController {
         if ($this->getRequest()->getMethod() == 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
-
-                $em = $this->getDoctrine()->getManager();
-                $data = $form->getData();
                 $kwota = \App\LibBundle\Float::toFloat($data['price']);
                 if ($kwota == FALSE) {
-                    $this->get('session')->getFlashBag()->set('error', 'Podana kwota jest nieprawidłowa');
-                    return $this->redirect($this->generateUrl('projects_new'));
-                }
-                $projekt
-                        ->setLabel($data['label'])
-                        ->setName($data['name'])
-                        ->setStatus($data['status'])
-                        ->setTermin($data['termin'])
-                ;
-                $em->persist($projekt);
-                if ($rkOperacja instanceof RkOperacja) {
-                    $rkOperacja->setKwotaNetto($kwota);
-                } else {
-                    $rkOperacja = new RkOperacja();
-                    $rkOperacja
-                            ->setKwotaNetto($kwota)
-                            ->setLabel($projekt->getLabel())
-                            ->setConfirm(FALSE)
+                    $em = $this->getDoctrine()->getManager();
+                    $data = $form->getData();
+                    $projekt
+                            ->setLabel($data['label'])
+                            ->setName($data['name'])
+                            ->setStatus($data['status'])
+                            ->setTermin($data['termin'])
                     ;
+                    $em->persist($projekt);
+                    if ($rkOperacja instanceof RkOperacja) {
+                        $rkOperacja->setKwotaNetto($kwota);
+                    } else {
+                        $rkOperacja = new RkOperacja();
+                        $rkOperacja
+                                ->setKwotaNetto($kwota)
+                                ->setLabel($projekt->getLabel())
+                                ->setConfirm(FALSE)
+                        ;
+                    }
+                    $em->persist($rkOperacja);
+                    $em->flush();
+                    if ($projekt->isZakonczony()) {
+                        $this->sendMailInfo(
+                                $m->getRepository('DataDatabaseBundle:Projekt')->findUzytkownicyByProjekt($projekt), "Projekt: " . $projekt->getLabel() . ' został zamknięty', $this->renderView('AppFrontendBundle:Common:mailProjectClosed.html.twig', array(
+                                    'aktualny' => $this->getUser()->getLogin(),
+                                    'projekt' => $projekt,
+                                ))
+                        );
+                    }
+                    return $this->redirectWithFlash('projects', 'projekt został zaktualizowany', 'success');
+                } else {
+                    $this->get('session')->getFlashBag()->set('error', 'Podana kwota jest nieprawidłowa');
                 }
-                $em->persist($rkOperacja);
-                $em->flush();
-                if ($projekt->isZakonczony()) {
-                    $this->sendMailInfo(
-                            $m->getRepository('DataDatabaseBundle:Projekt')->findUzytkownicyByProjekt($projekt), "Projekt: " . $projekt->getLabel() . ' został zamknięty', $this->renderView('AppFrontendBundle:Common:mailProjectClosed.html.twig', array(
-                                'aktualny' => $this->getUser()->getLogin(),
-                                'projekt' => $projekt,
-                            ))
-                    );
-                }
-                return $this->redirectWithFlash('projects', 'projekt został zaktualizowany', 'success');
             }
         }
         return $this->render('AppFrontendBundle:Projects:editProject.html.twig', array(
