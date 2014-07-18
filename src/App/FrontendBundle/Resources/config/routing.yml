@@ -114,4 +114,8 @@ ajax_get_new_form_message:
     
 rachunek:
    pattern:  /rachunek
-   defaults: { _controller: AppFrontendBundle:Rachunek:index} 
+   defaults: { _controller: AppFrontendBundle:Rachunek:index}
+   
+rachunek_new:
+   pattern:  /rachunek-nowa-transakcja
+   defaults: { _controller: AppFrontendBundle:Rachunek:new }

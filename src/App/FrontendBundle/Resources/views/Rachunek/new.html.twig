@@ -1,0 +1,30 @@
+{% extends "::frontend.html.twig" %}
+{% block content %}
+{% include 'AppHelperBundle:basic:flash.html.twig' %}
+<div class="cloud">
+    <div class="cloud_tt">
+        <h3>Nowa transakcja</h3>
+    </div>
+    <div class="cloud_ct">
+        <div>
+            <form action="" method="POST">
+                <div class="well-sm">
+                    {{ form_widget(form.label) }}
+                </div>
+                <div class="well-sm">
+                    {{ form_widget(form.price) }}
+                </div>
+                <div class="well-sm">
+                    {{ form_label(form.zatwierdzone) }}
+                    {{ form_widget(form.zatwierdzone) }}
+                </div>
+                <div class="well-sm">
+                    {{ form_row(form._token) }}
+                    {{ form_widget(form.save) }}
+                </div>
+            </form>
+        </div>
+    </div>
+    {{ include('AppHelperBundle:bootstrap:return_link.html.twig', {link: 'rachunek'}) }}
+</div>
+{% endblock content %}

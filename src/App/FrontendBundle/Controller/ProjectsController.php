@@ -6,6 +6,7 @@ use App\LibBundle\TmController;
 use Data\DatabaseBundle\Entity\Projekt;
 use Data\DatabaseBundle\Entity\UzytkownikProjekt;
 use Symfony\Component\HttpFoundation\Request;
+use Data\DatabaseBundle\Entity\RkOperacja;
 
 class ProjectsController extends TmController {
 
@@ -53,7 +54,7 @@ class ProjectsController extends TmController {
     }
 
     public function newAction() {
-        if(!$this->getUser()->hasUprawnienie('1')) {
+        if (!$this->getUser()->hasUprawnienie('1')) {
             return $this->render("::common/AccessDenied.html.twig");
         }
         $m = $this->getDoctrine()->getManager();
@@ -66,7 +67,7 @@ class ProjectsController extends TmController {
             if ($form->isValid()) {
                 $data = $form->getData();
                 $kwota = \App\LibBundle\Float::toFloat($data['price']);
-                if($kwota == FALSE) {
+                if ($kwota == FALSE) {
                     $this->get('session')->getFlashBag()->set('error', 'Podana kwota jest nieprawidłowa');
                     return $this->redirect($this->generateUrl('projects_new'));
                 }
@@ -253,10 +254,23 @@ class ProjectsController extends TmController {
         }
 
 
-
-        $form = $this->createFormBuilder($projekt)
-                ->add('label', null, array('label' => 'Zmień nazwę', 'attr' => array('class' => 'form-control')))
-                ->add('name', null, array('label' => 'Url projektu', 'attr' => array('class' => 'form-control')))
+        $rkOperacja = $projekt->getRkOperacjaId() == null ? null : $m->getRepository('DataDatabaseBundle:RkOperacja')->find($projekt->getRkOperacjaId());
+        $form = $this->createFormBuilder()
+                ->add(
+                        'label', 'text', array(
+                    'data' => $projekt->getLabel(),
+                    'label' => 'Zmień nazwę',
+                    'attr' => array('class' => 'form-control')
+                        )
+                )
+                ->add(
+                        'name', 'text', array(
+                    'data' => $projekt->getName(),
+                    'label' => 'Url projektu',
+                    'attr' => array('class' => 'form-control'
+                    )
+                        )
+                )
                 ->add('status', 'choice', array(
                     'label' => 'Status',
                     'attr' => array(
@@ -264,13 +278,22 @@ class ProjectsController extends TmController {
                         'data-style' => 'btn-default',
                     ),
                     'choices' => Projekt::GetStatusy(),
+                    'data' => $projekt->getStatus(),
                     'required' => false))
                 ->add('termin', 'date', array(
                     'widget' => 'single_text',
                     'format' => 'dd-MM-yyyy',
+                    'data' => $projekt->getTermin(),
                     'attr' => array(
                         'class' => 'form-control date_to',
                         'placeholder' => 'Podaj termin'
+                    ))
+                )
+                ->add('price', 'text', array(
+                    'data' => $rkOperacja instanceof RkOperacja ? $rkOperacja->getKwotaNetto() : '0',
+                    'attr' => array(
+                        'placeholder' => 'Kwota netto za wykonanie projektu',
+                        'class' => 'form-control'
                     ))
                 )
                 ->add('save', 'submit', array('label' => 'Zapisz', 'attr' => array('class' => 'btn btn-success')))
@@ -281,7 +304,30 @@ class ProjectsController extends TmController {
             if ($form->isValid()) {
 
                 $em = $this->getDoctrine()->getManager();
+                $data = $form->getData();
+                $kwota = \App\LibBundle\Float::toFloat($data['price']);
+                if ($kwota == FALSE) {
+                    $this->get('session')->getFlashBag()->set('error', 'Podana kwota jest nieprawidłowa');
+                    return $this->redirect($this->generateUrl('project_new'));
+                }
+                $projekt
+                        ->setLabel($data['label'])
+                        ->setName($data['name'])
+                        ->setStatus($data['status'])
+                        ->setTermin($data['termin'])
+                ;
                 $em->persist($projekt);
+                if ($rkOperacja instanceof RkOperacja) {
+                    $rkOperacja->setKwotaNetto($kwota);
+                } else {
+                    $rkOperacja = new RkOperacja();
+                    $rkOperacja
+                            ->setKwotaNetto($kwota)
+                            ->setLabel($projekt->getLabel())
+                            ->setConfirm(FALSE)
+                    ;
+                }
+                $em->persist($rkOperacja);
                 $em->flush();
                 if ($projekt->isZakonczony()) {
                     $this->sendMailInfo(

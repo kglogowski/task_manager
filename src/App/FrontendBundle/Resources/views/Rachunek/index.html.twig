@@ -1,11 +1,36 @@
 {% extends "::frontend.html.twig" %}
 {% block content %}
+{% include 'AppHelperBundle:basic:flash.html.twig' %}
+<div class="modernizator_area">
+    <a href="{{ url('rachunek_new') }}">
+        <div data-toggle="tooltip" data-placement="bottom" title="Nowa transakcja" class="modernizator_field"><span class="glyphicon glyphicon-plus-sign"></span></div>
+    </a>
+</div>
 <div class="cloud">
     <div class="cloud_tt">
         <h3>Rachunek OvenGroup.pl</h3>
     </div>
     <div class="cloud_ct">
-        
+        <div class="cloud_elem_th">
+            <div class="row well-sm">
+                <div class="col-md-4">Kwota aktualna</div>
+                <div class="col-md-4">Nadchodzące transakcje</div>
+                <div class="col-md-4">Suma</div>
+            </div>
+        </div>
+        <div class="cloud_elem">
+            <div class="row well-sm">
+                <div class="col-md-4">
+                        {{ real }} zł
+                </div>
+                <div class="col-md-4">
+                        {{ virtual }} zł
+                </div>
+                <div class="col-md-4">
+                        {{ real + virtual }} zł
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
