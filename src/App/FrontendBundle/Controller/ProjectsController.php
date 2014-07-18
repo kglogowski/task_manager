@@ -302,10 +302,10 @@ class ProjectsController extends TmController {
         if ($this->getRequest()->getMethod() == 'POST') {
             $form->bind($this->getRequest());
             if ($form->isValid()) {
+                $data = $form->getData();
                 $kwota = \App\LibBundle\Float::toFloat($data['price']);
-                if ($kwota == FALSE) {
+                if ($kwota !== FALSE) {
                     $em = $this->getDoctrine()->getManager();
-                    $data = $form->getData();
                     $projekt
                             ->setLabel($data['label'])
                             ->setName($data['name'])
