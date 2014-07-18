@@ -322,8 +322,11 @@ class ProjectsController extends TmController {
                                 ->setLabel($projekt->getLabel())
                                 ->setConfirm(FALSE)
                         ;
+                        $em->persist($rkOperacja);
+                        $projekt->setRkOperacjaId($rkOperacja->getId());
+                        $em->persist($projekt);
                     }
-                    $em->persist($rkOperacja);
+                    
                     $em->flush();
                     if ($projekt->isZakonczony()) {
                         $this->sendMailInfo(
