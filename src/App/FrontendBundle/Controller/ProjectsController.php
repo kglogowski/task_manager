@@ -308,7 +308,7 @@ class ProjectsController extends TmController {
                 $kwota = \App\LibBundle\Float::toFloat($data['price']);
                 if ($kwota == FALSE) {
                     $this->get('session')->getFlashBag()->set('error', 'Podana kwota jest nieprawidłowa');
-                    return $this->redirect($this->generateUrl('project_new'));
+                    return $this->redirect($this->generateUrl('projects_new'));
                 }
                 $projekt
                         ->setLabel($data['label'])
